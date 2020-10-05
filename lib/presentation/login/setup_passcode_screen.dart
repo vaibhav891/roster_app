@@ -20,7 +20,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
     return Container(
       decoration: MyDecorationBox(),
       child: Scaffold(
-        appBar: MyAppBar(myTitle: ''),
+        appBar: MyAppBar(myTitle: Text('')),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

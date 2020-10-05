@@ -35,7 +35,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: MyAppBar(myTitle: 'Scan & Check-in'),
+      appBar: MyAppBar(myTitle: Text('Scan & Check-in')),
       body: Stack(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

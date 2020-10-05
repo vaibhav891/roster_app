@@ -5,7 +5,6 @@ import 'package:roster_app/common/size_constants.dart';
 import 'package:roster_app/common/string_constants.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/di/get_it.dart';
-import 'package:roster_app/domain/auth_bloc/auth_bloc.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
 import 'package:roster_app/presentation/common/custom_input_box.dart';
 import 'package:roster_app/presentation/common/my_decoration_box.dart';
@@ -19,8 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  AuthBloc authBloc;
   SignInFormBloc signInFormBloc;
+  bool _isObscureText = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -69,14 +68,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    authBloc = getIt<AuthBloc>();
     signInFormBloc = getIt<SignInFormBloc>();
   }
 
   @override
   void dispose() {
     super.dispose();
-    authBloc.close();
     signInFormBloc.close();
   }
 
@@ -84,19 +81,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => authBloc,
-        ),
         BlocProvider<SignInFormBloc>(
           create: (context) => signInFormBloc,
         ),
       ],
-      child: BlocBuilder<AuthBloc, AuthState>(
+      child: BlocBuilder<SignInFormBloc, SignInFormState>(
         builder: (context, state) {
           return Container(
             decoration: MyDecorationBox(),
             child: Scaffold(
-                appBar: MyAppBar(myTitle: 'Login'),
+                appBar: MyAppBar(myTitle: Text('Login')),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -141,14 +135,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   CustomInputBox(
                                     title: 'Username',
                                     onChanged: (value) {},
-                                    hintText: 'Jameson_dunn',
+                                    hintText: 'Enter your username',
                                   ),
                                   CustomInputBox(
                                     title: 'Passcode',
                                     onChanged: (value) {},
                                     hintText: '******',
-                                    obscureText: true,
-                                    suffixIcon: Icon(Icons.remove_red_eye),
+                                    obscureText: _isObscureText,
+                                    keyboardType: TextInputType.number,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.remove_red_eye),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isObscureText = !_isObscureText;
+                                        });
+                                      },
+                                    ),
                                   ),
                                   Align(
                                     alignment: Alignment.centerRight,

@@ -30,8 +30,10 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: Sizes.dimen_100.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(left: Sizes.dimen_24.w),
@@ -47,10 +49,13 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
               child: Text(StringConstants.myStatsScreenSubTitleText,
                   style: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColor.white)),
             ),
-            SizedBox(
-              height: Sizes.dimen_100.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
-            Flexible(
+            Expanded(
+              flex: 10,
               child: Container(
                 width: ScreenUtil().screenWidth,
                 decoration: BoxDecoration(
@@ -59,63 +64,65 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                   ),
                   color: AppColor.white,
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: Sizes.dimen_48.h,
-                      ),
-                      ButtonBar(
-                        alignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          FlatButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            minWidth: Sizes.dimen_100.w,
-                            child: Text('Weekly'),
-                            color: Colors.blue,
-                            onPressed: () {/** */},
-                          ),
-                          FlatButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            minWidth: Sizes.dimen_100.w,
-                            child: Text('Monthly'),
-                            color: AppColor.sandGrey,
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('/manager-dashboard');
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: Sizes.dimen_10.h,
-                      ),
-                      CircularPercentIndicator(
-                        percent: 0.32,
-                        lineWidth: 45.0,
-                        startAngle: 0.0,
-                        radius: 180,
-                        linearGradient: LinearGradient(
-                          colors: [
-                            AppColor.lightBlue,
-                            AppColor.elecViolet,
-                          ],
-                          begin: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: Sizes.dimen_48.h,
+                    ),
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        FlatButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          minWidth: Sizes.dimen_100.w,
+                          child: Text('Weekly'),
+                          color: Colors.blue,
+                          onPressed: () {/** */},
                         ),
-                        //fillColor: Colors.black,
-                        backgroundColor: Color(0xffd8fcff),
-                        backgroundWidth: 40,
-                        circularStrokeCap: CircularStrokeCap.butt,
-                        //arcType: ArcType.FULL,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Image.asset('assets/images/Group95303.png', width: Sizes.dimen_140.w),
-                          Image.asset('assets/images/Group95304.png', width: Sizes.dimen_140.w),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          minWidth: Sizes.dimen_100.w,
+                          child: Text('Monthly'),
+                          color: AppColor.sandGrey,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/manager-dashboard');
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Sizes.dimen_10.h,
+                    ),
+                    CircularPercentIndicator(
+                      percent: 0.32,
+                      lineWidth: 45.0,
+                      startAngle: 0.0,
+                      radius: 180,
+                      linearGradient: LinearGradient(
+                        colors: [
+                          AppColor.lightBlue,
+                          AppColor.elecViolet,
                         ],
-                      )
-                    ],
-                  ),
+                        begin: Alignment.topCenter,
+                      ),
+                      //fillColor: Colors.black,
+                      backgroundColor: Color(0xffd8fcff),
+                      backgroundWidth: 40,
+                      circularStrokeCap: CircularStrokeCap.butt,
+                      //arcType: ArcType.FULL,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset('assets/images/Group95303.png', width: Sizes.dimen_140.w),
+                        Image.asset('assets/images/Group95304.png', width: Sizes.dimen_140.w),
+                      ],
+                    ),
+                    Expanded(
+                        child: SizedBox(
+                      height: Sizes.dimen_10,
+                    )),
+                  ],
                 ),
               ),
             )

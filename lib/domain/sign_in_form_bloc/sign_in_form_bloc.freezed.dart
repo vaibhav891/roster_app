@@ -14,27 +14,13 @@ class _$SignInFormEventTearOff {
   const _$SignInFormEventTearOff();
 
 // ignore: unused_element
-  RegisterWithEmailnPasswordPressed registerWithEmailnPasswordPressed() {
-    return const RegisterWithEmailnPasswordPressed();
+  RegisterUser registerUser() {
+    return const RegisterUser();
   }
 
 // ignore: unused_element
-  SignInWithEmailnPasswordPressed signInWithEmailnPasswordPressed() {
-    return const SignInWithEmailnPasswordPressed();
-  }
-
-// ignore: unused_element
-  EmailChanged emailChanged(String emailStr) {
-    return EmailChanged(
-      emailStr,
-    );
-  }
-
-// ignore: unused_element
-  PasswordChanged passwordChanged(String passwordStr) {
-    return PasswordChanged(
-      passwordStr,
-    );
+  SignInUser signInUser() {
+    return const SignInUser();
   }
 }
 
@@ -46,38 +32,24 @@ const $SignInFormEvent = _$SignInFormEventTearOff();
 mixin _$SignInFormEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerWithEmailnPasswordPressed(),
-    @required Result signInWithEmailnPasswordPressed(),
-    @required Result emailChanged(String emailStr),
-    @required Result passwordChanged(String passwordStr),
+    @required Result registerUser(),
+    @required Result signInUser(),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(),
-    Result signInWithEmailnPasswordPressed(),
-    Result emailChanged(String emailStr),
-    Result passwordChanged(String passwordStr),
+    Result registerUser(),
+    Result signInUser(),
     @required Result orElse(),
   });
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required
-        Result registerWithEmailnPasswordPressed(
-            RegisterWithEmailnPasswordPressed value),
-    @required
-        Result signInWithEmailnPasswordPressed(
-            SignInWithEmailnPasswordPressed value),
-    @required Result emailChanged(EmailChanged value),
-    @required Result passwordChanged(PasswordChanged value),
+    @required Result registerUser(RegisterUser value),
+    @required Result signInUser(SignInUser value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(
-        RegisterWithEmailnPasswordPressed value),
-    Result signInWithEmailnPasswordPressed(
-        SignInWithEmailnPasswordPressed value),
-    Result emailChanged(EmailChanged value),
-    Result passwordChanged(PasswordChanged value),
+    Result registerUser(RegisterUser value),
+    Result signInUser(SignInUser value),
     @required Result orElse(),
   });
 }
@@ -100,50 +72,43 @@ class _$SignInFormEventCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class $RegisterWithEmailnPasswordPressedCopyWith<$Res> {
-  factory $RegisterWithEmailnPasswordPressedCopyWith(
-          RegisterWithEmailnPasswordPressed value,
-          $Res Function(RegisterWithEmailnPasswordPressed) then) =
-      _$RegisterWithEmailnPasswordPressedCopyWithImpl<$Res>;
+abstract class $RegisterUserCopyWith<$Res> {
+  factory $RegisterUserCopyWith(
+          RegisterUser value, $Res Function(RegisterUser) then) =
+      _$RegisterUserCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$RegisterWithEmailnPasswordPressedCopyWithImpl<$Res>
+class _$RegisterUserCopyWithImpl<$Res>
     extends _$SignInFormEventCopyWithImpl<$Res>
-    implements $RegisterWithEmailnPasswordPressedCopyWith<$Res> {
-  _$RegisterWithEmailnPasswordPressedCopyWithImpl(
-      RegisterWithEmailnPasswordPressed _value,
-      $Res Function(RegisterWithEmailnPasswordPressed) _then)
-      : super(_value, (v) => _then(v as RegisterWithEmailnPasswordPressed));
+    implements $RegisterUserCopyWith<$Res> {
+  _$RegisterUserCopyWithImpl(
+      RegisterUser _value, $Res Function(RegisterUser) _then)
+      : super(_value, (v) => _then(v as RegisterUser));
 
   @override
-  RegisterWithEmailnPasswordPressed get _value =>
-      super._value as RegisterWithEmailnPasswordPressed;
+  RegisterUser get _value => super._value as RegisterUser;
 }
 
 /// @nodoc
-class _$RegisterWithEmailnPasswordPressed
-    with DiagnosticableTreeMixin
-    implements RegisterWithEmailnPasswordPressed {
-  const _$RegisterWithEmailnPasswordPressed();
+class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
+  const _$RegisterUser();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.registerWithEmailnPasswordPressed()';
+    return 'SignInFormEvent.registerUser()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', 'SignInFormEvent.registerWithEmailnPasswordPressed'));
+      ..add(DiagnosticsProperty('type', 'SignInFormEvent.registerUser'));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is RegisterWithEmailnPasswordPressed);
+    return identical(this, other) || (other is RegisterUser);
   }
 
   @override
@@ -152,30 +117,24 @@ class _$RegisterWithEmailnPasswordPressed
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerWithEmailnPasswordPressed(),
-    @required Result signInWithEmailnPasswordPressed(),
-    @required Result emailChanged(String emailStr),
-    @required Result passwordChanged(String passwordStr),
+    @required Result registerUser(),
+    @required Result signInUser(),
   }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return registerWithEmailnPasswordPressed();
+    assert(registerUser != null);
+    assert(signInUser != null);
+    return registerUser();
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(),
-    Result signInWithEmailnPasswordPressed(),
-    Result emailChanged(String emailStr),
-    Result passwordChanged(String passwordStr),
+    Result registerUser(),
+    Result signInUser(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (registerWithEmailnPasswordPressed != null) {
-      return registerWithEmailnPasswordPressed();
+    if (registerUser != null) {
+      return registerUser();
     }
     return orElse();
   }
@@ -183,90 +142,68 @@ class _$RegisterWithEmailnPasswordPressed
   @override
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required
-        Result registerWithEmailnPasswordPressed(
-            RegisterWithEmailnPasswordPressed value),
-    @required
-        Result signInWithEmailnPasswordPressed(
-            SignInWithEmailnPasswordPressed value),
-    @required Result emailChanged(EmailChanged value),
-    @required Result passwordChanged(PasswordChanged value),
+    @required Result registerUser(RegisterUser value),
+    @required Result signInUser(SignInUser value),
   }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return registerWithEmailnPasswordPressed(this);
+    assert(registerUser != null);
+    assert(signInUser != null);
+    return registerUser(this);
   }
 
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(
-        RegisterWithEmailnPasswordPressed value),
-    Result signInWithEmailnPasswordPressed(
-        SignInWithEmailnPasswordPressed value),
-    Result emailChanged(EmailChanged value),
-    Result passwordChanged(PasswordChanged value),
+    Result registerUser(RegisterUser value),
+    Result signInUser(SignInUser value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (registerWithEmailnPasswordPressed != null) {
-      return registerWithEmailnPasswordPressed(this);
+    if (registerUser != null) {
+      return registerUser(this);
     }
     return orElse();
   }
 }
 
-abstract class RegisterWithEmailnPasswordPressed implements SignInFormEvent {
-  const factory RegisterWithEmailnPasswordPressed() =
-      _$RegisterWithEmailnPasswordPressed;
+abstract class RegisterUser implements SignInFormEvent {
+  const factory RegisterUser() = _$RegisterUser;
 }
 
 /// @nodoc
-abstract class $SignInWithEmailnPasswordPressedCopyWith<$Res> {
-  factory $SignInWithEmailnPasswordPressedCopyWith(
-          SignInWithEmailnPasswordPressed value,
-          $Res Function(SignInWithEmailnPasswordPressed) then) =
-      _$SignInWithEmailnPasswordPressedCopyWithImpl<$Res>;
+abstract class $SignInUserCopyWith<$Res> {
+  factory $SignInUserCopyWith(
+          SignInUser value, $Res Function(SignInUser) then) =
+      _$SignInUserCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$SignInWithEmailnPasswordPressedCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res>
-    implements $SignInWithEmailnPasswordPressedCopyWith<$Res> {
-  _$SignInWithEmailnPasswordPressedCopyWithImpl(
-      SignInWithEmailnPasswordPressed _value,
-      $Res Function(SignInWithEmailnPasswordPressed) _then)
-      : super(_value, (v) => _then(v as SignInWithEmailnPasswordPressed));
+class _$SignInUserCopyWithImpl<$Res> extends _$SignInFormEventCopyWithImpl<$Res>
+    implements $SignInUserCopyWith<$Res> {
+  _$SignInUserCopyWithImpl(SignInUser _value, $Res Function(SignInUser) _then)
+      : super(_value, (v) => _then(v as SignInUser));
 
   @override
-  SignInWithEmailnPasswordPressed get _value =>
-      super._value as SignInWithEmailnPasswordPressed;
+  SignInUser get _value => super._value as SignInUser;
 }
 
 /// @nodoc
-class _$SignInWithEmailnPasswordPressed
-    with DiagnosticableTreeMixin
-    implements SignInWithEmailnPasswordPressed {
-  const _$SignInWithEmailnPasswordPressed();
+class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
+  const _$SignInUser();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.signInWithEmailnPasswordPressed()';
+    return 'SignInFormEvent.signInUser()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'SignInFormEvent.signInWithEmailnPasswordPressed'));
+    properties..add(DiagnosticsProperty('type', 'SignInFormEvent.signInUser'));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is SignInWithEmailnPasswordPressed);
+    return identical(this, other) || (other is SignInUser);
   }
 
   @override
@@ -275,30 +212,24 @@ class _$SignInWithEmailnPasswordPressed
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerWithEmailnPasswordPressed(),
-    @required Result signInWithEmailnPasswordPressed(),
-    @required Result emailChanged(String emailStr),
-    @required Result passwordChanged(String passwordStr),
+    @required Result registerUser(),
+    @required Result signInUser(),
   }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return signInWithEmailnPasswordPressed();
+    assert(registerUser != null);
+    assert(signInUser != null);
+    return signInUser();
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(),
-    Result signInWithEmailnPasswordPressed(),
-    Result emailChanged(String emailStr),
-    Result passwordChanged(String passwordStr),
+    Result registerUser(),
+    Result signInUser(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (signInWithEmailnPasswordPressed != null) {
-      return signInWithEmailnPasswordPressed();
+    if (signInUser != null) {
+      return signInUser();
     }
     return orElse();
   }
@@ -306,330 +237,31 @@ class _$SignInWithEmailnPasswordPressed
   @override
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required
-        Result registerWithEmailnPasswordPressed(
-            RegisterWithEmailnPasswordPressed value),
-    @required
-        Result signInWithEmailnPasswordPressed(
-            SignInWithEmailnPasswordPressed value),
-    @required Result emailChanged(EmailChanged value),
-    @required Result passwordChanged(PasswordChanged value),
+    @required Result registerUser(RegisterUser value),
+    @required Result signInUser(SignInUser value),
   }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return signInWithEmailnPasswordPressed(this);
+    assert(registerUser != null);
+    assert(signInUser != null);
+    return signInUser(this);
   }
 
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(
-        RegisterWithEmailnPasswordPressed value),
-    Result signInWithEmailnPasswordPressed(
-        SignInWithEmailnPasswordPressed value),
-    Result emailChanged(EmailChanged value),
-    Result passwordChanged(PasswordChanged value),
+    Result registerUser(RegisterUser value),
+    Result signInUser(SignInUser value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (signInWithEmailnPasswordPressed != null) {
-      return signInWithEmailnPasswordPressed(this);
+    if (signInUser != null) {
+      return signInUser(this);
     }
     return orElse();
   }
 }
 
-abstract class SignInWithEmailnPasswordPressed implements SignInFormEvent {
-  const factory SignInWithEmailnPasswordPressed() =
-      _$SignInWithEmailnPasswordPressed;
-}
-
-/// @nodoc
-abstract class $EmailChangedCopyWith<$Res> {
-  factory $EmailChangedCopyWith(
-          EmailChanged value, $Res Function(EmailChanged) then) =
-      _$EmailChangedCopyWithImpl<$Res>;
-  $Res call({String emailStr});
-}
-
-/// @nodoc
-class _$EmailChangedCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res>
-    implements $EmailChangedCopyWith<$Res> {
-  _$EmailChangedCopyWithImpl(
-      EmailChanged _value, $Res Function(EmailChanged) _then)
-      : super(_value, (v) => _then(v as EmailChanged));
-
-  @override
-  EmailChanged get _value => super._value as EmailChanged;
-
-  @override
-  $Res call({
-    Object emailStr = freezed,
-  }) {
-    return _then(EmailChanged(
-      emailStr == freezed ? _value.emailStr : emailStr as String,
-    ));
-  }
-}
-
-/// @nodoc
-class _$EmailChanged with DiagnosticableTreeMixin implements EmailChanged {
-  const _$EmailChanged(this.emailStr) : assert(emailStr != null);
-
-  @override
-  final String emailStr;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.emailChanged(emailStr: $emailStr)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'SignInFormEvent.emailChanged'))
-      ..add(DiagnosticsProperty('emailStr', emailStr));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is EmailChanged &&
-            (identical(other.emailStr, emailStr) ||
-                const DeepCollectionEquality()
-                    .equals(other.emailStr, emailStr)));
-  }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(emailStr);
-
-  @override
-  $EmailChangedCopyWith<EmailChanged> get copyWith =>
-      _$EmailChangedCopyWithImpl<EmailChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result registerWithEmailnPasswordPressed(),
-    @required Result signInWithEmailnPasswordPressed(),
-    @required Result emailChanged(String emailStr),
-    @required Result passwordChanged(String passwordStr),
-  }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return emailChanged(emailStr);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(),
-    Result signInWithEmailnPasswordPressed(),
-    Result emailChanged(String emailStr),
-    Result passwordChanged(String passwordStr),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (emailChanged != null) {
-      return emailChanged(emailStr);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required
-        Result registerWithEmailnPasswordPressed(
-            RegisterWithEmailnPasswordPressed value),
-    @required
-        Result signInWithEmailnPasswordPressed(
-            SignInWithEmailnPasswordPressed value),
-    @required Result emailChanged(EmailChanged value),
-    @required Result passwordChanged(PasswordChanged value),
-  }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return emailChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(
-        RegisterWithEmailnPasswordPressed value),
-    Result signInWithEmailnPasswordPressed(
-        SignInWithEmailnPasswordPressed value),
-    Result emailChanged(EmailChanged value),
-    Result passwordChanged(PasswordChanged value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (emailChanged != null) {
-      return emailChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class EmailChanged implements SignInFormEvent {
-  const factory EmailChanged(String emailStr) = _$EmailChanged;
-
-  String get emailStr;
-  $EmailChangedCopyWith<EmailChanged> get copyWith;
-}
-
-/// @nodoc
-abstract class $PasswordChangedCopyWith<$Res> {
-  factory $PasswordChangedCopyWith(
-          PasswordChanged value, $Res Function(PasswordChanged) then) =
-      _$PasswordChangedCopyWithImpl<$Res>;
-  $Res call({String passwordStr});
-}
-
-/// @nodoc
-class _$PasswordChangedCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res>
-    implements $PasswordChangedCopyWith<$Res> {
-  _$PasswordChangedCopyWithImpl(
-      PasswordChanged _value, $Res Function(PasswordChanged) _then)
-      : super(_value, (v) => _then(v as PasswordChanged));
-
-  @override
-  PasswordChanged get _value => super._value as PasswordChanged;
-
-  @override
-  $Res call({
-    Object passwordStr = freezed,
-  }) {
-    return _then(PasswordChanged(
-      passwordStr == freezed ? _value.passwordStr : passwordStr as String,
-    ));
-  }
-}
-
-/// @nodoc
-class _$PasswordChanged
-    with DiagnosticableTreeMixin
-    implements PasswordChanged {
-  const _$PasswordChanged(this.passwordStr) : assert(passwordStr != null);
-
-  @override
-  final String passwordStr;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.passwordChanged(passwordStr: $passwordStr)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'SignInFormEvent.passwordChanged'))
-      ..add(DiagnosticsProperty('passwordStr', passwordStr));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is PasswordChanged &&
-            (identical(other.passwordStr, passwordStr) ||
-                const DeepCollectionEquality()
-                    .equals(other.passwordStr, passwordStr)));
-  }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(passwordStr);
-
-  @override
-  $PasswordChangedCopyWith<PasswordChanged> get copyWith =>
-      _$PasswordChangedCopyWithImpl<PasswordChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result registerWithEmailnPasswordPressed(),
-    @required Result signInWithEmailnPasswordPressed(),
-    @required Result emailChanged(String emailStr),
-    @required Result passwordChanged(String passwordStr),
-  }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return passwordChanged(passwordStr);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(),
-    Result signInWithEmailnPasswordPressed(),
-    Result emailChanged(String emailStr),
-    Result passwordChanged(String passwordStr),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (passwordChanged != null) {
-      return passwordChanged(passwordStr);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required
-        Result registerWithEmailnPasswordPressed(
-            RegisterWithEmailnPasswordPressed value),
-    @required
-        Result signInWithEmailnPasswordPressed(
-            SignInWithEmailnPasswordPressed value),
-    @required Result emailChanged(EmailChanged value),
-    @required Result passwordChanged(PasswordChanged value),
-  }) {
-    assert(registerWithEmailnPasswordPressed != null);
-    assert(signInWithEmailnPasswordPressed != null);
-    assert(emailChanged != null);
-    assert(passwordChanged != null);
-    return passwordChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result registerWithEmailnPasswordPressed(
-        RegisterWithEmailnPasswordPressed value),
-    Result signInWithEmailnPasswordPressed(
-        SignInWithEmailnPasswordPressed value),
-    Result emailChanged(EmailChanged value),
-    Result passwordChanged(PasswordChanged value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (passwordChanged != null) {
-      return passwordChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class PasswordChanged implements SignInFormEvent {
-  const factory PasswordChanged(String passwordStr) = _$PasswordChanged;
-
-  String get passwordStr;
-  $PasswordChangedCopyWith<PasswordChanged> get copyWith;
+abstract class SignInUser implements SignInFormEvent {
+  const factory SignInUser() = _$SignInUser;
 }
 
 /// @nodoc
@@ -638,15 +270,9 @@ class _$SignInFormStateTearOff {
 
 // ignore: unused_element
   _SignInFormState call(
-      {@required EmailAddress emailAddress,
-      @required Password password,
-      @required bool showErrorMsg,
-      @required bool isSubmitting,
+      {@required bool isSubmitting,
       @required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) {
     return _SignInFormState(
-      emailAddress: emailAddress,
-      password: password,
-      showErrorMsg: showErrorMsg,
       isSubmitting: isSubmitting,
       authFailureOrSuccessOption: authFailureOrSuccessOption,
     );
@@ -659,9 +285,6 @@ const $SignInFormState = _$SignInFormStateTearOff();
 
 /// @nodoc
 mixin _$SignInFormState {
-  EmailAddress get emailAddress;
-  Password get password;
-  bool get showErrorMsg;
   bool get isSubmitting;
   Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
 
@@ -674,10 +297,7 @@ abstract class $SignInFormStateCopyWith<$Res> {
           SignInFormState value, $Res Function(SignInFormState) then) =
       _$SignInFormStateCopyWithImpl<$Res>;
   $Res call(
-      {EmailAddress emailAddress,
-      Password password,
-      bool showErrorMsg,
-      bool isSubmitting,
+      {bool isSubmitting,
       Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
 }
 
@@ -692,19 +312,10 @@ class _$SignInFormStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object emailAddress = freezed,
-    Object password = freezed,
-    Object showErrorMsg = freezed,
     Object isSubmitting = freezed,
     Object authFailureOrSuccessOption = freezed,
   }) {
     return _then(_value.copyWith(
-      emailAddress: emailAddress == freezed
-          ? _value.emailAddress
-          : emailAddress as EmailAddress,
-      password: password == freezed ? _value.password : password as Password,
-      showErrorMsg:
-          showErrorMsg == freezed ? _value.showErrorMsg : showErrorMsg as bool,
       isSubmitting:
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
@@ -722,10 +333,7 @@ abstract class _$SignInFormStateCopyWith<$Res>
       __$SignInFormStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {EmailAddress emailAddress,
-      Password password,
-      bool showErrorMsg,
-      bool isSubmitting,
+      {bool isSubmitting,
       Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
 }
 
@@ -742,19 +350,10 @@ class __$SignInFormStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object emailAddress = freezed,
-    Object password = freezed,
-    Object showErrorMsg = freezed,
     Object isSubmitting = freezed,
     Object authFailureOrSuccessOption = freezed,
   }) {
     return _then(_SignInFormState(
-      emailAddress: emailAddress == freezed
-          ? _value.emailAddress
-          : emailAddress as EmailAddress,
-      password: password == freezed ? _value.password : password as Password,
-      showErrorMsg:
-          showErrorMsg == freezed ? _value.showErrorMsg : showErrorMsg as bool,
       isSubmitting:
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
@@ -769,23 +368,10 @@ class _$_SignInFormState
     with DiagnosticableTreeMixin
     implements _SignInFormState {
   const _$_SignInFormState(
-      {@required this.emailAddress,
-      @required this.password,
-      @required this.showErrorMsg,
-      @required this.isSubmitting,
-      @required this.authFailureOrSuccessOption})
-      : assert(emailAddress != null),
-        assert(password != null),
-        assert(showErrorMsg != null),
-        assert(isSubmitting != null),
+      {@required this.isSubmitting, @required this.authFailureOrSuccessOption})
+      : assert(isSubmitting != null),
         assert(authFailureOrSuccessOption != null);
 
-  @override
-  final EmailAddress emailAddress;
-  @override
-  final Password password;
-  @override
-  final bool showErrorMsg;
   @override
   final bool isSubmitting;
   @override
@@ -793,7 +379,7 @@ class _$_SignInFormState
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormState(emailAddress: $emailAddress, password: $password, showErrorMsg: $showErrorMsg, isSubmitting: $isSubmitting, authFailureOrSuccessOption: $authFailureOrSuccessOption)';
+    return 'SignInFormState(isSubmitting: $isSubmitting, authFailureOrSuccessOption: $authFailureOrSuccessOption)';
   }
 
   @override
@@ -801,9 +387,6 @@ class _$_SignInFormState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'SignInFormState'))
-      ..add(DiagnosticsProperty('emailAddress', emailAddress))
-      ..add(DiagnosticsProperty('password', password))
-      ..add(DiagnosticsProperty('showErrorMsg', showErrorMsg))
       ..add(DiagnosticsProperty('isSubmitting', isSubmitting))
       ..add(DiagnosticsProperty(
           'authFailureOrSuccessOption', authFailureOrSuccessOption));
@@ -813,15 +396,6 @@ class _$_SignInFormState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _SignInFormState &&
-            (identical(other.emailAddress, emailAddress) ||
-                const DeepCollectionEquality()
-                    .equals(other.emailAddress, emailAddress)) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality()
-                    .equals(other.password, password)) &&
-            (identical(other.showErrorMsg, showErrorMsg) ||
-                const DeepCollectionEquality()
-                    .equals(other.showErrorMsg, showErrorMsg)) &&
             (identical(other.isSubmitting, isSubmitting) ||
                 const DeepCollectionEquality()
                     .equals(other.isSubmitting, isSubmitting)) &&
@@ -835,9 +409,6 @@ class _$_SignInFormState
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(emailAddress) ^
-      const DeepCollectionEquality().hash(password) ^
-      const DeepCollectionEquality().hash(showErrorMsg) ^
       const DeepCollectionEquality().hash(isSubmitting) ^
       const DeepCollectionEquality().hash(authFailureOrSuccessOption);
 
@@ -849,23 +420,11 @@ class _$_SignInFormState
 abstract class _SignInFormState implements SignInFormState {
   const factory _SignInFormState(
           {@required
-              EmailAddress emailAddress,
-          @required
-              Password password,
-          @required
-              bool showErrorMsg,
-          @required
               bool isSubmitting,
           @required
               Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) =
       _$_SignInFormState;
 
-  @override
-  EmailAddress get emailAddress;
-  @override
-  Password get password;
-  @override
-  bool get showErrorMsg;
   @override
   bool get isSubmitting;
   @override

@@ -31,6 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: Sizes.dimen_20.h,
             ),
+            // FractionallySizedBox(
+            //   heightFactor: 0.04,
+            // ),
             Padding(
               padding: EdgeInsets.only(left: Sizes.dimen_24.w),
               child: Text(
@@ -67,8 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: Sizes.dimen_48.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
             Center(
               child: MyRaisedButton(
@@ -82,10 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 isTrailingPresent: false,
               ),
             ),
-            SizedBox(
-              height: Sizes.dimen_40.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
             Expanded(
+              flex: 24,
               child: Container(
                 width: ScreenUtil().screenWidth,
                 decoration: BoxDecoration(
@@ -94,108 +102,110 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   color: AppColor.blackHaze,
                 ),
-                child: SingleChildScrollView(
-                  child: _isSignedIn
-                      ? Padding(
-                          padding: EdgeInsets.only(left: Sizes.dimen_0.w),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: Sizes.dimen_48.h,
-                              ),
-                              Text(
-                                'Your working hours.',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              SizedBox(
-                                height: Sizes.dimen_10.h,
-                              ),
-                              Image.asset(
-                                'assets/images/Frame.png',
-                                height: Sizes.dimen_200,
-                              ),
-                              SizedBox(height: Sizes.dimen_10.h),
-                              MyRaisedButton(
-                                buttonTitle: 'Check-in',
-                                buttonColor: AppColor.lightBlue,
-                                isTrailingPresent: false,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Sizes.dimen_20.w,
-                                  vertical: Sizes.dimen_18.h,
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('/');
-                                },
-                              ),
-                              SizedBox(
-                                height: Sizes.dimen_10.h,
-                              ),
-                              Text('Checkin time : 9:15 am'),
-                              SizedBox(
-                                height: Sizes.dimen_100.h,
-                              )
-                            ],
-                          ),
-                        )
-                      : Column(
+                child: _isSignedIn
+                    ? Padding(
+                        padding: EdgeInsets.only(left: Sizes.dimen_0.w),
+                        child: Column(
                           children: [
                             SizedBox(
                               height: Sizes.dimen_48.h,
+                            ),
+                            Text(
+                              'Your working hours.',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: Sizes.dimen_10.h,
                             ),
                             Image.asset(
                               'assets/images/Frame.png',
                               height: Sizes.dimen_200,
                             ),
                             SizedBox(height: Sizes.dimen_10.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed('/apply-leave-screen');
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/unwell_bg.png',
-                                        height: 138,
-                                      ),
-                                      Positioned(
-                                        left: Sizes.dimen_20,
-                                        top: Sizes.dimen_12,
-                                        child: Image.asset(
-                                          'assets/images/unwell.png',
-                                          height: 61,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                    child: Stack(
+                            MyRaisedButton(
+                              buttonTitle: 'Check-in',
+                              buttonColor: AppColor.lightBlue,
+                              isTrailingPresent: false,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.dimen_20.w,
+                                vertical: Sizes.dimen_18.h,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/');
+                              },
+                            ),
+                            SizedBox(
+                              height: Sizes.dimen_10.h,
+                            ),
+                            Text('Checkin time : 9:15 am'),
+                            SizedBox(
+                              height: Sizes.dimen_100.h,
+                            )
+                          ],
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: Sizes.dimen_4.h,
+                            ),
+                          ),
+                          Image.asset(
+                            'assets/images/Frame.png',
+                            height: Sizes.dimen_200.h,
+                          ),
+                          Expanded(child: SizedBox(height: Sizes.dimen_4.h)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed('/apply-leave-screen');
+                                },
+                                child: Stack(
                                   children: [
                                     Image.asset(
-                                      'assets/images/late_bg.png',
+                                      'assets/images/unwell_bg.png',
                                       height: 138,
                                     ),
                                     Positioned(
                                       left: Sizes.dimen_20,
                                       top: Sizes.dimen_12,
                                       child: Image.asset(
-                                        'assets/images/running_late.png',
+                                        'assets/images/unwell.png',
                                         height: 61,
                                       ),
                                     )
                                   ],
-                                )),
-                              ],
+                                ),
+                              ),
+                              GestureDetector(
+                                  child: Stack(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/late_bg.png',
+                                    height: 138,
+                                  ),
+                                  Positioned(
+                                    left: Sizes.dimen_20,
+                                    top: Sizes.dimen_12,
+                                    child: Image.asset(
+                                      'assets/images/running_late.png',
+                                      height: 61,
+                                    ),
+                                  )
+                                ],
+                              )),
+                            ],
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: Sizes.dimen_4.h,
                             ),
-                            SizedBox(
-                              height: Sizes.dimen_100.h,
-                            )
-                          ],
-                        ),
-                ),
+                          )
+                        ],
+                      ),
               ),
             ),
           ],

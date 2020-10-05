@@ -37,12 +37,14 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     return Container(
       decoration: MyDecorationBox(),
       child: Scaffold(
-        appBar: MyAppBar(myTitle: 'Leave'),
+        appBar: MyAppBar(myTitle: Text('My Calendar')),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: Sizes.dimen_100.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(left: Sizes.dimen_24.w),
@@ -58,10 +60,13 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
               child: Text(StringConstants.applyLeaveScreenSubTitleText,
                   style: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColor.white)),
             ),
-            SizedBox(
-              height: Sizes.dimen_100.h,
+            Expanded(
+              child: SizedBox(
+                height: Sizes.dimen_4.h,
+              ),
             ),
-            Flexible(
+            Expanded(
+              flex: 12,
               child: Form(
                 key: _formKey,
                 child: Container(
@@ -74,9 +79,13 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                   ),
                   child: SingleChildScrollView(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: Sizes.dimen_48.h,
+                        Flexible(
+                          flex: 5,
+                          child: SizedBox(
+                            height: Sizes.dimen_10.h,
+                          ),
                         ),
                         IconButton(
                           icon: Icon(Icons.calendar_today_rounded),
@@ -106,8 +115,10 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             );
                           },
                         ),
-                        SizedBox(
-                          height: Sizes.dimen_40.h,
+                        Flexible(
+                          child: SizedBox(
+                            height: Sizes.dimen_4.h,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
@@ -126,8 +137,10 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: Sizes.dimen_40.h,
+                        Flexible(
+                          child: SizedBox(
+                            height: Sizes.dimen_40.h,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: Sizes.dimen_24.w),

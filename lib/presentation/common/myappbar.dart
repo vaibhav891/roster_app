@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MyAppBar extends AppBar {
-  final String myTitle;
+  final Text myTitle;
 
   MyAppBar({Key key, @required this.myTitle})
       : super(
           key: key,
-          title: Text(myTitle),
+          title: myTitle,
           backgroundColor: Colors.transparent,
         );
 }

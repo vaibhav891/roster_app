@@ -5,13 +5,11 @@ import 'package:roster_app/domain/auth/user.dart';
 import 'package:roster_app/domain/auth/value_objects.dart';
 
 abstract class IAuthFacade {
-  Future<Option<User>> signedInUser();
+  //Future<Option<User>> signedInUser();
 
-  Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword(
-      {@required EmailAddress emailAddress, @required Password password});
+  Future<Either<AuthFailure, Unit>> registerUser({@required String userId});
 
-  Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword(
-      {@required EmailAddress emailAddress, @required Password password});
+  Future<Either<AuthFailure, Unit>> signInUser({@required String userId, @required String passcode});
 
   Future<void> signOut();
 }

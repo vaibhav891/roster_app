@@ -21,7 +21,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
         Sizes.dimen_18.w,
         Sizes.dimen_12.h,
         Sizes.dimen_18.w,
-        Sizes.dimen_32.h,
+        Sizes.dimen_24.h,
       ),
       currentIndex: widget.currentIndex,
       onTap: widget.handleIndexChanged,

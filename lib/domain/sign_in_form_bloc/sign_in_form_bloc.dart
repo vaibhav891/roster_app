@@ -30,65 +30,6 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
     SignInFormEvent event,
   ) async* {
     // implement mapEventToState
-    yield* event.map(
-      emailChanged: (e) async* {
-        yield state.copyWith(
-          emailAddress: EmailAddress(e.emailStr),
-          authFailureOrSuccessOption: none(),
-        );
-      },
-      passwordChanged: (e) async* {
-        yield state.copyWith(
-          password: Password(e.passwordStr),
-          authFailureOrSuccessOption: none(),
-        );
-      },
-      registerWithEmailnPasswordPressed: (e) async* {
-        Either<AuthFailure, Unit> successOrFailure;
-        //set state
-        yield state.copyWith(
-          isSubmitting: true,
-          authFailureOrSuccessOption: none(),
-        );
-
-        //check if email and password correct
-        // if correct then sign in and set state
-        if (state.emailAddress.value.isRight() && state.password.value.isRight()) {
-          successOrFailure = await _authFacade.registerWithEmailAndPassword(
-              emailAddress: state.emailAddress, password: state.password);
-        }
-
-        //finally set state
-        yield state.copyWith(
-          isSubmitting: false,
-          authFailureOrSuccessOption: successOrFailure == null ? none() : some(successOrFailure),
-          showErrorMsg: true,
-        );
-      },
-      signInWithEmailnPasswordPressed: (e) async* {
-        print('inside SignInWithEmailnPasswordPressed');
-
-        Either<AuthFailure, Unit> successOrFailure;
-        //set state
-        yield state.copyWith(
-          isSubmitting: true,
-          authFailureOrSuccessOption: none(),
-        );
-
-        //check if email and password correct
-        // if correct then sign in and set state
-        if (state.emailAddress.value.isRight() && state.password.value.isRight()) {
-          successOrFailure =
-              await _authFacade.signInWithEmailAndPassword(emailAddress: state.emailAddress, password: state.password);
-        }
-
-        //finally set state
-        yield state.copyWith(
-          isSubmitting: false,
-          authFailureOrSuccessOption: successOrFailure == null ? none() : some(successOrFailure),
-          showErrorMsg: true,
-        );
-      },
-    );
+    yield* event.map(registerUser: (RegisterUser value) {}, signInUser: (SignInUser value) {});
   }
 }

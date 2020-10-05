@@ -11,22 +11,20 @@ class RemoteDataSource implements IAuthFacade {
   RemoteDataSource(this._client);
 
   @override
-  Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({EmailAddress emailAddress, Password password}) {
+  Future<Either<AuthFailure, Unit>> registerUser({String userId}) {
+    // TODO: implement registerUser
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword({EmailAddress emailAddress, Password password}) {
+  Future<Either<AuthFailure, Unit>> signInUser({String userId, String passcode}) {
+    // TODO: implement signInUser
     throw UnimplementedError();
   }
 
   @override
   Future<void> signOut() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Option<User>> signedInUser() {
+    // TODO: implement signOut
     throw UnimplementedError();
   }
 }

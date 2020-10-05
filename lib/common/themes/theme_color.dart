@@ -13,4 +13,6 @@ class AppColor {
   static const Color eastBay = Color(0xff42417d);
   static const Color shamrockGreen = Color(0xff2FC9AB);
   static const Color elecViolet = Color(0xff653cfd);
+  static const Color mmGreen = Color(0xff23CD53);
+  static const Color gallery = Color(0xffebebeb);
 }

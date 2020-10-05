@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:roster_app/common/screenutils/screen_utils.dart';
+import 'package:roster_app/common/size_constants.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/presentation/common/my_decoration_box.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:roster_app/common/size_extension.dart';
 
 class ManagerDashboardScreen extends StatefulWidget {
   @override
@@ -44,27 +46,58 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
           Expanded(
             child: Container(
               width: ScreenUtil().screenWidth,
-              color: Colors.white,
+              color: AppColor.gallery,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  DropdownButton<String>(
-                    items: [
-                      DropdownMenuItem(
-                        child: Text('VR Mall Bengaluru'),
-                        value: 'VR Mall Bengaluru',
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                      items: [
+                        DropdownMenuItem(
+                          child: Text('VR Mall Bengaluru'),
+                          value: 'VR Mall Bengaluru',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('AR Mall Bengaluru'),
+                          value: 'AR Mall Bengaluru',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('GR Mall Bengaluru'),
+                          value: 'GR Mall Bengaluru',
+                        ),
+                      ],
+                      onChanged: (_) {},
+                      value: 'VR Mall Bengaluru',
+                    ),
+                  ),
+                  SizedBox(
+                    height: Sizes.dimen_12.h,
+                  ),
+                  Flexible(
+                    child: ListView.separated(
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          tileColor: AppColor.white,
+                          title: Text('William Mendoza'),
+                          subtitle: Text('In : 09:00 am  Out : 06:00 pm'),
+                          trailing: Container(
+                            color: AppColor.mmGreen,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Icon(
+                                Icons.done,
+                                color: AppColor.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 2,
                       ),
-                      DropdownMenuItem(
-                        child: Text('AR Mall Bengaluru'),
-                        value: 'AR Mall Bengaluru',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('GR Mall Bengaluru'),
-                        value: 'GR Mall Bengaluru',
-                      ),
-                    ],
-                    onChanged: (_) {},
-                    value: 'VR Mall Bengaluru',
+                    ),
                   )
                 ],
               ),

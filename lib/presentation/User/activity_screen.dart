@@ -31,7 +31,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Scaffold(
       backgroundColor: AppColor.blackHaze,
       appBar: MyAppBar(
-        myTitle: 'My Calendar',
+        myTitle: Text(
+          'My Calendar',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
