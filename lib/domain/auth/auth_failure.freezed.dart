@@ -27,6 +27,11 @@ class _$AuthFailureTearOff {
   InvalidUsernamePasscodeCombination invalidUsernamePasscodeCombination() {
     return const InvalidUsernamePasscodeCombination();
   }
+
+// ignore: unused_element
+  NoInternetConnectivity noInternetConnectivity() {
+    return const NoInternetConnectivity();
+  }
 }
 
 /// @nodoc
@@ -40,12 +45,14 @@ mixin _$AuthFailure {
     @required Result cancelledByUser(),
     @required Result serverError(),
     @required Result invalidUsernamePasscodeCombination(),
+    @required Result noInternetConnectivity(),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result cancelledByUser(),
     Result serverError(),
     Result invalidUsernamePasscodeCombination(),
+    Result noInternetConnectivity(),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -55,6 +62,7 @@ mixin _$AuthFailure {
     @required
         Result invalidUsernamePasscodeCombination(
             InvalidUsernamePasscodeCombination value),
+    @required Result noInternetConnectivity(NoInternetConnectivity value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
@@ -62,6 +70,7 @@ mixin _$AuthFailure {
     Result serverError(ServerError value),
     Result invalidUsernamePasscodeCombination(
         InvalidUsernamePasscodeCombination value),
+    Result noInternetConnectivity(NoInternetConnectivity value),
     @required Result orElse(),
   });
 }
@@ -124,10 +133,12 @@ class _$CancelledByUser implements CancelledByUser {
     @required Result cancelledByUser(),
     @required Result serverError(),
     @required Result invalidUsernamePasscodeCombination(),
+    @required Result noInternetConnectivity(),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return cancelledByUser();
   }
 
@@ -137,6 +148,7 @@ class _$CancelledByUser implements CancelledByUser {
     Result cancelledByUser(),
     Result serverError(),
     Result invalidUsernamePasscodeCombination(),
+    Result noInternetConnectivity(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -154,10 +166,12 @@ class _$CancelledByUser implements CancelledByUser {
     @required
         Result invalidUsernamePasscodeCombination(
             InvalidUsernamePasscodeCombination value),
+    @required Result noInternetConnectivity(NoInternetConnectivity value),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return cancelledByUser(this);
   }
 
@@ -168,6 +182,7 @@ class _$CancelledByUser implements CancelledByUser {
     Result serverError(ServerError value),
     Result invalidUsernamePasscodeCombination(
         InvalidUsernamePasscodeCombination value),
+    Result noInternetConnectivity(NoInternetConnectivity value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -223,10 +238,12 @@ class _$ServerError implements ServerError {
     @required Result cancelledByUser(),
     @required Result serverError(),
     @required Result invalidUsernamePasscodeCombination(),
+    @required Result noInternetConnectivity(),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return serverError();
   }
 
@@ -236,6 +253,7 @@ class _$ServerError implements ServerError {
     Result cancelledByUser(),
     Result serverError(),
     Result invalidUsernamePasscodeCombination(),
+    Result noInternetConnectivity(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -253,10 +271,12 @@ class _$ServerError implements ServerError {
     @required
         Result invalidUsernamePasscodeCombination(
             InvalidUsernamePasscodeCombination value),
+    @required Result noInternetConnectivity(NoInternetConnectivity value),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return serverError(this);
   }
 
@@ -267,6 +287,7 @@ class _$ServerError implements ServerError {
     Result serverError(ServerError value),
     Result invalidUsernamePasscodeCombination(
         InvalidUsernamePasscodeCombination value),
+    Result noInternetConnectivity(NoInternetConnectivity value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -328,10 +349,12 @@ class _$InvalidUsernamePasscodeCombination
     @required Result cancelledByUser(),
     @required Result serverError(),
     @required Result invalidUsernamePasscodeCombination(),
+    @required Result noInternetConnectivity(),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return invalidUsernamePasscodeCombination();
   }
 
@@ -341,6 +364,7 @@ class _$InvalidUsernamePasscodeCombination
     Result cancelledByUser(),
     Result serverError(),
     Result invalidUsernamePasscodeCombination(),
+    Result noInternetConnectivity(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -358,10 +382,12 @@ class _$InvalidUsernamePasscodeCombination
     @required
         Result invalidUsernamePasscodeCombination(
             InvalidUsernamePasscodeCombination value),
+    @required Result noInternetConnectivity(NoInternetConnectivity value),
   }) {
     assert(cancelledByUser != null);
     assert(serverError != null);
     assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
     return invalidUsernamePasscodeCombination(this);
   }
 
@@ -372,6 +398,7 @@ class _$InvalidUsernamePasscodeCombination
     Result serverError(ServerError value),
     Result invalidUsernamePasscodeCombination(
         InvalidUsernamePasscodeCombination value),
+    Result noInternetConnectivity(NoInternetConnectivity value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -385,4 +412,110 @@ class _$InvalidUsernamePasscodeCombination
 abstract class InvalidUsernamePasscodeCombination implements AuthFailure {
   const factory InvalidUsernamePasscodeCombination() =
       _$InvalidUsernamePasscodeCombination;
+}
+
+/// @nodoc
+abstract class $NoInternetConnectivityCopyWith<$Res> {
+  factory $NoInternetConnectivityCopyWith(NoInternetConnectivity value,
+          $Res Function(NoInternetConnectivity) then) =
+      _$NoInternetConnectivityCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$NoInternetConnectivityCopyWithImpl<$Res>
+    extends _$AuthFailureCopyWithImpl<$Res>
+    implements $NoInternetConnectivityCopyWith<$Res> {
+  _$NoInternetConnectivityCopyWithImpl(NoInternetConnectivity _value,
+      $Res Function(NoInternetConnectivity) _then)
+      : super(_value, (v) => _then(v as NoInternetConnectivity));
+
+  @override
+  NoInternetConnectivity get _value => super._value as NoInternetConnectivity;
+}
+
+/// @nodoc
+class _$NoInternetConnectivity implements NoInternetConnectivity {
+  const _$NoInternetConnectivity();
+
+  @override
+  String toString() {
+    return 'AuthFailure.noInternetConnectivity()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is NoInternetConnectivity);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result cancelledByUser(),
+    @required Result serverError(),
+    @required Result invalidUsernamePasscodeCombination(),
+    @required Result noInternetConnectivity(),
+  }) {
+    assert(cancelledByUser != null);
+    assert(serverError != null);
+    assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
+    return noInternetConnectivity();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result cancelledByUser(),
+    Result serverError(),
+    Result invalidUsernamePasscodeCombination(),
+    Result noInternetConnectivity(),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (noInternetConnectivity != null) {
+      return noInternetConnectivity();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result cancelledByUser(CancelledByUser value),
+    @required Result serverError(ServerError value),
+    @required
+        Result invalidUsernamePasscodeCombination(
+            InvalidUsernamePasscodeCombination value),
+    @required Result noInternetConnectivity(NoInternetConnectivity value),
+  }) {
+    assert(cancelledByUser != null);
+    assert(serverError != null);
+    assert(invalidUsernamePasscodeCombination != null);
+    assert(noInternetConnectivity != null);
+    return noInternetConnectivity(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result cancelledByUser(CancelledByUser value),
+    Result serverError(ServerError value),
+    Result invalidUsernamePasscodeCombination(
+        InvalidUsernamePasscodeCombination value),
+    Result noInternetConnectivity(NoInternetConnectivity value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (noInternetConnectivity != null) {
+      return noInternetConnectivity(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NoInternetConnectivity implements AuthFailure {
+  const factory NoInternetConnectivity() = _$NoInternetConnectivity;
 }

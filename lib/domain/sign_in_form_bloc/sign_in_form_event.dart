@@ -2,6 +2,6 @@ part of 'sign_in_form_bloc.dart';
 
 @freezed
 abstract class SignInFormEvent with _$SignInFormEvent {
-  const factory SignInFormEvent.registerUser() = RegisterUser;
-  const factory SignInFormEvent.signInUser() = SignInUser;
+  const factory SignInFormEvent.registerUser(String username) = RegisterUser;
+  const factory SignInFormEvent.signInUser(String username, String passcode) = SignInUser;
 }

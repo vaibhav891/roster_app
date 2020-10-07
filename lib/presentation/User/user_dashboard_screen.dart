@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/presentation/User/activity_screen.dart';
 import 'package:roster_app/presentation/User/home_screen.dart';
@@ -12,6 +15,7 @@ class UserDashboardScreen extends StatefulWidget {
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   final bucket = PageStorageBucket();
+  StreamSubscription<Position> positionStream;
 
   List<Widget> tabScreens = [
     HomeScreen(),
@@ -27,11 +31,24 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     });
   }
 
+  _getPosition() {
+    positionStream = getPositionStream(
+      distanceFilter: 10,
+    ).listen((Position position) {
+      print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    });
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // TODO get user location
+    _getPosition();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    positionStream.cancel();
   }
 
   @override

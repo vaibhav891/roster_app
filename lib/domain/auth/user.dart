@@ -1,9 +1,16 @@
-// import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:roster_app/domain/auth/value_objects.dart';
+class User {
+  static final User _instance = User._();
 
-// part 'user.freezed.dart';
+  User._();
 
-// @freezed
-// abstract class User with _$User {
-//   const factory User({@required UniqueId uid}) = _User;
-// }
+  static User get instance => _instance;
+
+  String userId;
+  String userRole;
+  bool isFirstLogin;
+  String token;
+
+  factory User() {
+    return _instance;
+  }
+}

@@ -14,13 +14,18 @@ class _$SignInFormEventTearOff {
   const _$SignInFormEventTearOff();
 
 // ignore: unused_element
-  RegisterUser registerUser() {
-    return const RegisterUser();
+  RegisterUser registerUser(String username) {
+    return RegisterUser(
+      username,
+    );
   }
 
 // ignore: unused_element
-  SignInUser signInUser() {
-    return const SignInUser();
+  SignInUser signInUser(String username, String passcode) {
+    return SignInUser(
+      username,
+      passcode,
+    );
   }
 }
 
@@ -30,15 +35,17 @@ const $SignInFormEvent = _$SignInFormEventTearOff();
 
 /// @nodoc
 mixin _$SignInFormEvent {
+  String get username;
+
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerUser(),
-    @required Result signInUser(),
+    @required Result registerUser(String username),
+    @required Result signInUser(String username, String passcode),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerUser(),
-    Result signInUser(),
+    Result registerUser(String username),
+    Result signInUser(String username, String passcode),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -52,6 +59,8 @@ mixin _$SignInFormEvent {
     Result signInUser(SignInUser value),
     @required Result orElse(),
   });
+
+  $SignInFormEventCopyWith<SignInFormEvent> get copyWith;
 }
 
 /// @nodoc
@@ -59,6 +68,7 @@ abstract class $SignInFormEventCopyWith<$Res> {
   factory $SignInFormEventCopyWith(
           SignInFormEvent value, $Res Function(SignInFormEvent) then) =
       _$SignInFormEventCopyWithImpl<$Res>;
+  $Res call({String username});
 }
 
 /// @nodoc
@@ -69,13 +79,25 @@ class _$SignInFormEventCopyWithImpl<$Res>
   final SignInFormEvent _value;
   // ignore: unused_field
   final $Res Function(SignInFormEvent) _then;
+
+  @override
+  $Res call({
+    Object username = freezed,
+  }) {
+    return _then(_value.copyWith(
+      username: username == freezed ? _value.username : username as String,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class $RegisterUserCopyWith<$Res> {
+abstract class $RegisterUserCopyWith<$Res>
+    implements $SignInFormEventCopyWith<$Res> {
   factory $RegisterUserCopyWith(
           RegisterUser value, $Res Function(RegisterUser) then) =
       _$RegisterUserCopyWithImpl<$Res>;
+  @override
+  $Res call({String username});
 }
 
 /// @nodoc
@@ -88,53 +110,75 @@ class _$RegisterUserCopyWithImpl<$Res>
 
   @override
   RegisterUser get _value => super._value as RegisterUser;
+
+  @override
+  $Res call({
+    Object username = freezed,
+  }) {
+    return _then(RegisterUser(
+      username == freezed ? _value.username : username as String,
+    ));
+  }
 }
 
 /// @nodoc
 class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
-  const _$RegisterUser();
+  const _$RegisterUser(this.username) : assert(username != null);
+
+  @override
+  final String username;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.registerUser()';
+    return 'SignInFormEvent.registerUser(username: $username)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'SignInFormEvent.registerUser'));
+      ..add(DiagnosticsProperty('type', 'SignInFormEvent.registerUser'))
+      ..add(DiagnosticsProperty('username', username));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is RegisterUser);
+    return identical(this, other) ||
+        (other is RegisterUser &&
+            (identical(other.username, username) ||
+                const DeepCollectionEquality()
+                    .equals(other.username, username)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(username);
+
+  @override
+  $RegisterUserCopyWith<RegisterUser> get copyWith =>
+      _$RegisterUserCopyWithImpl<RegisterUser>(this, _$identity);
 
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerUser(),
-    @required Result signInUser(),
+    @required Result registerUser(String username),
+    @required Result signInUser(String username, String passcode),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
-    return registerUser();
+    return registerUser(username);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerUser(),
-    Result signInUser(),
+    Result registerUser(String username),
+    Result signInUser(String username, String passcode),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (registerUser != null) {
-      return registerUser();
+      return registerUser(username);
     }
     return orElse();
   }
@@ -166,14 +210,22 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
 }
 
 abstract class RegisterUser implements SignInFormEvent {
-  const factory RegisterUser() = _$RegisterUser;
+  const factory RegisterUser(String username) = _$RegisterUser;
+
+  @override
+  String get username;
+  @override
+  $RegisterUserCopyWith<RegisterUser> get copyWith;
 }
 
 /// @nodoc
-abstract class $SignInUserCopyWith<$Res> {
+abstract class $SignInUserCopyWith<$Res>
+    implements $SignInFormEventCopyWith<$Res> {
   factory $SignInUserCopyWith(
           SignInUser value, $Res Function(SignInUser) then) =
       _$SignInUserCopyWithImpl<$Res>;
+  @override
+  $Res call({String username, String passcode});
 }
 
 /// @nodoc
@@ -184,52 +236,87 @@ class _$SignInUserCopyWithImpl<$Res> extends _$SignInFormEventCopyWithImpl<$Res>
 
   @override
   SignInUser get _value => super._value as SignInUser;
+
+  @override
+  $Res call({
+    Object username = freezed,
+    Object passcode = freezed,
+  }) {
+    return _then(SignInUser(
+      username == freezed ? _value.username : username as String,
+      passcode == freezed ? _value.passcode : passcode as String,
+    ));
+  }
 }
 
 /// @nodoc
 class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
-  const _$SignInUser();
+  const _$SignInUser(this.username, this.passcode)
+      : assert(username != null),
+        assert(passcode != null);
+
+  @override
+  final String username;
+  @override
+  final String passcode;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormEvent.signInUser()';
+    return 'SignInFormEvent.signInUser(username: $username, passcode: $passcode)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'SignInFormEvent.signInUser'));
+    properties
+      ..add(DiagnosticsProperty('type', 'SignInFormEvent.signInUser'))
+      ..add(DiagnosticsProperty('username', username))
+      ..add(DiagnosticsProperty('passcode', passcode));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is SignInUser);
+    return identical(this, other) ||
+        (other is SignInUser &&
+            (identical(other.username, username) ||
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
+            (identical(other.passcode, passcode) ||
+                const DeepCollectionEquality()
+                    .equals(other.passcode, passcode)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(username) ^
+      const DeepCollectionEquality().hash(passcode);
+
+  @override
+  $SignInUserCopyWith<SignInUser> get copyWith =>
+      _$SignInUserCopyWithImpl<SignInUser>(this, _$identity);
 
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result registerUser(),
-    @required Result signInUser(),
+    @required Result registerUser(String username),
+    @required Result signInUser(String username, String passcode),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
-    return signInUser();
+    return signInUser(username, passcode);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result registerUser(),
-    Result signInUser(),
+    Result registerUser(String username),
+    Result signInUser(String username, String passcode),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (signInUser != null) {
-      return signInUser();
+      return signInUser(username, passcode);
     }
     return orElse();
   }
@@ -261,7 +348,13 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
 }
 
 abstract class SignInUser implements SignInFormEvent {
-  const factory SignInUser() = _$SignInUser;
+  const factory SignInUser(String username, String passcode) = _$SignInUser;
+
+  @override
+  String get username;
+  String get passcode;
+  @override
+  $SignInUserCopyWith<SignInUser> get copyWith;
 }
 
 /// @nodoc
@@ -271,10 +364,12 @@ class _$SignInFormStateTearOff {
 // ignore: unused_element
   _SignInFormState call(
       {@required bool isSubmitting,
-      @required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) {
+      @required Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
+      @required bool isRegister}) {
     return _SignInFormState(
       isSubmitting: isSubmitting,
       authFailureOrSuccessOption: authFailureOrSuccessOption,
+      isRegister: isRegister,
     );
   }
 }
@@ -286,7 +381,8 @@ const $SignInFormState = _$SignInFormStateTearOff();
 /// @nodoc
 mixin _$SignInFormState {
   bool get isSubmitting;
-  Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
+  Option<Either<AuthFailure, String>> get authFailureOrSuccessOption;
+  bool get isRegister;
 
   $SignInFormStateCopyWith<SignInFormState> get copyWith;
 }
@@ -298,7 +394,8 @@ abstract class $SignInFormStateCopyWith<$Res> {
       _$SignInFormStateCopyWithImpl<$Res>;
   $Res call(
       {bool isSubmitting,
-      Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
+      Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
+      bool isRegister});
 }
 
 /// @nodoc
@@ -314,13 +411,16 @@ class _$SignInFormStateCopyWithImpl<$Res>
   $Res call({
     Object isSubmitting = freezed,
     Object authFailureOrSuccessOption = freezed,
+    Object isRegister = freezed,
   }) {
     return _then(_value.copyWith(
       isSubmitting:
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
           ? _value.authFailureOrSuccessOption
-          : authFailureOrSuccessOption as Option<Either<AuthFailure, Unit>>,
+          : authFailureOrSuccessOption as Option<Either<AuthFailure, String>>,
+      isRegister:
+          isRegister == freezed ? _value.isRegister : isRegister as bool,
     ));
   }
 }
@@ -334,7 +434,8 @@ abstract class _$SignInFormStateCopyWith<$Res>
   @override
   $Res call(
       {bool isSubmitting,
-      Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
+      Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
+      bool isRegister});
 }
 
 /// @nodoc
@@ -352,13 +453,16 @@ class __$SignInFormStateCopyWithImpl<$Res>
   $Res call({
     Object isSubmitting = freezed,
     Object authFailureOrSuccessOption = freezed,
+    Object isRegister = freezed,
   }) {
     return _then(_SignInFormState(
       isSubmitting:
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
           ? _value.authFailureOrSuccessOption
-          : authFailureOrSuccessOption as Option<Either<AuthFailure, Unit>>,
+          : authFailureOrSuccessOption as Option<Either<AuthFailure, String>>,
+      isRegister:
+          isRegister == freezed ? _value.isRegister : isRegister as bool,
     ));
   }
 }
@@ -368,18 +472,23 @@ class _$_SignInFormState
     with DiagnosticableTreeMixin
     implements _SignInFormState {
   const _$_SignInFormState(
-      {@required this.isSubmitting, @required this.authFailureOrSuccessOption})
+      {@required this.isSubmitting,
+      @required this.authFailureOrSuccessOption,
+      @required this.isRegister})
       : assert(isSubmitting != null),
-        assert(authFailureOrSuccessOption != null);
+        assert(authFailureOrSuccessOption != null),
+        assert(isRegister != null);
 
   @override
   final bool isSubmitting;
   @override
-  final Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption;
+  final Option<Either<AuthFailure, String>> authFailureOrSuccessOption;
+  @override
+  final bool isRegister;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SignInFormState(isSubmitting: $isSubmitting, authFailureOrSuccessOption: $authFailureOrSuccessOption)';
+    return 'SignInFormState(isSubmitting: $isSubmitting, authFailureOrSuccessOption: $authFailureOrSuccessOption, isRegister: $isRegister)';
   }
 
   @override
@@ -389,7 +498,8 @@ class _$_SignInFormState
       ..add(DiagnosticsProperty('type', 'SignInFormState'))
       ..add(DiagnosticsProperty('isSubmitting', isSubmitting))
       ..add(DiagnosticsProperty(
-          'authFailureOrSuccessOption', authFailureOrSuccessOption));
+          'authFailureOrSuccessOption', authFailureOrSuccessOption))
+      ..add(DiagnosticsProperty('isRegister', isRegister));
   }
 
   @override
@@ -403,14 +513,18 @@ class _$_SignInFormState
                     authFailureOrSuccessOption) ||
                 const DeepCollectionEquality().equals(
                     other.authFailureOrSuccessOption,
-                    authFailureOrSuccessOption)));
+                    authFailureOrSuccessOption)) &&
+            (identical(other.isRegister, isRegister) ||
+                const DeepCollectionEquality()
+                    .equals(other.isRegister, isRegister)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(isSubmitting) ^
-      const DeepCollectionEquality().hash(authFailureOrSuccessOption);
+      const DeepCollectionEquality().hash(authFailureOrSuccessOption) ^
+      const DeepCollectionEquality().hash(isRegister);
 
   @override
   _$SignInFormStateCopyWith<_SignInFormState> get copyWith =>
@@ -419,16 +533,16 @@ class _$_SignInFormState
 
 abstract class _SignInFormState implements SignInFormState {
   const factory _SignInFormState(
-          {@required
-              bool isSubmitting,
-          @required
-              Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) =
-      _$_SignInFormState;
+      {@required bool isSubmitting,
+      @required Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
+      @required bool isRegister}) = _$_SignInFormState;
 
   @override
   bool get isSubmitting;
   @override
-  Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
+  Option<Either<AuthFailure, String>> get authFailureOrSuccessOption;
+  @override
+  bool get isRegister;
   @override
   _$SignInFormStateCopyWith<_SignInFormState> get copyWith;
 }

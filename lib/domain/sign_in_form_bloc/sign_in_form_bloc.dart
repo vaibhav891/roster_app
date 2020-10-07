@@ -22,14 +22,48 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
 
   SignInFormBloc(this._authFacade) : super(SignInFormState.initial());
 
-  @override
-  SignInFormState get initialState => SignInFormState.initial();
+  // @override
+  // SignInFormState get initialState => SignInFormState.initial();
 
   @override
   Stream<SignInFormState> mapEventToState(
     SignInFormEvent event,
   ) async* {
     // implement mapEventToState
-    yield* event.map(registerUser: (RegisterUser value) {}, signInUser: (SignInUser value) {});
+    yield* event.map(
+      registerUser: (RegisterUser value) async* {
+        print('start registerUser bloc');
+        Either<AuthFailure, String> successOrFailure;
+        yield state.copyWith(
+          isSubmitting: true,
+          authFailureOrSuccessOption: none(),
+        );
+
+        successOrFailure = await _authFacade.registerUser(
+          userId: value.username,
+        );
+        print('end registerUser bloc');
+        yield state.copyWith(
+          isSubmitting: false,
+          isRegister: true,
+          authFailureOrSuccessOption: successOrFailure == null ? none() : some(successOrFailure),
+        );
+      },
+      signInUser: (SignInUser value) async* {
+        print('start signInUser bloc');
+        Either<AuthFailure, String> successOrFailure;
+        yield state.copyWith(
+          isSubmitting: true,
+          authFailureOrSuccessOption: none(),
+        );
+
+        successOrFailure = await _authFacade.signInUser(userId: value.username, passcode: value.passcode);
+        print('end signInUser bloc');
+        yield state.copyWith(
+          isSubmitting: false,
+          authFailureOrSuccessOption: successOrFailure == null ? none() : some(successOrFailure),
+        );
+      },
+    );
   }
 }

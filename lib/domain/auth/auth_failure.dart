@@ -8,4 +8,5 @@ abstract class AuthFailure with _$AuthFailure {
   const factory AuthFailure.serverError() = ServerError;
   //const factory AuthFailure.emailAlreadyInUse() = EmailAlreadyInUse;
   const factory AuthFailure.invalidUsernamePasscodeCombination() = InvalidUsernamePasscodeCombination;
+  const factory AuthFailure.noInternetConnectivity() = NoInternetConnectivity;
 }
