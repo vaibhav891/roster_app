@@ -55,7 +55,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
               ),
             ),
             Expanded(
-              flex: 10,
+              flex: 11,
               child: Container(
                 width: ScreenUtil().screenWidth,
                 decoration: BoxDecoration(
@@ -67,7 +67,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: Sizes.dimen_48.h,
+                      height: Sizes.dimen_40.h,
                     ),
                     ButtonBar(
                       alignment: MainAxisAlignment.spaceAround,

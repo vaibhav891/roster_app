@@ -39,16 +39,16 @@ class CustomInputBox extends StatelessWidget {
           isDense: true,
           filled: true,
           fillColor: AppColor.sandGrey.withOpacity(0.85),
-          enabledBorder: InputBorder.none,
-          // OutlineInputBorder(
-          //   borderSide: const BorderSide(color: Color.fromRGBO(194, 198, 202, 0.2), width: 1),
-          //   borderRadius: BorderRadius.circular(5),
-          // ),
-          focusedBorder: InputBorder.none,
-          // OutlineInputBorder(
-          //   borderSide: const BorderSide(color: Color.fromRGBO(194, 198, 202, 0.2), width: 1),
-          //   borderRadius: BorderRadius.circular(5),
-          // ),
+          enabledBorder: //InputBorder.none,
+              OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          focusedBorder: //InputBorder.none,
+              OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
         validator: validator,
         onChanged: onChanged,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 import 'package:roster_app/common/screenutils/screen_utils.dart';
 import 'package:roster_app/common/size_constants.dart';
 import 'package:roster_app/common/themes/theme_color.dart';

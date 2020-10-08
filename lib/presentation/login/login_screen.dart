@@ -176,8 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: Sizes.dimen_100.h,
+                  Expanded(
+                    child: SizedBox(
+                      height: Sizes.dimen_100.h,
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Sizes.dimen_24.w),
@@ -196,7 +198,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: Sizes.dimen_100.h,
                   ),
-                  Flexible(
+                  Expanded(
+                    flex: 12,
                     child: Form(
                       key: _formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -211,9 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: Sizes.dimen_24.w),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                  height: Sizes.dimen_48.h,
+                                Flexible(
+                                  child: SizedBox(
+                                    height: Sizes.dimen_48.h,
+                                  ),
                                 ),
                                 CustomInputBox(
                                   title: 'Username',
@@ -254,8 +260,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: Sizes.dimen_100.h,
+                                Flexible(
+                                  child: SizedBox(
+                                    height: Sizes.dimen_48.h,
+                                  ),
                                 ),
                                 !state.isSubmitting
                                     ? MyRaisedButton(

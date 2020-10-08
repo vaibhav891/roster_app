@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
+import 'package:roster_app/domain/auth/user.dart';
+import 'package:roster_app/domain/shift_signing_bloc/shift_signing_bloc.dart';
 import 'package:roster_app/presentation/User/activity_screen.dart';
 import 'package:roster_app/presentation/User/home_screen.dart';
 import 'package:roster_app/presentation/User/my_stats_screen.dart';
@@ -32,10 +35,21 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   }
 
   _getPosition() {
+    print('inside _getPosition');
+
     positionStream = getPositionStream(
-      distanceFilter: 10,
-    ).listen((Position position) {
+            //distanceFilter: 10,
+            //timeInterval: 1000, //this is in millisecs
+            )
+        .listen((Position position) {
       print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+      User.instance.lat = position.latitude.toString();
+      User.instance.long = position.longitude.toString();
+      var bloc = BlocProvider.of<ShiftSigningBloc>(context);
+      if (bloc.state.isSignedIn) {
+        // BlocProvider.of<ShiftSigningBloc>(context)
+        //     .add(ShiftSigningEvent(position.latitude.toString(), position.longitude.toString()));
+      }
     });
   }
 

@@ -9,6 +9,8 @@ class User {
   String userRole;
   bool isFirstLogin;
   String token;
+  String lat;
+  String long;
 
   factory User() {
     return _instance;

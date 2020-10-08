@@ -107,7 +107,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   ),
                   MyRaisedButton(
                     buttonTitle: 'Apply for Leaves',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/apply-leave-screen');
+                    },
                     buttonColor: AppColor.lightBlue,
                     isTrailingPresent: false,
                     padding: EdgeInsets.symmetric(

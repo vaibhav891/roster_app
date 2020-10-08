@@ -27,7 +27,7 @@ class CustomFormField extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
-              height: Sizes.dimen_4.h,
+              height: Sizes.dimen_8.h,
             ),
             child,
           ],

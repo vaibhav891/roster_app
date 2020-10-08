@@ -117,6 +117,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                                     onChanged: (value) => _passcode = value,
                                     hintText: '******',
                                     obscureText: true,
+                                    keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value.isEmpty) return 'Cannot be empty';
                                       return null;
@@ -127,6 +128,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                                     onChanged: (value) => _rePasscode = value,
                                     hintText: '******',
                                     obscureText: true,
+                                    keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value.isEmpty)
                                         return 'Cannot be empty';

@@ -15,4 +15,6 @@ class AppColor {
   static const Color elecViolet = Color(0xff653cfd);
   static const Color mmGreen = Color(0xff23CD53);
   static const Color gallery = Color(0xffebebeb);
+  static const Color ebonyClay = Color(0xff272140);
+  static const Color anakiwaBlue = Color(0xffA4DBFF);
 }

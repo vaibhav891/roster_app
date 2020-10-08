@@ -4,14 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:roster_app/domain/auth/auth_failure.dart';
-import 'package:roster_app/domain/auth/i_auth_facade.dart';
+import 'package:roster_app/data/data_sources/remote_data_src.dart';
 
 part 'update_passcode_event.dart';
 part 'update_passcode_state.dart';
 
 class UpdatePasscodeBloc extends Bloc<UpdatePasscodeEvent, UpdatePasscodeState> {
-  final IAuthFacade _iAuthFacade;
-  UpdatePasscodeBloc(this._iAuthFacade) : super(UpdatePasscodeInitial());
+  final RemoteDataSrc _remoteDataSrc;
+  UpdatePasscodeBloc(this._remoteDataSrc) : super(UpdatePasscodeInitial());
 
   @override
   Stream<UpdatePasscodeState> mapEventToState(
@@ -19,7 +19,7 @@ class UpdatePasscodeBloc extends Bloc<UpdatePasscodeEvent, UpdatePasscodeState> 
   ) async* {
     yield UpdatePasscodeDoneState(true, none());
 
-    var successOrFailure = await _iAuthFacade.updatePasscode(
+    var successOrFailure = await _remoteDataSrc.updatePasscode(
         userId: (event as UpdatePasscodePressedEvent).userId,
         passcode: (event as UpdatePasscodePressedEvent).passcode,
         newPasscode: (event as UpdatePasscodePressedEvent).newPasscode);
