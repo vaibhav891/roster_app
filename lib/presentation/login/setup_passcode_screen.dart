@@ -50,14 +50,15 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                 (either) => either.fold(
                   (failure) {
                     print('inside failure');
-                    return FlushbarHelper.createError(
-                      message: failure.map(
-                        cancelledByUser: (_) => 'cancelled ',
-                        serverError: (_) => 'Server error! Contact support',
-                        invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                        noInternetConnectivity: (_) => 'No Internet connectivity',
-                      ),
-                    ).show(context);
+                    return FlushbarHelper.createError(message: failure.message
+                            // map(
+                            //   cancelledByUser: (_) => 'cancelled ',
+                            //   serverError: (_) => 'Server error! Contact support',
+                            //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
+                            //   noInternetConnectivity: (_) => 'No Internet connectivity',
+                            // ),
+                            )
+                        .show(context);
                   },
                   (r) {
                     Navigator.of(context).pushNamed('/user-dashboard');

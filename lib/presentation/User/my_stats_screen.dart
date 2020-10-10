@@ -85,7 +85,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                           child: Text('Monthly'),
                           color: AppColor.sandGrey,
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/manager-dashboard');
+                            // Navigator.of(context).pushNamed('/manager-dashboard');
                           },
                         ),
                       ],

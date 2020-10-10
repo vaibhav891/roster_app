@@ -8,6 +8,7 @@ import 'package:roster_app/domain/shift_signing_bloc/shift_signing_bloc.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
 import 'package:roster_app/domain/task_bloc/task_bloc.dart';
 import 'package:roster_app/domain/update_passcode_bloc/update_passcode_bloc.dart';
+import 'package:roster_app/domain/user_report_bloc/user_report_bloc.dart';
 
 GetIt getIt = GetIt.I;
 
@@ -21,4 +22,5 @@ Future<void> setup() async {
   getIt.registerFactory<ShiftSigningBloc>(() => ShiftSigningBloc(getIt<RemoteDataSrc>()));
   getIt.registerFactory<TaskBloc>(() => TaskBloc(getIt<RemoteDataSrc>()));
   getIt.registerFactory<ApplyLeaveBloc>(() => ApplyLeaveBloc(getIt<RemoteDataSrc>()));
+  getIt.registerFactory<UserReportBloc>(() => UserReportBloc(getIt<RemoteDataSrc>()));
 }

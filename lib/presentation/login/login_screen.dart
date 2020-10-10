@@ -8,6 +8,7 @@ import 'package:roster_app/common/size_constants.dart';
 import 'package:roster_app/common/string_constants.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/di/get_it.dart';
+import 'package:roster_app/domain/auth/user.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
 import 'package:roster_app/presentation/common/custom_input_box.dart';
 import 'package:roster_app/presentation/common/my_decoration_box.dart';
@@ -51,14 +52,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 (either) => either.fold(
                   (failure) {
                     print('inside failure');
-                    return FlushbarHelper.createError(
-                      message: failure.map(
-                        cancelledByUser: (_) => 'cancelled ',
-                        serverError: (_) => 'Server error! Contact support',
-                        invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                        noInternetConnectivity: (_) => 'No Internet connectivity',
-                      ),
-                    ).show(context);
+                    return FlushbarHelper.createError(message: failure.message
+                            // map(
+                            //   cancelledByUser: (_) => 'cancelled ',
+                            //   serverError: (_) => 'Server error! Contact support',
+                            //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
+                            //   noInternetConnectivity: (_) => 'No Internet connectivity',
+                            // ),
+                            )
+                        .show(context);
                   },
                   (r) {
                     print('inside success');
@@ -148,21 +150,27 @@ class _LoginScreenState extends State<LoginScreen> {
             (either) => either.fold(
               (failure) {
                 print('inside failure');
-                return FlushbarHelper.createError(
-                  message: failure.map(
-                    cancelledByUser: (_) => 'cancelled ',
-                    serverError: (_) => 'Server error! Contact support',
-                    invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                    noInternetConnectivity: (_) => 'No Internet connectivity',
-                  ),
-                ).show(context);
+                return FlushbarHelper.createError(message: failure.message
+                        // map(
+                        //   cancelledByUser: (_) => 'cancelled ',
+                        //   serverError: (_) => 'Server error! Contact support',
+                        //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
+                        //   noInternetConnectivity: (_) => 'No Internet connectivity',
+                        // ),
+                        )
+                    .show(context);
               },
               (r) {
                 print('updatePasscode -> $r');
                 if (r == 'YES')
                   Navigator.of(context).pushNamed('/setup-passcode-screen', arguments: _passcode);
-                else
-                  Navigator.of(context).pushNamedAndRemoveUntil('/user-dashboard', (route) => route.isFirst);
+                else {
+                  if (User.instance.userRole == 'manager') {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/manager-dashboard', (route) => route.isFirst);
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/user-dashboard', (route) => route.isFirst);
+                  }
+                }
               },
             ),
           );

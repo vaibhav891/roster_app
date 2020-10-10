@@ -13,6 +13,7 @@ import 'package:roster_app/domain/task_bloc/task_bloc.dart';
 import 'package:roster_app/presentation/common/dashboard_appbar.dart';
 import 'package:roster_app/presentation/common/my_decoration_box.dart';
 import 'package:roster_app/presentation/common/my_raised_button.dart';
+import 'package:roster_app/presentation/common/show_duration_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -22,34 +23,38 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   //bool _isSignedIn = false;
   Position position;
+  Duration _duration = Duration(hours: 0, minutes: 0);
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ShiftSigningBloc, ShiftSigningState>(
       listener: (context, state) {
         if (state.failure != null)
-          return FlushbarHelper.createError(
-            message: state.failure.map(
-              cancelledByUser: (_) => 'cancelled ',
-              serverError: (_) => 'Server error! Contact support',
-              invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-              noInternetConnectivity: (_) => 'No Internet connectivity',
-            ),
-          ).show(context);
+          return FlushbarHelper.createError(message: state.failure.message
+
+                  // map(
+                  //   cancelledByUser: (_) => 'cancelled ',
+                  //   serverError: (_) => 'Server error! Contact support',
+                  //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
+                  //   noInternetConnectivity: (_) => 'No Internet connectivity',
+                  // ),
+                  )
+              .show(context);
         // else
         //                                       Navigator.of(context).pushNamed('/');
       },
       child: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
           if (state.failure != null)
-            return FlushbarHelper.createError(
-              message: state.failure.map(
-                cancelledByUser: (_) => 'cancelled ',
-                serverError: (_) => 'Server error! Contact support',
-                invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                noInternetConnectivity: (_) => 'No Internet connectivity',
-              ),
-            ).show(context);
+            return FlushbarHelper.createError(message: state.failure.message
+                    // map(
+                    //   cancelledByUser: (_) => 'cancelled ',
+                    //   serverError: (_) => 'Server error! Contact support',
+                    //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
+                    //   noInternetConnectivity: (_) => 'No Internet connectivity',
+                    // ),
+                    )
+                .show(context);
         },
         child: BlocBuilder<ShiftSigningBloc, ShiftSigningState>(
           builder: (context, shiftState) {
@@ -93,13 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               children: [
                                 Column(
-                                  children: [Text('Start Time'), Text('10:00 AM')],
+                                  children: [Text('Start Time'), Text(User.instance.startTime ?? '-')],
                                 ),
                                 SizedBox(
                                   width: Sizes.dimen_48.w,
                                 ),
                                 Column(
-                                  children: [Text('End Time'), Text('07:00 PM')],
+                                  children: [Text('End Time'), Text(User.instance.endTime ?? '-')],
                                 )
                               ],
                             ),
@@ -241,8 +246,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                           GestureDetector(
-                                              onTap: () {
-                                                //Navigator.of(context).pushNamed('/apply-leave-screen');
+                                              onTap: () async {
+                                                _duration = await showDurationPicker(
+                                                    context: context, initialTime: Duration(minutes: 0));
+
+                                                print(_duration);
+                                                if (_duration != null)
+                                                  FlushbarHelper.createSuccess(message: 'Submit successful')
+                                                      .show(context);
                                               },
                                               child: Stack(
                                                 children: [

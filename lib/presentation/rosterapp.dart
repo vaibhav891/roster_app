@@ -6,6 +6,7 @@ import 'package:roster_app/di/get_it.dart';
 import 'package:roster_app/domain/shift_signing_bloc/shift_signing_bloc.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
 import 'package:roster_app/domain/task_bloc/task_bloc.dart';
+//import 'package:roster_app/domain/user_report_bloc/user_report_bloc.dart';
 import 'package:roster_app/presentation/User/apply_leave_screen.dart';
 import 'package:roster_app/presentation/User/qr_scan_screen.dart';
 import 'package:roster_app/presentation/User/user_dashboard_screen.dart';
@@ -17,6 +18,7 @@ class RosterApp extends StatelessWidget {
   final SignInFormBloc signInFormBloc = getIt<SignInFormBloc>();
   final ShiftSigningBloc shiftSigningBloc = getIt<ShiftSigningBloc>();
   final TaskBloc taskBloc = getIt<TaskBloc>();
+  //final UserReportBloc userReportBloc = getIt<UserReportBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class RosterApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => taskBloc,
-        )
+        ),
       ],
       child: GestureDetector(
         onTap: () {

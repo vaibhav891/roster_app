@@ -11,6 +11,8 @@ class User {
   String token;
   String lat;
   String long;
+  String startTime;
+  String endTime;
 
   factory User() {
     return _instance;
