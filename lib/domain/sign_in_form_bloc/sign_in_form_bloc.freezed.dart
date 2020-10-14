@@ -27,6 +27,11 @@ class _$SignInFormEventTearOff {
       passcode,
     );
   }
+
+// ignore: unused_element
+  SignOutUser signOutUser() {
+    return const SignOutUser();
+  }
 }
 
 /// @nodoc
@@ -35,32 +40,32 @@ const $SignInFormEvent = _$SignInFormEventTearOff();
 
 /// @nodoc
 mixin _$SignInFormEvent {
-  String get username;
-
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result registerUser(String username),
     @required Result signInUser(String username, String passcode),
+    @required Result signOutUser(),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result registerUser(String username),
     Result signInUser(String username, String passcode),
+    Result signOutUser(),
     @required Result orElse(),
   });
   @optionalTypeArgs
   Result map<Result extends Object>({
     @required Result registerUser(RegisterUser value),
     @required Result signInUser(SignInUser value),
+    @required Result signOutUser(SignOutUser value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result registerUser(RegisterUser value),
     Result signInUser(SignInUser value),
+    Result signOutUser(SignOutUser value),
     @required Result orElse(),
   });
-
-  $SignInFormEventCopyWith<SignInFormEvent> get copyWith;
 }
 
 /// @nodoc
@@ -68,7 +73,6 @@ abstract class $SignInFormEventCopyWith<$Res> {
   factory $SignInFormEventCopyWith(
           SignInFormEvent value, $Res Function(SignInFormEvent) then) =
       _$SignInFormEventCopyWithImpl<$Res>;
-  $Res call({String username});
 }
 
 /// @nodoc
@@ -79,24 +83,13 @@ class _$SignInFormEventCopyWithImpl<$Res>
   final SignInFormEvent _value;
   // ignore: unused_field
   final $Res Function(SignInFormEvent) _then;
-
-  @override
-  $Res call({
-    Object username = freezed,
-  }) {
-    return _then(_value.copyWith(
-      username: username == freezed ? _value.username : username as String,
-    ));
-  }
 }
 
 /// @nodoc
-abstract class $RegisterUserCopyWith<$Res>
-    implements $SignInFormEventCopyWith<$Res> {
+abstract class $RegisterUserCopyWith<$Res> {
   factory $RegisterUserCopyWith(
           RegisterUser value, $Res Function(RegisterUser) then) =
       _$RegisterUserCopyWithImpl<$Res>;
-  @override
   $Res call({String username});
 }
 
@@ -163,9 +156,11 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
   Result when<Result extends Object>({
     @required Result registerUser(String username),
     @required Result signInUser(String username, String passcode),
+    @required Result signOutUser(),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
+    assert(signOutUser != null);
     return registerUser(username);
   }
 
@@ -174,6 +169,7 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
   Result maybeWhen<Result extends Object>({
     Result registerUser(String username),
     Result signInUser(String username, String passcode),
+    Result signOutUser(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -188,9 +184,11 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
   Result map<Result extends Object>({
     @required Result registerUser(RegisterUser value),
     @required Result signInUser(SignInUser value),
+    @required Result signOutUser(SignOutUser value),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
+    assert(signOutUser != null);
     return registerUser(this);
   }
 
@@ -199,6 +197,7 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
   Result maybeMap<Result extends Object>({
     Result registerUser(RegisterUser value),
     Result signInUser(SignInUser value),
+    Result signOutUser(SignOutUser value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -212,19 +211,15 @@ class _$RegisterUser with DiagnosticableTreeMixin implements RegisterUser {
 abstract class RegisterUser implements SignInFormEvent {
   const factory RegisterUser(String username) = _$RegisterUser;
 
-  @override
   String get username;
-  @override
   $RegisterUserCopyWith<RegisterUser> get copyWith;
 }
 
 /// @nodoc
-abstract class $SignInUserCopyWith<$Res>
-    implements $SignInFormEventCopyWith<$Res> {
+abstract class $SignInUserCopyWith<$Res> {
   factory $SignInUserCopyWith(
           SignInUser value, $Res Function(SignInUser) then) =
       _$SignInUserCopyWithImpl<$Res>;
-  @override
   $Res call({String username, String passcode});
 }
 
@@ -301,9 +296,11 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
   Result when<Result extends Object>({
     @required Result registerUser(String username),
     @required Result signInUser(String username, String passcode),
+    @required Result signOutUser(),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
+    assert(signOutUser != null);
     return signInUser(username, passcode);
   }
 
@@ -312,6 +309,7 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
   Result maybeWhen<Result extends Object>({
     Result registerUser(String username),
     Result signInUser(String username, String passcode),
+    Result signOutUser(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -326,9 +324,11 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
   Result map<Result extends Object>({
     @required Result registerUser(RegisterUser value),
     @required Result signInUser(SignInUser value),
+    @required Result signOutUser(SignOutUser value),
   }) {
     assert(registerUser != null);
     assert(signInUser != null);
+    assert(signOutUser != null);
     return signInUser(this);
   }
 
@@ -337,6 +337,7 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
   Result maybeMap<Result extends Object>({
     Result registerUser(RegisterUser value),
     Result signInUser(SignInUser value),
+    Result signOutUser(SignOutUser value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -350,11 +351,112 @@ class _$SignInUser with DiagnosticableTreeMixin implements SignInUser {
 abstract class SignInUser implements SignInFormEvent {
   const factory SignInUser(String username, String passcode) = _$SignInUser;
 
-  @override
   String get username;
   String get passcode;
-  @override
   $SignInUserCopyWith<SignInUser> get copyWith;
+}
+
+/// @nodoc
+abstract class $SignOutUserCopyWith<$Res> {
+  factory $SignOutUserCopyWith(
+          SignOutUser value, $Res Function(SignOutUser) then) =
+      _$SignOutUserCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$SignOutUserCopyWithImpl<$Res>
+    extends _$SignInFormEventCopyWithImpl<$Res>
+    implements $SignOutUserCopyWith<$Res> {
+  _$SignOutUserCopyWithImpl(
+      SignOutUser _value, $Res Function(SignOutUser) _then)
+      : super(_value, (v) => _then(v as SignOutUser));
+
+  @override
+  SignOutUser get _value => super._value as SignOutUser;
+}
+
+/// @nodoc
+class _$SignOutUser with DiagnosticableTreeMixin implements SignOutUser {
+  const _$SignOutUser();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'SignInFormEvent.signOutUser()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'SignInFormEvent.signOutUser'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is SignOutUser);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result registerUser(String username),
+    @required Result signInUser(String username, String passcode),
+    @required Result signOutUser(),
+  }) {
+    assert(registerUser != null);
+    assert(signInUser != null);
+    assert(signOutUser != null);
+    return signOutUser();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result registerUser(String username),
+    Result signInUser(String username, String passcode),
+    Result signOutUser(),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (signOutUser != null) {
+      return signOutUser();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result registerUser(RegisterUser value),
+    @required Result signInUser(SignInUser value),
+    @required Result signOutUser(SignOutUser value),
+  }) {
+    assert(registerUser != null);
+    assert(signInUser != null);
+    assert(signOutUser != null);
+    return signOutUser(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result registerUser(RegisterUser value),
+    Result signInUser(SignInUser value),
+    Result signOutUser(SignOutUser value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (signOutUser != null) {
+      return signOutUser(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SignOutUser implements SignInFormEvent {
+  const factory SignOutUser() = _$SignOutUser;
 }
 
 /// @nodoc

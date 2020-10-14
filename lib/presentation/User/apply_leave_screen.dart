@@ -28,15 +28,19 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   final _formKey = GlobalKey<FormState>();
   String _startDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
   String _endDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
+  String fromDate = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
+  String toDate = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
   String _leaveType;
   String _reason;
 
-  List<String> leaveTypes = ['Sick Leave', 'Paid Leave', 'Unpaid Leave'];
+  List<String> leaveTypes = ['Sick Leave', 'Planned Leave'];
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
         _startDate = DateFormat('EEEE dd,MMMM').format(args.value.startDate).toString();
         _endDate = DateFormat('EEEE dd,MMMM').format(args.value.endDate ?? args.value.startDate).toString();
+        fromDate = args.value.startDate.toUtc().millisecondsSinceEpoch.toString();
+        toDate = (args.value.endDate ?? args.value.startDate).toUtc().millisecondsSinceEpoch.toString();
       }
     });
   }
@@ -263,9 +267,10 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                                         onPressed: () {
                                           if (_formKey.currentState.validate()) {
                                             //_formKey.currentState.save();
+                                            var type = _leaveType == 'Sick Leave' ? 'sick' : 'planned';
                                             context
                                                 .bloc<ApplyLeaveBloc>()
-                                                .add(ApplyLeaveEvent(_startDate, _endDate, _leaveType, _reason));
+                                                .add(ApplyLeaveEvent(fromDate, toDate, type, _reason));
                                           }
                                           // Navigator.of(context).pushNamed('/qr-scan-screen');
                                         },

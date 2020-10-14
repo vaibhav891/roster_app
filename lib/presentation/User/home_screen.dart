@@ -7,10 +7,12 @@ import 'package:roster_app/common/screenutils/screen_utils.dart';
 import 'package:roster_app/common/size_constants.dart';
 import 'package:roster_app/common/size_extension.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
+import 'package:roster_app/data/data_sources/remote_data_src.dart';
+import 'package:roster_app/di/get_it.dart';
+import 'package:roster_app/domain/auth/auth_failure.dart';
 import 'package:roster_app/domain/auth/user.dart';
-import 'package:roster_app/domain/shift_signing_bloc/shift_signing_bloc.dart';
-import 'package:roster_app/domain/task_bloc/task_bloc.dart';
-import 'package:roster_app/presentation/common/dashboard_appbar.dart';
+import 'package:roster_app/domain/home_bloc/home_bloc.dart';
+import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
 import 'package:roster_app/presentation/common/my_decoration_box.dart';
 import 'package:roster_app/presentation/common/my_raised_button.dart';
 import 'package:roster_app/presentation/common/show_duration_picker.dart';
@@ -27,268 +29,270 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ShiftSigningBloc, ShiftSigningState>(
+    return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
-        if (state.failure != null)
-          return FlushbarHelper.createError(message: state.failure.message
-
-                  // map(
-                  //   cancelledByUser: (_) => 'cancelled ',
-                  //   serverError: (_) => 'Server error! Contact support',
-                  //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                  //   noInternetConnectivity: (_) => 'No Internet connectivity',
-                  // ),
-                  )
-              .show(context);
-        // else
-        //                                       Navigator.of(context).pushNamed('/');
+        if (state.failure != AuthFailure(""))
+          return FlushbarHelper.createError(message: state.failure.message).show(context);
       },
-      child: BlocListener<TaskBloc, TaskState>(
-        listener: (context, state) {
-          if (state.failure != null)
-            return FlushbarHelper.createError(message: state.failure.message
-                    // map(
-                    //   cancelledByUser: (_) => 'cancelled ',
-                    //   serverError: (_) => 'Server error! Contact support',
-                    //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                    //   noInternetConnectivity: (_) => 'No Internet connectivity',
-                    // ),
-                    )
-                .show(context);
-        },
-        child: BlocBuilder<ShiftSigningBloc, ShiftSigningState>(
-          builder: (context, shiftState) {
-            return BlocBuilder<TaskBloc, TaskState>(
-              builder: (context, taskState) {
-                return Container(
-                  decoration: MyDecorationBox(),
-                  child: Scaffold(
-                    appBar: DashboardAppBar(myTitle: ''),
-                    //bottomNavigationBar: MyBottomNav(),
-                    body: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: Sizes.dimen_20.h,
-                        ),
-                        // FractionallySizedBox(
-                        //   heightFactor: 0.04,
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.only(left: Sizes.dimen_24.w),
-                          child: Text(
-                            'Hi, ' + User.instance.userId ?? 'There',
-                            style: Theme.of(context).textTheme.headline5.copyWith(
-                                  color: AppColor.white,
-                                ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: Sizes.dimen_24.w),
-                          child: Text(DateFormat('EEEE, d MMM y').format(DateTime.now()),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColor.white)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: Sizes.dimen_24.w,
-                            top: Sizes.dimen_24.h,
-                          ),
-                          child: DefaultTextStyle(
-                            style: Theme.of(context).textTheme.caption.copyWith(color: AppColor.white),
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [Text('Start Time'), Text(User.instance.startTime ?? '-')],
-                                ),
-                                SizedBox(
-                                  width: Sizes.dimen_48.w,
-                                ),
-                                Column(
-                                  children: [Text('End Time'), Text(User.instance.endTime ?? '-')],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: Sizes.dimen_4.h,
-                          ),
-                        ),
-                        Center(
-                          child: MyRaisedButton(
-                            buttonTitle: shiftState.isLoading
-                                ? 'Please wait...'
-                                : shiftState.isSignedIn
-                                    ? 'SIGN OUT'
-                                    : 'SIGN IN',
-                            onPressed: () async {
-                              print('tapped');
-                              try {
-                                position = await getCurrentPosition();
-                              } catch (ex) {
-                                print("Error details: ${ex.details}");
-                              }
-                              BlocProvider.of<ShiftSigningBloc>(context)
-                                  .add(ShiftSigningEvent(position.latitude.toString(), position.longitude.toString()));
-                            },
-                            buttonColor: AppColor.eastBay,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Sizes.dimen_48.w,
-                              vertical: Sizes.dimen_14.h,
-                            ),
-                            isTrailingPresent: false,
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: Sizes.dimen_4.h,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 24,
-                          child: Container(
-                            width: ScreenUtil().screenWidth,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(Sizes.dimen_40),
-                              ),
-                              color: AppColor.blackHaze,
-                            ),
-                            child: shiftState.isSignedIn
-                                ? Padding(
-                                    padding: EdgeInsets.only(left: Sizes.dimen_0.w),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: Sizes.dimen_4.h,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Your working hours.',
-                                          style: Theme.of(context).textTheme.headline6,
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: Sizes.dimen_10.h,
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          'assets/images/Frame.png',
-                                          height: Sizes.dimen_200,
-                                        ),
-                                        SizedBox(height: Sizes.dimen_10.h),
-                                        MyRaisedButton(
-                                          buttonTitle: taskState.isLoading
-                                              ? 'Please wait...'
-                                              : taskState.isCheckedIn
-                                                  ? 'Check-out'
-                                                  : 'Check-in',
-                                          buttonColor: AppColor.lightBlue,
-                                          isTrailingPresent: false,
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: Sizes.dimen_20.w,
-                                            vertical: Sizes.dimen_18.h,
-                                          ),
-                                          onPressed: () async {
-                                            BlocProvider.of<TaskBloc>(context).add(TaskEvent(id: '1234'));
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: Sizes.dimen_4.h,
-                                          ),
-                                        ),
-                                        Text('Checkin time : 9:15 am'),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: Sizes.dimen_4.h,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : Column(
-                                    children: [
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: Sizes.dimen_4.h,
-                                        ),
-                                      ),
-                                      Image.asset(
-                                        'assets/images/Frame.png',
-                                        height: Sizes.dimen_200.h,
-                                      ),
-                                      Expanded(child: SizedBox(height: Sizes.dimen_4.h)),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context).pushNamed('/apply-leave-screen');
-                                            },
-                                            child: Stack(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/unwell_bg.png',
-                                                  height: 138,
-                                                ),
-                                                Positioned(
-                                                  left: Sizes.dimen_20,
-                                                  top: Sizes.dimen_12,
-                                                  child: Image.asset(
-                                                    'assets/images/unwell.png',
-                                                    height: 61,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                              onTap: () async {
-                                                _duration = await showDurationPicker(
-                                                    context: context, initialTime: Duration(minutes: 0));
+      builder: (context, state) => Container(
+        decoration: MyDecorationBox(),
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            //leading: IconButton(icon: Icon(Icons.dehaze_outlined), onPressed: () {}),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Logout',
+                  style: TextStyle(fontSize: Sizes.dimen_20.sp, color: AppColor.white),
+                ),
+              ),
+              IconButton(
+                  icon: Icon(
+                    Icons.notifications_none_outlined,
+                  ),
+                  onPressed: () {})
+            ],
+            title: Text(''),
+            backgroundColor: Colors.transparent,
+          ),
 
-                                                print(_duration);
-                                                if (_duration != null)
-                                                  FlushbarHelper.createSuccess(message: 'Submit successful')
-                                                      .show(context);
-                                              },
-                                              child: Stack(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/late_bg.png',
-                                                    height: 138,
-                                                  ),
-                                                  Positioned(
-                                                    left: Sizes.dimen_20,
-                                                    top: Sizes.dimen_12,
-                                                    child: Image.asset(
-                                                      'assets/images/running_late.png',
-                                                      height: 61,
-                                                    ),
-                                                  )
-                                                ],
-                                              )),
-                                        ],
+          //DashboardAppBar(myTitle: ''),
+          //bottomNavigationBar: MyBottomNav(),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: Sizes.dimen_20.h,
+              ),
+              // FractionallySizedBox(
+              //   heightFactor: 0.04,
+              // ),
+              Padding(
+                padding: EdgeInsets.only(left: Sizes.dimen_24.w),
+                child: Text(
+                  'Hi, ' + User.instance.userId ?? 'There',
+                  style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: AppColor.white,
+                      ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: Sizes.dimen_24.w),
+                child: Text(DateFormat('EEEE, d MMM y').format(DateTime.now()),
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColor.white)),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: Sizes.dimen_24.w,
+                  top: Sizes.dimen_24.h,
+                ),
+                child: DefaultTextStyle(
+                  style: Theme.of(context).textTheme.caption.copyWith(color: AppColor.white),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [Text('Start Time'), Text(User.instance.startTime ?? '-')],
+                      ),
+                      SizedBox(
+                        width: Sizes.dimen_48.w,
+                      ),
+                      Column(
+                        children: [Text('End Time'), Text(User.instance.endTime ?? '-')],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: Sizes.dimen_4.h,
+                ),
+              ),
+              Center(
+                child: MyRaisedButton(
+                  buttonTitle: state.isSignInLoading
+                      ? 'Please wait...'
+                      : state.isSignedIn
+                          ? 'SIGN OUT'
+                          : 'SIGN IN',
+                  onPressed: () async {
+                    print('tapped');
+                    try {
+                      position = await getCurrentPosition();
+                    } catch (ex) {
+                      print("Error details: ${ex.details}");
+                    }
+                    BlocProvider.of<HomeBloc>(context).add(SignInSignOutEvent(position.latitude, position.longitude));
+                  },
+                  buttonColor: AppColor.eastBay,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.dimen_48.w,
+                    vertical: Sizes.dimen_14.h,
+                  ),
+                  isTrailingPresent: false,
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: Sizes.dimen_4.h,
+                ),
+              ),
+              Expanded(
+                flex: 24,
+                child: Container(
+                  width: ScreenUtil().screenWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(Sizes.dimen_40),
+                    ),
+                    color: AppColor.blackHaze,
+                  ),
+                  child: state.isSignedIn
+                      ? Padding(
+                          padding: EdgeInsets.only(left: Sizes.dimen_0.w),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: Sizes.dimen_4.h,
+                                ),
+                              ),
+                              Text(
+                                'Your working hours.',
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: Sizes.dimen_10.h,
+                                ),
+                              ),
+                              Image.asset(
+                                'assets/images/Frame.png',
+                                height: Sizes.dimen_200,
+                              ),
+                              SizedBox(height: Sizes.dimen_10.h),
+                              MyRaisedButton(
+                                buttonTitle: state.isCheckInLoading
+                                    ? 'Please wait...'
+                                    : state.isCheckedIn
+                                        ? 'Check-out'
+                                        : 'Check-in',
+                                buttonColor: AppColor.lightBlue,
+                                isTrailingPresent: false,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Sizes.dimen_20.w,
+                                  vertical: Sizes.dimen_18.h,
+                                ),
+                                onPressed: () async {
+                                  User.instance.checkInTime = DateFormat.jm().format(DateTime.now()).toString();
+                                  var taskId = state.isCheckedIn
+                                      ? User.instance.taskId.toString()
+                                      : '83b921b5-8be6-4322-b6b0-60ca5f4e9033';
+                                  BlocProvider.of<HomeBloc>(context).add(CheckInCheckOutEvent(id: taskId));
+                                },
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: Sizes.dimen_4.h,
+                                ),
+                              ),
+                              state.isCheckedIn
+                                  ? Text('Checkin time : ${User.instance.checkInTime}')
+                                  : Text('Checkin time : -'),
+                              Expanded(
+                                child: SizedBox(
+                                  height: Sizes.dimen_4.h,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: Sizes.dimen_4.h,
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/images/Frame.png',
+                              height: Sizes.dimen_200.h,
+                            ),
+                            Expanded(child: SizedBox(height: Sizes.dimen_4.h)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed('/apply-leave-screen');
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/unwell_bg.png',
+                                        height: 138,
                                       ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: Sizes.dimen_4.h,
+                                      Positioned(
+                                        left: Sizes.dimen_20,
+                                        top: Sizes.dimen_12,
+                                        child: Image.asset(
+                                          'assets/images/unwell.png',
+                                          height: 61,
                                         ),
                                       )
                                     ],
                                   ),
-                          ),
+                                ),
+                                GestureDetector(
+                                    onTap: () async {
+                                      _duration =
+                                          await showDurationPicker(context: context, initialTime: Duration(minutes: 0));
+
+                                      print(_duration);
+                                      if (_duration != null) {
+                                        var failureOrSuccess =
+                                            await getIt<RemoteDataSrc>().runningLate(duration: _duration.inMinutes);
+                                        failureOrSuccess.fold(
+                                          (l) => FlushbarHelper.createError(message: l.message).show(context),
+                                          (r) =>
+                                              FlushbarHelper.createSuccess(message: 'Submit successful').show(context),
+                                        );
+                                      }
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/late_bg.png',
+                                          height: 138,
+                                        ),
+                                        Positioned(
+                                          left: Sizes.dimen_20,
+                                          top: Sizes.dimen_12,
+                                          child: Image.asset(
+                                            'assets/images/running_late.png',
+                                            height: 61,
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                height: Sizes.dimen_4.h,
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

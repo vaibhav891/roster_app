@@ -17,14 +17,14 @@ abstract class RemoteDataSrc {
   Future<void> signOut();
 
   Future<Either<AuthFailure, Unit>> shiftSignIn({
-    @required String lat,
-    @required String long,
+    @required double lat,
+    @required double long,
   });
   Future<Either<AuthFailure, Unit>> shiftSignOut({
-    @required String lat,
-    @required String long,
+    @required double lat,
+    @required double long,
   });
-  Future<Either<AuthFailure, String>> startTask({@required String id});
+  Future<Either<AuthFailure, int>> startTask({@required String id});
   Future<Either<AuthFailure, String>> finishTask({@required String id});
 
   Future<Either<AuthFailure, Unit>> applyLeave({
@@ -34,19 +34,19 @@ abstract class RemoteDataSrc {
     @required String reason,
   });
   Future<Either<AuthFailure, Unit>> runningLate({
-    @required int date,
-    @required double duration,
+    @required int duration,
   });
 
   Future<Either<AuthFailure, Map<String, dynamic>>> getShiftTiming({
-    String date,
+    @required String date,
   });
 
   Future<Either<AuthFailure, UsersReport>> fetchUserReport({
-    String startDate,
-    String endDate,
+    @required String startDate,
+    @required String endDate,
   });
 
   Future<Either<AuthFailure, LocationsList>> fetchUserSite();
 
+  Future<Either<AuthFailure, Unit>> updateDeviceInfo({Map<String, dynamic> deviceInfo});
 }

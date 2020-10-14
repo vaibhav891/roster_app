@@ -9,10 +9,12 @@ class User {
   String userRole;
   bool isFirstLogin;
   String token;
-  String lat;
-  String long;
+  double lat;
+  double long;
   String startTime;
   String endTime;
+  String checkInTime;
+  int taskId;
 
   factory User() {
     return _instance;

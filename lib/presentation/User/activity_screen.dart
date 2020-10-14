@@ -18,16 +18,22 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  String _startDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
-  String _endDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
-
+  DateTime now = DateTime.now();
+  String _startDate;
+  String _endDate;
   UserReportBloc _userReportBloc;
+
+  _getStartnEndDates(DateTime date) {
+    _startDate = (DateTime(date.year, date.month, date.day).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
+    _endDate = (DateTime(date.year, date.month, date.day).add(Duration(days: 1)).toUtc().millisecondsSinceEpoch ~/ 1000)
+        .toString();
+  }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
-      if (args.value is PickerDateRange) {
-        _startDate = DateFormat('EEEE dd,MMMM').format(args.value.startDate).toString();
-        _endDate = DateFormat('EEEE dd,MMMM').format(args.value.endDate ?? args.value.startDate).toString();
+      if (args.value is DateTime) {
+        print('inside _onSelectingChanged');
+        _getStartnEndDates(args.value);
       }
     });
     _userReportBloc.add(UserReportEvent(
@@ -40,6 +46,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   void initState() {
     super.initState();
     _userReportBloc = getIt<UserReportBloc>();
+    _getStartnEndDates(now);
   }
 
   @override
@@ -67,8 +74,42 @@ class _ActivityScreenState extends State<ActivityScreen> {
               Expanded(
                 flex: 3,
                 child: SfDateRangePicker(
+                  selectionTextStyle: TextStyle(color: AppColor.white),
                   showNavigationArrow: true,
                   onSelectionChanged: _onSelectionChanged,
+                  monthViewSettings: DateRangePickerMonthViewSettings(
+                    weekendDays: List<int>()..add(6)..add(7),
+                    specialDates: List<DateTime>()
+                      ..add(
+                        DateTime(2020, 10, 27),
+                      ),
+                    blackoutDates: List<DateTime>()
+                      ..add(
+                        DateTime(2020, 10, 7),
+                      ),
+                  ),
+                  monthCellStyle: DateRangePickerMonthCellStyle(
+                    weekendDatesDecoration: BoxDecoration(
+                        color: AppColor.saffron,
+                        border: Border.all(color: AppColor.saffron, width: 1),
+                        shape: BoxShape.circle),
+                    cellDecoration: BoxDecoration(
+                      color: AppColor.shamrockGreen,
+                      border: Border.all(color: AppColor.shamrockGreen, width: 1),
+                      shape: BoxShape.circle,
+                    ),
+                    blackoutDatesDecoration: BoxDecoration(
+                      color: AppColor.salmon,
+                      border: Border.all(color: AppColor.salmon, width: 1),
+                      shape: BoxShape.circle,
+                    ),
+                    specialDatesDecoration: BoxDecoration(
+                      color: AppColor.lightBlue,
+                      border: Border.all(color: AppColor.lightBlue, width: 1),
+                      shape: BoxShape.circle,
+                    ),
+                    blackoutDateTextStyle: Theme.of(context).textTheme.bodyText2,
+                  ),
                 ),
               ),
               Expanded(
@@ -90,7 +131,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             ),
                             Text(
                               (state is UserReportLoaded)
-                                  ? state.usersReport.workSummary.first.dailyReport.first.dateTs.toString()
+                                  ? DateFormat('dd MMM yyyy')
+                                      .format(DateTime.fromMillisecondsSinceEpoch(int.parse(_startDate) * 1000))
                                   : '',
                               style: Theme.of(context).textTheme.headline5,
                             ),
@@ -111,31 +153,35 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                     children: [
                                       MyActivityColumn(
                                         title: 'Sign In',
-                                        subTitle: (state is UserReportLoaded)
-                                            ? state.usersReport.workSummary.first.dailyReport.first.checkInTimeTs
-                                                .toString()
-                                            : '9:00 am',
+                                        subTitle: (state is UserReportLoaded &&
+                                                state.usersReport.workSummary.first.dailyReport.length > 0)
+                                            ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                state.usersReport.workSummary.first.dailyReport.first.signInTimeTs))
+                                            : 'NA',
                                       ),
                                       MyActivityColumn(
                                         title: 'Sign Out',
-                                        subTitle: (state is UserReportLoaded)
-                                            ? state.usersReport.workSummary.first.dailyReport.first.checkOutTimeTs
-                                                .toString()
-                                            : '6:00 pm',
+                                        subTitle: (state is UserReportLoaded &&
+                                                state.usersReport.workSummary.first.dailyReport.length > 0)
+                                            ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                state.usersReport.workSummary.first.dailyReport.first.signOutTimeTs))
+                                            : 'NA',
                                       ),
                                       MyActivityColumn(
                                         title: 'Extras',
-                                        subTitle: (state is UserReportLoaded)
-                                            ? state.usersReport.workSummary.first.dailyReport.first.durationInHrs
+                                        subTitle: (state is UserReportLoaded &&
+                                                state.usersReport.workSummary.first.dailyReport.length > 0)
+                                            ? (state.usersReport.workSummary.first.dailyReport.first.durationInHrs - 9)
                                                 .toString()
-                                            : '0:00 hr',
+                                            : 'NA',
                                       ),
                                       MyActivityColumn(
                                         title: 'Late',
-                                        subTitle: (state is UserReportLoaded)
-                                            ? state.usersReport.workSummary.first.dailyReport.first.lateInMins
-                                                .toString()
-                                            : '0:00 hr',
+                                        subTitle: (state is UserReportLoaded &&
+                                                state.usersReport.workSummary.first.dailyReport.length > 0)
+                                            ? getTimeString(
+                                                state.usersReport.workSummary.first.dailyReport.first.lateInMins)
+                                            : 'NA',
                                       ),
                                     ],
                                   ),
@@ -166,6 +212,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
         ),
       ),
     );
+  }
+
+  String getTimeString(int value) {
+    final int hour = value ~/ 60;
+    final int minutes = value % 60;
+    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")} hr';
   }
 }
 

@@ -3,22 +3,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roster_app/common/screenutils/screen_utils.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/di/get_it.dart';
-import 'package:roster_app/domain/shift_signing_bloc/shift_signing_bloc.dart';
+import 'package:roster_app/domain/auth/user.dart';
+import 'package:roster_app/domain/home_bloc/home_bloc.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
-import 'package:roster_app/domain/task_bloc/task_bloc.dart';
-//import 'package:roster_app/domain/user_report_bloc/user_report_bloc.dart';
 import 'package:roster_app/presentation/User/apply_leave_screen.dart';
 import 'package:roster_app/presentation/User/qr_scan_screen.dart';
 import 'package:roster_app/presentation/User/user_dashboard_screen.dart';
+import 'package:roster_app/presentation/common/lifecycle_event_handler.dart';
 import 'package:roster_app/presentation/login/login_screen.dart';
 import 'package:roster_app/presentation/login/setup_passcode_screen.dart';
 import 'package:roster_app/presentation/manager/manager_dashboard_screen.dart';
 
-class RosterApp extends StatelessWidget {
+class RosterApp extends StatefulWidget {
+  @override
+  _RosterAppState createState() => _RosterAppState();
+}
+
+class _RosterAppState extends State<RosterApp> {
   final SignInFormBloc signInFormBloc = getIt<SignInFormBloc>();
-  final ShiftSigningBloc shiftSigningBloc = getIt<ShiftSigningBloc>();
-  final TaskBloc taskBloc = getIt<TaskBloc>();
-  //final UserReportBloc userReportBloc = getIt<UserReportBloc>();
+
+  final HomeBloc homeBloc = getIt<HomeBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
+        resumeCallBack: () async => setState(() {
+              // check if token is present
+              if (User.instance.token != null) {}
+              print("resume callback");
+            })));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +44,7 @@ class RosterApp extends StatelessWidget {
           create: (context) => signInFormBloc,
         ),
         BlocProvider(
-          create: (context) => shiftSigningBloc,
-        ),
-        BlocProvider(
-          create: (context) => taskBloc,
+          create: (context) => homeBloc,
         ),
       ],
       child: GestureDetector(

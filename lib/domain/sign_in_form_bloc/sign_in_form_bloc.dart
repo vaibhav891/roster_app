@@ -17,9 +17,9 @@ part 'sign_in_form_bloc.freezed.dart';
 
 @injectable
 class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
-  final RemoteDataSrc _authFacade;
+  final RemoteDataSrc _remoteDataSrc;
 
-  SignInFormBloc(this._authFacade) : super(SignInFormState.initial());
+  SignInFormBloc(this._remoteDataSrc) : super(SignInFormState.initial());
 
   // @override
   // SignInFormState get initialState => SignInFormState.initial();
@@ -38,7 +38,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
           authFailureOrSuccessOption: none(),
         );
 
-        successOrFailure = await _authFacade.registerUser(
+        successOrFailure = await _remoteDataSrc.registerUser(
           userId: value.username,
         );
         print('end registerUser bloc');
@@ -56,11 +56,18 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
           authFailureOrSuccessOption: none(),
         );
 
-        successOrFailure = await _authFacade.signInUser(userId: value.username, passcode: value.passcode);
+        successOrFailure = await _remoteDataSrc.signInUser(userId: value.username, passcode: value.passcode);
         print('end signInUser bloc');
         yield state.copyWith(
           isSubmitting: false,
           authFailureOrSuccessOption: successOrFailure == null ? none() : some(successOrFailure),
+        );
+      },
+      signOutUser: (SignOutUser value) async* {
+        yield state.copyWith(
+          isSubmitting: false,
+          authFailureOrSuccessOption: none(),
+          isRegister: false,
         );
       },
     );

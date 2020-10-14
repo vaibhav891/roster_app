@@ -17,4 +17,7 @@ class AppColor {
   static const Color gallery = Color(0xffebebeb);
   static const Color ebonyClay = Color(0xff272140);
   static const Color anakiwaBlue = Color(0xffA4DBFF);
+  static const Color textGrey = Color(0xff4c4b5d);
+  static const Color saffron = Color(0xfff6b93b);
+  static const Color salmon = Color(0xffFF7979);
 }

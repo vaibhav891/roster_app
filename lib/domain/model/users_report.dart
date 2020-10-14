@@ -2,14 +2,22 @@ class UsersReport {
   int startDateTs;
   int endDateTs;
   int totalWorkTimeInHrs;
+  int remainingWorkTimeInHrs;
   List<WorkSummary> workSummary;
 
-  UsersReport({this.startDateTs, this.endDateTs, this.totalWorkTimeInHrs, this.workSummary});
+  UsersReport({
+    this.startDateTs,
+    this.endDateTs,
+    this.totalWorkTimeInHrs,
+    this.remainingWorkTimeInHrs,
+    this.workSummary,
+  });
 
   UsersReport.fromJson(Map<String, dynamic> json) {
     startDateTs = json['startDateTs'];
     endDateTs = json['endDateTs'];
     totalWorkTimeInHrs = json['totalWorkTimeInHrs'];
+    remainingWorkTimeInHrs = json['remainingWorkTimeInHrs'];
     if (json['workSummary'] != null) {
       workSummary = new List<WorkSummary>();
       json['workSummary'].forEach((v) {
@@ -23,6 +31,7 @@ class UsersReport {
     data['startDateTs'] = this.startDateTs;
     data['endDateTs'] = this.endDateTs;
     data['totalWorkTimeInHrs'] = this.totalWorkTimeInHrs;
+    data['remainingWorkTimeInHrs'] = this.remainingWorkTimeInHrs;
     if (this.workSummary != null) {
       data['workSummary'] = this.workSummary.map((v) => v.toJson()).toList();
     }
@@ -31,15 +40,22 @@ class UsersReport {
 }
 
 class WorkSummary {
-  int locationId;
-  String locationName;
+  int siteId;
+  String siteName;
+  String company;
   List<DailyReport> dailyReport;
 
-  WorkSummary({this.locationId, this.locationName, this.dailyReport});
+  WorkSummary({
+    this.siteId,
+    this.siteName,
+    this.company,
+    this.dailyReport,
+  });
 
   WorkSummary.fromJson(Map<String, dynamic> json) {
-    locationId = json['locationId'];
-    locationName = json['locationName'];
+    siteId = json['siteId'];
+    siteName = json['siteName'];
+    company = json['company'];
     if (json['dailyReport'] != null) {
       dailyReport = new List<DailyReport>();
       json['dailyReport'].forEach((v) {
@@ -50,8 +66,9 @@ class WorkSummary {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['locationId'] = this.locationId;
-    data['locationName'] = this.locationName;
+    data['siteId'] = this.siteId;
+    data['siteName'] = this.siteName;
+    data['company'] = this.company;
     if (this.dailyReport != null) {
       data['dailyReport'] = this.dailyReport.map((v) => v.toJson()).toList();
     }
@@ -61,30 +78,33 @@ class WorkSummary {
 
 class DailyReport {
   String name;
-  int userId;
+  String userId;
   int dateTs;
-  int checkInTimeTs;
-  int checkOutTimeTs;
+  int signInTimeTs;
+  int signOutTimeTs;
   int durationInHrs;
   int lateInMins;
+  String leaveType;
 
   DailyReport(
       {this.name,
       this.userId,
       this.dateTs,
-      this.checkInTimeTs,
-      this.checkOutTimeTs,
+      this.signInTimeTs,
+      this.signOutTimeTs,
       this.durationInHrs,
-      this.lateInMins});
+      this.lateInMins,
+      this.leaveType});
 
   DailyReport.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     userId = json['userId'];
     dateTs = json['dateTs'];
-    checkInTimeTs = json['checkInTimeTs'];
-    checkOutTimeTs = json['checkOutTimeTs'];
+    signInTimeTs = json['signInTimeTs'];
+    signOutTimeTs = json['signOutTimeTs'];
     durationInHrs = json['durationInHrs'];
     lateInMins = json['lateInMins'];
+    leaveType = json['leaveType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -92,10 +112,11 @@ class DailyReport {
     data['name'] = this.name;
     data['userId'] = this.userId;
     data['dateTs'] = this.dateTs;
-    data['checkInTimeTs'] = this.checkInTimeTs;
-    data['checkOutTimeTs'] = this.checkOutTimeTs;
+    data['signInTimeTs'] = this.signInTimeTs;
+    data['signOutTimeTs'] = this.signOutTimeTs;
     data['durationInHrs'] = this.durationInHrs;
     data['lateInMins'] = this.lateInMins;
+    data['leaveType'] = this.leaveType;
     return data;
   }
 }

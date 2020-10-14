@@ -20,6 +20,7 @@ class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
   ) async* {
     yield state.copyWith(
       isLoading: true,
+      successOrFailure: right(unit),
     );
 
     Either<AuthFailure, Unit> successOrFailure;

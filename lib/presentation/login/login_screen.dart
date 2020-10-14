@@ -150,22 +150,14 @@ class _LoginScreenState extends State<LoginScreen> {
             (either) => either.fold(
               (failure) {
                 print('inside failure');
-                return FlushbarHelper.createError(message: failure.message
-                        // map(
-                        //   cancelledByUser: (_) => 'cancelled ',
-                        //   serverError: (_) => 'Server error! Contact support',
-                        //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                        //   noInternetConnectivity: (_) => 'No Internet connectivity',
-                        // ),
-                        )
-                    .show(context);
+                return FlushbarHelper.createError(message: failure.message).show(context);
               },
               (r) {
                 print('updatePasscode -> $r');
                 if (r == 'YES')
                   Navigator.of(context).pushNamed('/setup-passcode-screen', arguments: _passcode);
                 else {
-                  if (User.instance.userRole == 'manager') {
+                  if (User.instance.userRole == 'Manager') {
                     Navigator.of(context).pushNamedAndRemoveUntil('/manager-dashboard', (route) => route.isFirst);
                   } else {
                     Navigator.of(context).pushNamedAndRemoveUntil('/user-dashboard', (route) => route.isFirst);
