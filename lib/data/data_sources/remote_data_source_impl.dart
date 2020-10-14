@@ -334,124 +334,6 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'app-key': ApiConstants.APP_KEY,
         };
 
-        // var responseBody = jsonEncode({
-        //   "startDateTs": 1231,
-        //   "endDateTs": 2568,
-        //   "totalWorkTimeInHrs": 36,
-        //   "remainingWorkTimeInHrs": 26,
-        //   "workSummary": [
-        //     {
-        //       "locationId": 8,
-        //       "locationName": "VR Mall - Bengaluru",
-        //       "dailyReport": [
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 63,
-        //           "dateTs": 1602018342485,
-        //           "checkInTimeTs": 1602018342485,
-        //           "checkOutTimeTs": 1602018342485,
-        //           "durationInHrs": 9,
-        //           "lateInMins": 19
-        //         },
-        //         {"name": "Adeesh", "userId": 64, "dateTs": 1602018342485, "leaveType": "sick"},
-        //         {"name": "Adeesh", "userId": 65, "dateTs": 1602018342485, "leaveType": "planned"},
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 66,
-        //           "dateTs": 1602018342485,
-        //           "checkInTimeTs": 1602018342485,
-        //           "checkOutTimeTs": 1602018342485,
-        //           "durationInHrs": 3,
-        //           "lateInMins": 25
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "locationId": 1,
-        //       "locationName": "VB Mall - Bengaluru",
-        //       "dailyReport": [
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 63,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 10,
-        //           "lateInMins": 12
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 64,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 3,
-        //           "lateInMins": 3
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 65,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 8,
-        //           "lateInMins": 10
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 66,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 8,
-        //           "lateInMins": 36
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "locationId": 9,
-        //       "locationName": "VG Mall - Bengaluru",
-        //       "dailyReport": [
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 63,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 1,
-        //           "lateInMins": 43
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 64,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 1,
-        //           "lateInMins": 40
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 65,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 2,
-        //           "lateInMins": 48
-        //         },
-        //         {
-        //           "name": "Adeesh",
-        //           "userId": 66,
-        //           "dateTs": 1602018342486,
-        //           "checkInTimeTs": 1602018342486,
-        //           "checkOutTimeTs": 1602018342486,
-        //           "durationInHrs": 0,
-        //           "lateInMins": 48
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // });
         var responseBody = await _client.post(ApiConstants.USERS_REPORT_ENDPOINT, body, headers);
 
         print(responseBody.toString());
@@ -476,24 +358,6 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         };
 
         var responseBody = await _client.get(ApiConstants.USER_SITE_ENDPOINT, headers);
-        // var responseBody = jsonEncode(
-        //   {
-        //     "Locations": [
-        //       {
-        //         "id": 1,
-        //         "name": "VR Bengaluru",
-        //         "address": "Whitefield Main Rd, Devasandra Industrial Estate, Mahadevapura, ",
-        //         "city": "Bengaluru",
-        //         "state": "Karnataka",
-        //         "country": "India",
-        //         "zipCode": "560048",
-        //         "radiusInMeter": 100,
-        //         "company": "Virtuous Retail",
-        //         "location": {"latitude": 12.996383, "longitude": 77.6942964}
-        //       }
-        //     ]
-        //   },
-        // );
         return right(LocationsList.fromJson(responseBody));
       } catch (e) {
         return left(AuthFailure(e.toString()));
@@ -502,6 +366,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
       return left(AuthFailure('Check your Internet connection'));
   }
 
+  @override
   Future<Either<AuthFailure, Unit>> updateDeviceInfo({Map<String, dynamic> deviceInfo}) async {
     print('enter remoteDataSourceImpl updateDeviceInfo');
     if (await DataConnectionChecker().hasConnection) {
@@ -517,6 +382,30 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         //var responseBody = await Future.delayed(Duration(seconds: 5));
         await _client.post(ApiConstants.UPDATE_DEVICE_INFO_ENDPOINT, body, headers);
         //return right(responseBody['taskId']);
+        return right(unit);
+      } catch (e) {
+        return left(AuthFailure(e.toString()));
+      }
+    } else
+      return left(AuthFailure('Check your Internet connection'));
+  }
+
+  @override
+  Future<Either<AuthFailure, Unit>> syncInfo() async {
+    print('enter remoteDataSourceImpl syncInfo');
+    if (await DataConnectionChecker().hasConnection) {
+      try {
+        Map<String, String> headers = {
+          'Authorization': 'Bearer ${User.instance.token}',
+          'Content-Type': 'application/json',
+          'app-key': ApiConstants.APP_KEY,
+        };
+
+        var responseBody = await _client.get(ApiConstants.SYNC_INFO_ENDPOINT, headers);
+        if ((responseBody as Map).containsKey('taskId')) {
+          User.instance.taskId = (responseBody as Map)['taskId'];
+        }
+        User.instance.isSignedIn = responseBody['isSignedIn'];
         return right(unit);
       } catch (e) {
         return left(AuthFailure(e.toString()));

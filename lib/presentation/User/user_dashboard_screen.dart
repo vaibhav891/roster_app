@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:package_info/package_info.dart';
 import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/data/data_sources/remote_data_src.dart';
 import 'package:roster_app/di/get_it.dart';
@@ -24,6 +26,8 @@ class UserDashboardScreen extends StatefulWidget {
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   final bucket = PageStorageBucket();
+  final fbm = FirebaseMessaging();
+
   StreamSubscription<Position> positionStream;
   RemoteDataSrc _remoteDataSrc = getIt<RemoteDataSrc>();
   double siteLat;
@@ -95,58 +99,34 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     }
 
     if (!mounted) return;
+    _deviceData = deviceData;
 
-    setState(() {
-      _deviceData = deviceData;
-    });
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _deviceData['appVersion'] = packageInfo.version;
+    var pushToken = await fbm.getToken();
+    _deviceData['pushToken'] = pushToken;
+
+    var successOrFailure = await _remoteDataSrc.updateDeviceInfo(deviceInfo: _deviceData);
+    successOrFailure.fold((l) => FlushbarHelper.createError(message: l.message).show(context), (r) => null);
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
     return <String, dynamic>{
-      'version.securityPatch': build.version.securityPatch,
-      'version.sdkInt': build.version.sdkInt,
-      'version.release': build.version.release,
-      'version.previewSdkInt': build.version.previewSdkInt,
-      'version.incremental': build.version.incremental,
-      'version.codename': build.version.codename,
-      'version.baseOS': build.version.baseOS,
-      'board': build.board,
-      'bootloader': build.bootloader,
-      'brand': build.brand,
-      'device': build.device,
-      'display': build.display,
-      'fingerprint': build.fingerprint,
-      'hardware': build.hardware,
-      'host': build.host,
-      'id': build.id,
+      'osVersion': build.version.release,
+      'deviceName': build.device,
       'manufacturer': build.manufacturer,
       'model': build.model,
-      'product': build.product,
-      'supported32BitAbis': build.supported32BitAbis,
-      'supported64BitAbis': build.supported64BitAbis,
-      'supportedAbis': build.supportedAbis,
-      'tags': build.tags,
-      'type': build.type,
-      'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId,
-      'systemFeatures': build.systemFeatures,
+      'platform': 'android',
     };
   }
 
   Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
     return <String, dynamic>{
-      'name': data.name,
-      'systemName': data.systemName,
-      'systemVersion': data.systemVersion,
+      'deviceName': data.name,
+      'osVersion': data.systemVersion,
       'model': data.model,
-      'localizedModel': data.localizedModel,
-      'identifierForVendor': data.identifierForVendor,
-      'isPhysicalDevice': data.isPhysicalDevice,
-      'utsname.sysname:': data.utsname.sysname,
-      'utsname.nodename:': data.utsname.nodename,
-      'utsname.release:': data.utsname.release,
-      'utsname.version:': data.utsname.version,
-      'utsname.machine:': data.utsname.machine,
+      'manufacturer': 'Apple',
+      'platform': 'ios',
     };
   }
 
@@ -154,7 +134,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   void initState() {
     super.initState();
     _getPosition();
-    final fbm = FirebaseMessaging();
     fbm.requestNotificationPermissions();
 
     fbm.configure(

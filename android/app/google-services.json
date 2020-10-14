@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1033668956054",
+    "firebase_url": "https://roster-mobile-1625a.firebaseio.com",
+    "project_id": "roster-mobile-1625a",
+    "storage_bucket": "roster-mobile-1625a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033668956054:android:1a0b05611cc97e92ed57b7",
+        "android_client_info": {
+          "package_name": "com.yoursolution.roster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033668956054-jcgdshacplk7g7gt0qh9d5m1bice0uo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA93yjHias8ad1s_D8OaG1FlMuuPCWaeGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033668956054-jcgdshacplk7g7gt0qh9d5m1bice0uo2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -28,6 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Duration _duration = Duration(hours: 0, minutes: 0);
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<HomeBloc>(context).add(HomeInitialEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
@@ -60,18 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text(''),
             backgroundColor: Colors.transparent,
           ),
-
-          //DashboardAppBar(myTitle: ''),
-          //bottomNavigationBar: MyBottomNav(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: Sizes.dimen_20.h,
               ),
-              // FractionallySizedBox(
-              //   heightFactor: 0.04,
-              // ),
               Padding(
                 padding: EdgeInsets.only(left: Sizes.dimen_24.w),
                 child: Text(

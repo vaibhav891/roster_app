@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:roster_app/data/data_sources/remote_data_src.dart';
 import 'package:roster_app/domain/auth/auth_failure.dart';
+import 'package:roster_app/domain/auth/user.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -19,13 +20,35 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(
     HomeEvent event,
   ) async* {
+    if (event is HomeInitialEvent) {
+      yield state.copyWith(
+        isSignInLoading: true,
+        failure: AuthFailure(""),
+      );
+      Either<AuthFailure, Unit> successOrFailure;
+      successOrFailure = await _remoteDataSrc.syncInfo();
+
+      yield successOrFailure.fold(
+        (l) => state.copyWith(
+          isSignInLoading: false,
+          failure: l,
+        ),
+        (r) {
+          return state.copyWith(
+            isSignInLoading: false,
+            isSignedIn: User.instance.isSignedIn,
+            isCheckedIn: User.instance.taskId != null ? true : false,
+            failure: AuthFailure(""),
+          );
+        },
+      );
+    }
     if (event is SignInSignOutEvent) {
       yield state.copyWith(
         isSignInLoading: true,
         failure: AuthFailure(""),
       );
 
-      Future.delayed(Duration(seconds: 3));
       Either<AuthFailure, Unit> successOrFailure;
       if (!state.isSignedIn) {
         successOrFailure = await _remoteDataSrc.shiftSignIn(lat: event.lat, long: event.long);
@@ -43,11 +66,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           failure: AuthFailure(""),
         ),
       );
-
-      // yield state.copyWith(
-      //   isSignInLoading: false,
-      //   isSignedIn: !state.isSignedIn,
-      // );
     }
     if (event is CheckInCheckOutEvent) {
       yield state.copyWith(
@@ -72,11 +90,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           failure: AuthFailure(""),
         ),
       );
-
-      // yield state.copyWith(
-      //   isCheckInLoading: false,
-      //   isSignedIn: !state.isSignedIn,
-      // );
     }
   }
 }

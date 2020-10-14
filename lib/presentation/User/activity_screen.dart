@@ -22,24 +22,34 @@ class _ActivityScreenState extends State<ActivityScreen> {
   String _startDate;
   String _endDate;
   UserReportBloc _userReportBloc;
+  List<DateTime> workingDays = List<DateTime>();
+  List<DateTime> leaveDays = List<DateTime>();
+  List<Map<String, String>> tileData = List<Map<String, String>>();
+  String _selectedDate = '';
+  Map<String, String> _selectedTile = Map<String, String>();
 
   _getStartnEndDates(DateTime date) {
-    _startDate = (DateTime(date.year, date.month, date.day).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
-    _endDate = (DateTime(date.year, date.month, date.day).add(Duration(days: 1)).toUtc().millisecondsSinceEpoch ~/ 1000)
+    _startDate = (DateTime(date.year, date.month, 2).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
+    _endDate = (DateTime(
+              date.year,
+              date.month + 1,
+            ).toUtc().millisecondsSinceEpoch ~/
+            1000)
         .toString();
   }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is DateTime) {
-        print('inside _onSelectingChanged');
-        _getStartnEndDates(args.value);
+        print('inside _onSelectionChanged');
+        _selectedDate = DateFormat('dd MMM yyyy').format(args.value);
+        //_getStartnEndDates(args.value);
       }
     });
-    _userReportBloc.add(UserReportEvent(
-      endDate: _endDate,
-      startDate: _startDate,
-    ));
+    // _userReportBloc.add(UserReportEvent(
+    //   endDate: _endDate,
+    //   startDate: _startDate,
+    // ));
   }
 
   @override
@@ -47,6 +57,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     super.initState();
     _userReportBloc = getIt<UserReportBloc>();
     _getStartnEndDates(now);
+    _selectedDate = DateFormat('dd MMM yyyy').format(now);
   }
 
   @override
@@ -59,157 +70,172 @@ class _ActivityScreenState extends State<ActivityScreen> {
             FlushbarHelper.createError(message: state.failure.message).show(context);
           }
         },
-        builder: (context, state) => Scaffold(
-          backgroundColor: AppColor.blackHaze,
-          appBar: MyAppBar(
-            myTitle: Text(
-              'My Calendar',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          body: Column(
-            mainAxisSize: MainAxisSize.min,
-            //calendar here
-            children: [
-              Expanded(
-                flex: 3,
-                child: SfDateRangePicker(
-                  selectionTextStyle: TextStyle(color: AppColor.white),
-                  showNavigationArrow: true,
-                  onSelectionChanged: _onSelectionChanged,
-                  monthViewSettings: DateRangePickerMonthViewSettings(
-                    weekendDays: List<int>()..add(6)..add(7),
-                    specialDates: List<DateTime>()
-                      ..add(
-                        DateTime(2020, 10, 27),
-                      ),
-                    blackoutDates: List<DateTime>()
-                      ..add(
-                        DateTime(2020, 10, 7),
-                      ),
-                  ),
-                  monthCellStyle: DateRangePickerMonthCellStyle(
-                    weekendDatesDecoration: BoxDecoration(
-                        color: AppColor.saffron,
-                        border: Border.all(color: AppColor.saffron, width: 1),
-                        shape: BoxShape.circle),
-                    cellDecoration: BoxDecoration(
-                      color: AppColor.shamrockGreen,
-                      border: Border.all(color: AppColor.shamrockGreen, width: 1),
-                      shape: BoxShape.circle,
-                    ),
-                    blackoutDatesDecoration: BoxDecoration(
-                      color: AppColor.salmon,
-                      border: Border.all(color: AppColor.salmon, width: 1),
-                      shape: BoxShape.circle,
-                    ),
-                    specialDatesDecoration: BoxDecoration(
-                      color: AppColor.lightBlue,
-                      border: Border.all(color: AppColor.lightBlue, width: 1),
-                      shape: BoxShape.circle,
-                    ),
-                    blackoutDateTextStyle: Theme.of(context).textTheme.bodyText2,
-                  ),
+        builder: (context, state) {
+          if (state is UserReportLoaded) {
+            var workSum = state.usersReport.workSummary;
+            for (var i = 0; i < workSum.length; i++) {
+              var dailyRep = workSum[i].dailyReport;
+              for (var j = 0; j < dailyRep.length; j++) {
+                tileData.add({
+                  "date":
+                      DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "startTime": DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs)),
+                  "endTime": DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs)),
+                  "extras": (dailyRep[j].durationInHrs - 9) > 0 ? (dailyRep[j].durationInHrs - 9).toString() : "0",
+                  "late": getTimeString(dailyRep[j].lateInMins),
+                  "display": dailyRep[j].leaveType == 'sick'
+                      ? 'Leave: Sick'
+                      : dailyRep[j].leaveType == 'planned'
+                          ? 'Leave: planned'
+                          : dailyRep[j].durationInHrs == 0
+                              ? 'Weekly Off'
+                              : 'Your working hours'
+                });
+                if (dailyRep[j].durationInHrs == 0)
+                  leaveDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
+                else
+                  workingDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
+              }
+              _selectedTile = Map();
+
+              for (var i = 0; i < tileData.length; i++) {
+                if (tileData[i]['date'] == _selectedDate) _selectedTile = tileData[i];
+              }
+            }
+          }
+          return Scaffold(
+              backgroundColor: AppColor.blackHaze,
+              appBar: MyAppBar(
+                myTitle: Text(
+                  'My Calendar',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  width: ScreenUtil().screenWidth,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(Sizes.dimen_40),
-                    ),
-                    color: AppColor.white,
-                  ),
-                  child: (state is UserReportLoading)
-                      ? Center(child: CircularProgressIndicator())
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: Sizes.dimen_18.h,
+              body: (state is UserReportLoaded)
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      //calendar here
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: SfDateRangePicker(
+                            minDate: DateTime(DateTime.now().year, DateTime.now().month),
+                            maxDate: DateTime(DateTime.now().year, DateTime.now().month + 1, 0),
+                            selectionTextStyle: TextStyle(color: AppColor.white),
+                            //showNavigationArrow: true,
+                            onSelectionChanged: _onSelectionChanged,
+                            monthViewSettings: DateRangePickerMonthViewSettings(
+                              //weekendDays: List<int>()..add(6)..add(7),
+                              specialDates: leaveDays,
+
+                              // blackoutDates: List<DateTime>()
+                              //   ..add(
+                              //     DateTime(2020, 10, 7),
+                              //   ),
                             ),
-                            Text(
-                              (state is UserReportLoaded)
-                                  ? DateFormat('dd MMM yyyy')
-                                      .format(DateTime.fromMillisecondsSinceEpoch(int.parse(_startDate) * 1000))
-                                  : '',
-                              style: Theme.of(context).textTheme.headline5,
+                            monthCellStyle: DateRangePickerMonthCellStyle(
+                              // weekendDatesDecoration: BoxDecoration(
+                              //     color: AppColor.saffron,
+                              //     border: Border.all(color: AppColor.saffron, width: 1),
+                              //     shape: BoxShape.circle),
+                              cellDecoration: BoxDecoration(
+                                color: AppColor.shamrockGreen,
+                                border: Border.all(color: AppColor.shamrockGreen, width: 1),
+                                shape: BoxShape.circle,
+                              ),
+                              specialDatesDecoration: BoxDecoration(
+                                color: AppColor.saffron,
+                                border: Border.all(color: AppColor.saffron, width: 1),
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                            Text('Your working hours'),
-                            SizedBox(
-                              height: Sizes.dimen_14.h,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            width: ScreenUtil().screenWidth,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(Sizes.dimen_40),
+                              ),
+                              color: AppColor.white,
                             ),
-                            Container(
-                              color: AppColor.shamrockGreen,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: Sizes.dimen_18.h,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: Sizes.dimen_18.h,
                                 ),
-                                child: DefaultTextStyle(
-                                  style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      MyActivityColumn(
-                                        title: 'Sign In',
-                                        subTitle: (state is UserReportLoaded &&
-                                                state.usersReport.workSummary.first.dailyReport.length > 0)
-                                            ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
-                                                state.usersReport.workSummary.first.dailyReport.first.signInTimeTs))
-                                            : 'NA',
+                                Text(
+                                  //_selectedTile["date"],
+                                  _selectedDate,
+                                  style: Theme.of(context).textTheme.headline5,
+                                ),
+                                Text(_selectedTile.containsKey('display') ? _selectedTile['display'] : ''),
+                                SizedBox(
+                                  height: Sizes.dimen_14.h,
+                                ),
+                                Container(
+                                  color: AppColor.shamrockGreen,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: Sizes.dimen_18.h,
+                                    ),
+                                    child: DefaultTextStyle(
+                                      style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          MyActivityColumn(
+                                            title: 'Sign In',
+                                            subTitle: _selectedTile.containsKey('startTime')
+                                                ? _selectedTile['startTime']
+                                                : 'NA',
+                                          ),
+                                          MyActivityColumn(
+                                            title: 'Sign Out',
+                                            subTitle:
+                                                _selectedTile.containsKey('endTime') ? _selectedTile['endTime'] : 'NA',
+                                          ),
+                                          MyActivityColumn(
+                                            title: 'Extras',
+                                            subTitle:
+                                                _selectedTile.containsKey('extras') ? _selectedTile['extras'] : 'NA',
+                                          ),
+                                          MyActivityColumn(
+                                            title: 'Late',
+                                            subTitle: _selectedTile.containsKey('late') ? _selectedTile['late'] : 'NA',
+                                          ),
+                                        ],
                                       ),
-                                      MyActivityColumn(
-                                        title: 'Sign Out',
-                                        subTitle: (state is UserReportLoaded &&
-                                                state.usersReport.workSummary.first.dailyReport.length > 0)
-                                            ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
-                                                state.usersReport.workSummary.first.dailyReport.first.signOutTimeTs))
-                                            : 'NA',
-                                      ),
-                                      MyActivityColumn(
-                                        title: 'Extras',
-                                        subTitle: (state is UserReportLoaded &&
-                                                state.usersReport.workSummary.first.dailyReport.length > 0)
-                                            ? (state.usersReport.workSummary.first.dailyReport.first.durationInHrs - 9)
-                                                .toString()
-                                            : 'NA',
-                                      ),
-                                      MyActivityColumn(
-                                        title: 'Late',
-                                        subTitle: (state is UserReportLoaded &&
-                                                state.usersReport.workSummary.first.dailyReport.length > 0)
-                                            ? getTimeString(
-                                                state.usersReport.workSummary.first.dailyReport.first.lateInMins)
-                                            : 'NA',
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: Sizes.dimen_14.h,
+                                ),
+                                MyRaisedButton(
+                                  buttonTitle: 'Apply for Leaves',
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed('/apply-leave-screen');
+                                  },
+                                  buttonColor: AppColor.lightBlue,
+                                  isTrailingPresent: false,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: Sizes.dimen_32.w,
+                                    vertical: Sizes.dimen_14.h,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: Sizes.dimen_14.h,
-                            ),
-                            MyRaisedButton(
-                              buttonTitle: 'Apply for Leaves',
-                              onPressed: () {
-                                Navigator.of(context).pushNamed('/apply-leave-screen');
-                              },
-                              buttonColor: AppColor.lightBlue,
-                              isTrailingPresent: false,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Sizes.dimen_32.w,
-                                vertical: Sizes.dimen_14.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              )
-            ],
-          ),
-        ),
+                          ),
+                        )
+                      ],
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ));
+        },
       ),
     );
   }

@@ -15,6 +15,7 @@ class User {
   String endTime;
   String checkInTime;
   int taskId;
+  bool isSignedIn;
 
   factory User() {
     return _instance;
