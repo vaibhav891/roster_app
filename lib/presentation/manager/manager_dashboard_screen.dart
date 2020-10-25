@@ -215,6 +215,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                           availableCalendarFormats: const {CalendarFormat.week: 'Week'},
                           calendarController: _calendarController,
                           initialCalendarFormat: CalendarFormat.week,
+                          selectedBoxDecoration: BoxDecoration(shape: BoxShape.circle,color: Colors.white.withOpacity(0.5)),
                           //initialSelectedDay: dateSelected,
                           onVisibleDaysChanged: (first, last, format) {
                             if (DateTime.now().millisecondsSinceEpoch > first.millisecondsSinceEpoch) {
@@ -236,7 +237,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                           headerStyle: HeaderStyle(
                             centerHeaderTitle: true,
                           ),
-                          onDaySelected: (day, events) {
+                          onDaySelected: (day, events1,events2) {
                             print(day.toString());
                             _convertDate(day);
                             BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
