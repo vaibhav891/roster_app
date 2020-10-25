@@ -74,10 +74,11 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-//    now = last;
-//    _getStartnEndDates(last);
-//    _selectedDate = DateFormat('dd MMM yyyy').format(now);
-//    _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
+    _events = {};
+    tileData = [];
+    now = DateTime(first.year,first.month,1);
+    _getStartnEndDates(first);
+    _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
   }
 
   @override
@@ -224,53 +225,51 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 //                            ),
 //                          ),
 //                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            color: AppColor.blackHaze,
-                            child: TableCalendar(
+                        Container(
+                          color: AppColor.blackHaze,
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: TableCalendar(
+                              initialSelectedDay: now,
+                              availableGestures: AvailableGestures.none,
+                              calendarController: _calendarController,
+                              initialCalendarFormat: CalendarFormat.month,
+                              daysOfWeekStyle: DaysOfWeekStyle(
+                                weekdayStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
+                                weekendStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
+                              ),
+                              events: _events,
+                              startingDayOfWeek: StartingDayOfWeek.sunday,
+                              endDay: DateTime.now(),
+                              calendarStyle: CalendarStyle(
+                                outsideDaysVisible: false,
+                                markersPositionBottom: 10,
+                                contentPadding: EdgeInsets.only(bottom: 0,left: 8,right: 8),
+                                weekdayStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
+                                weekendStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
+                                outsideStyle: const TextStyle(color: AppColor.textLight,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
+                                selectedStyle: const TextStyle(color: AppColor.textDark,fontSize: 15,fontFamily: 'Product Sans',fontWeight: FontWeight.bold),
+                              ),
+                              selectedBoxDecoration: BoxDecoration(shape: BoxShape.rectangle,border: Border.all(color: Colors.black)),
+                              selectionMargin: EdgeInsets.only(right: 15, left:15 , top: 15 ,bottom: 15),
+                              headerStyle: HeaderStyle(
+                                formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+                                centerHeaderTitle: true,
+                                formatButtonVisible: false,
+                                titleTextStyle: TextStyle(color: AppColor.textDark,fontSize: 16,fontFamily: 'Product Sans'),
+                                headerMargin: EdgeInsets.only(bottom: 15)
+                              ),
+                              onDaySelected: _onDaySelected,
+                              onVisibleDaysChanged: _onVisibleDaysChanged,
+                              builders: CalendarBuilders(
+                                  singleMarkerBuilder: (context,daytime,event){
+                                    return Container(
+                                      height: 2,
+                                      width: 32,
+                                      color: getColorsFromEvent(event),
+                                    );
+                                  }
+                              ),
 
-                                availableGestures: AvailableGestures.none,
-                                calendarController: _calendarController,
-                                initialCalendarFormat: CalendarFormat.month,
-                                daysOfWeekStyle: DaysOfWeekStyle(
-                                  weekdayStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
-                                  weekendStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
-                                ),
-                                events: _events,
-                                startingDayOfWeek: StartingDayOfWeek.sunday,
-                                endDay: DateTime.now(),
-                                calendarStyle: CalendarStyle(
-                                  outsideDaysVisible: false,
-                                  markersPositionBottom: 10,
-                                  contentPadding: EdgeInsets.only(bottom: 0,left: 8,right: 8),
-                                  weekdayStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                  weekendStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                  outsideStyle: const TextStyle(color: AppColor.textLight,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                  selectedStyle: const TextStyle(color: AppColor.textDark,fontSize: 15,fontFamily: 'Product Sans',fontWeight: FontWeight.bold),
-                                ),
-                                selectedBoxDecoration: BoxDecoration(shape: BoxShape.rectangle,border: Border.all(color: Colors.black)),
-                                selectionMargin: EdgeInsets.only(right: 15, left:15 , top: 15 ,bottom: 15),
-                                headerStyle: HeaderStyle(
-                                  formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
-                                  centerHeaderTitle: true,
-                                  formatButtonVisible: false,
-                                  titleTextStyle: TextStyle(color: AppColor.textDark,fontSize: 16,fontFamily: 'Product Sans'),
-                                  headerMargin: EdgeInsets.only(bottom: 15)
-                                ),
-                                onDaySelected: _onDaySelected,
-                                onVisibleDaysChanged: _onVisibleDaysChanged,
-                                builders: CalendarBuilders(
-                                    singleMarkerBuilder: (context,daytime,event){
-                                      return Container(
-                                        height: 2,
-                                        width: 32,
-                                        color: getColorsFromEvent(event),
-                                      );
-                                    }
-                                ),
-
-                            ),
                           ),
                         ),
                         Expanded(
