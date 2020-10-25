@@ -28,8 +28,8 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
 
   _getMonthDates() {
     DateTime now = DateTime.now();
-    _monthStart = (DateTime(now.year, now.month).toUtc().millisecondsSinceEpoch / 1000).toString();
-    _monthEnd = (DateTime(now.year, now.month + 1, 0).toUtc().millisecondsSinceEpoch / 1000).toString();
+    _monthStart = (DateTime.utc(now.year, now.month).millisecondsSinceEpoch ~/ 1000).toString();
+    _monthEnd = (DateTime.utc(now.year, now.month + 1, 0).millisecondsSinceEpoch ~/ 1000).toString();
   }
 
   @override
@@ -38,12 +38,12 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
     var date = DateTime.now();
     print('Start of week: ${getDate(DateTime.now().subtract(Duration(days: date.weekday - 1)))}');
     print('End of week: ${getDate(date.add(Duration(days: DateTime.daysPerWeek - date.weekday)))}');
-    _weekStart = (getDate(date.subtract(Duration(days: date.weekday - 1))).millisecondsSinceEpoch / 1000).toString();
-    _weekEnd = (getDate(date.add(Duration(days: DateTime.daysPerWeek - date.weekday))).millisecondsSinceEpoch / 1000)
+    _weekStart = (getDate(date.subtract(Duration(days: date.weekday - 1))).millisecondsSinceEpoch ~/ 1000).toString();
+    _weekEnd = (getDate(date.add(Duration(days: DateTime.daysPerWeek - date.weekday))).millisecondsSinceEpoch ~/ 1000)
         .toString();
   }
 
-  DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+  DateTime getDate(DateTime d) => DateTime.utc(d.year, d.month, d.day);
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +67,18 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                     onPressed: () {
                       BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
 
-                      Navigator.of(context).pop();
+                      Navigator.of(context).popAndPushNamed('login');
                     },
                     child: Text(
                       'Logout',
                       style: TextStyle(fontSize: Sizes.dimen_20.sp, color: AppColor.white),
                     ),
                   ),
-                  IconButton(
-                      icon: Icon(
-                        Icons.notifications_none_outlined,
-                      ),
-                      onPressed: () {})
+                  // IconButton(
+                  //     icon: Icon(
+                  //       Icons.notifications_none_outlined,
+                  //     ),
+                  //     onPressed: () {})
                 ],
                 title: Text(''),
                 backgroundColor: Colors.transparent,
@@ -190,42 +190,58 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
-                                          Column(
+                                          Row(
                                             children: [
-                                              Image.asset(
-                                                'assets/icons/Vector1.png',
+                                              Column(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icons/Vector1.png',
+                                                    scale: 1.5,
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: Sizes.dimen_10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  (state is UserReportLoaded)
+                                                      ? Text(
+                                                          '${state.usersReport.totalWorkTimeInHrs}',
+                                                          style: Theme.of(context).textTheme.headline5,
+                                                        )
+                                                      : Text(''),
+                                                  Text('Hours Worked'),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          Row(
                                             children: [
-                                              (state is UserReportLoaded)
-                                                  ? Text(
-                                                      '${state.usersReport.totalWorkTimeInHrs}',
-                                                      style: Theme.of(context).textTheme.headline5,
-                                                    )
-                                                  : Text(''),
-                                              Text('Hours Worked'),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icons/vector2.png',
+                                              Column(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icons/vector2.png',
+                                                    scale: 1.5,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              (state is UserReportLoaded)
-                                                  ? Text(
-                                                      '${state.usersReport.remainingWorkTimeInHrs}',
-                                                      style: Theme.of(context).textTheme.headline5,
-                                                    )
-                                                  : Text(''),
-                                              Text('Hours Remaining'),
+                                              SizedBox(
+                                                width: Sizes.dimen_10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  (state is UserReportLoaded)
+                                                      ? Text(
+                                                          '${state.usersReport.remainingWorkTimeInHrs}',
+                                                          style: Theme.of(context).textTheme.headline5,
+                                                        )
+                                                      : Text(''),
+                                                  Text('Hours Remaining'),
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ],

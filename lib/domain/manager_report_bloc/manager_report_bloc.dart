@@ -49,11 +49,11 @@ class ManagerReportBloc extends Bloc<ManagerReportEvent, ManagerReportState> {
           endDate: event.endDate,
         );
         yield failureOrSuccess.fold(
-          (failure) => ManagerReportErrorState(failure: failure),
+          (failure) => ManagerReportErrorState(failure: AuthFailure(message)),
           (result) => ManagerReportLoadedState(usersReport: result),
         );
       } else
-        yield ManagerReportErrorState(failure: message);
+        yield ManagerReportErrorState(failure: AuthFailure(message));
     }
   }
 }

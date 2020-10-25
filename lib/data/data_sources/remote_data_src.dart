@@ -37,9 +37,9 @@ abstract class RemoteDataSrc {
     @required int duration,
   });
 
-  Future<Either<AuthFailure, Map<String, dynamic>>> getShiftTiming({
-    @required String date,
-  });
+  // Future<Either<AuthFailure, Map<String, dynamic>>> getShiftTiming({
+  //   @required String date,
+  // });
 
   Future<Either<AuthFailure, UsersReport>> fetchUserReport({
     @required String startDate,

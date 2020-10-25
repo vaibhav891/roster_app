@@ -29,13 +29,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Map<String, String> _selectedTile = Map<String, String>();
 
   _getStartnEndDates(DateTime date) {
-    _startDate = (DateTime(date.year, date.month, 2).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
-    _endDate = (DateTime(
-              date.year,
-              date.month + 1,
-            ).toUtc().millisecondsSinceEpoch ~/
-            1000)
-        .toString();
+    // _startDate = (DateTime(date.year, date.month, 2).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
+    _startDate = (DateTime.utc(date.year, date.month, 1).millisecondsSinceEpoch ~/ 1000).toString();
+    _endDate = (DateTime.utc(date.year, date.month + 1, 0).millisecondsSinceEpoch ~/ 1000).toString();
   }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -119,6 +115,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         Expanded(
                           flex: 3,
                           child: SfDateRangePicker(
+                            headerStyle: DateRangePickerHeaderStyle(textAlign: TextAlign.center),
                             minDate: DateTime(DateTime.now().year, DateTime.now().month),
                             maxDate: DateTime(DateTime.now().year, DateTime.now().month + 1, 0),
                             selectionTextStyle: TextStyle(color: AppColor.white),
@@ -139,6 +136,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               //     border: Border.all(color: AppColor.saffron, width: 1),
                               //     shape: BoxShape.circle),
                               cellDecoration: BoxDecoration(
+                                // image: DecorationImage(
+                                //   image: AssetImage('assets/icons/icon.png'),
+                                // ),
                                 color: AppColor.shamrockGreen,
                                 border: Border.all(color: AppColor.shamrockGreen, width: 1),
                                 shape: BoxShape.circle,
@@ -166,12 +166,52 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 SizedBox(
                                   height: Sizes.dimen_18.h,
                                 ),
-                                Text(
-                                  //_selectedTile["date"],
-                                  _selectedDate,
-                                  style: Theme.of(context).textTheme.headline5,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration:
+                                              BoxDecoration(shape: BoxShape.circle, color: AppColor.shamrockGreen),
+                                        ),
+                                        SizedBox(
+                                          width: Sizes.dimen_10.w,
+                                        ),
+                                        Text('Working day'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(shape: BoxShape.circle, color: AppColor.saffron),
+                                        ),
+                                        SizedBox(
+                                          width: Sizes.dimen_10.w,
+                                        ),
+                                        Text('Off day'),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Text(_selectedTile.containsKey('display') ? _selectedTile['display'] : ''),
+                                SizedBox(
+                                  height: Sizes.dimen_18.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      //_selectedTile["date"],
+                                      _selectedDate,
+                                      style: Theme.of(context).textTheme.headline5,
+                                    ),
+                                    Text(_selectedTile.containsKey('display') ? _selectedTile['display'] : '-'),
+                                  ],
+                                ),
                                 SizedBox(
                                   height: Sizes.dimen_14.h,
                                 ),
@@ -190,21 +230,21 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                             title: 'Sign In',
                                             subTitle: _selectedTile.containsKey('startTime')
                                                 ? _selectedTile['startTime']
-                                                : 'NA',
+                                                : '-',
                                           ),
                                           MyActivityColumn(
                                             title: 'Sign Out',
                                             subTitle:
-                                                _selectedTile.containsKey('endTime') ? _selectedTile['endTime'] : 'NA',
+                                                _selectedTile.containsKey('endTime') ? _selectedTile['endTime'] : '-',
                                           ),
                                           MyActivityColumn(
                                             title: 'Extras',
                                             subTitle:
-                                                _selectedTile.containsKey('extras') ? _selectedTile['extras'] : 'NA',
+                                                _selectedTile.containsKey('extras') ? _selectedTile['extras'] : '-',
                                           ),
                                           MyActivityColumn(
                                             title: 'Late',
-                                            subTitle: _selectedTile.containsKey('late') ? _selectedTile['late'] : 'NA',
+                                            subTitle: _selectedTile.containsKey('late') ? _selectedTile['late'] : '-',
                                           ),
                                         ],
                                       ),
@@ -217,7 +257,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 MyRaisedButton(
                                   buttonTitle: 'Apply for Leaves',
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed('/apply-leave-screen');
+                                    Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
+                                      setState(() {});
+                                    });
                                   },
                                   buttonColor: AppColor.lightBlue,
                                   isTrailingPresent: false,

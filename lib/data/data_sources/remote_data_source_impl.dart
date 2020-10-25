@@ -11,6 +11,7 @@ import 'package:roster_app/data/data_sources/remote_data_src.dart';
 import 'package:roster_app/domain/auth/user.dart';
 import 'package:roster_app/domain/model/locations.dart';
 import 'package:roster_app/domain/model/users_report.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RemoteDataSrcImpl implements RemoteDataSrc {
   final ApiClient _client;
@@ -44,6 +45,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
   @override
   Future<Either<AuthFailure, String>> signInUser({String userId, String passcode}) async {
     print('enter remoteDataSourceImpl signInUser');
+    var prefs = await SharedPreferences.getInstance();
     if (await DataConnectionChecker().hasConnection) {
       try {
         var body = jsonEncode({
@@ -62,24 +64,28 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         final response = await _client.post(ApiConstants.LOGIN_ENDPOINT, body, headers);
         Map<String, dynamic> decodedToken = JwtDecoder.decode(response['token']);
         print(decodedToken);
+        prefs.setString('token', response['token']);
         User.instance.token = response['token'];
-        User.instance.userId = userId ?? '';
+        User.instance.userId = decodedToken['data']['public']['user'] ?? '';
         User.instance.userRole = decodedToken['data']['public']['role'] ?? '';
 
-        if (User.instance.userRole == "User") {
-          headers = {
-            'Authorization': 'Bearer ${User.instance.token}',
-            'content-type': 'application/json',
-            'app-key': ApiConstants.APP_KEY
-          };
-          //print(headers);
-          var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-          final timeResponse = await _client.get('${ApiConstants.SHIFT_TIMING_ENDPOINT}?date=$date', headers);
-          User.instance.startTime =
-              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['startTimeTs']));
-          User.instance.endTime =
-              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
-        }
+        // if (User.instance.userRole == "User") {
+        //   headers = {
+        //     'Authorization': 'Bearer ${User.instance.token}',
+        //     'content-type': 'application/json',
+        //     'app-key': ApiConstants.APP_KEY
+        //   };
+        //   //print(headers);
+        //   var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        //   final timeResponse = await _client.get('${ApiConstants.SHIFT_TIMING_ENDPOINT}?date=$date', headers);
+        //   User.instance.startTime =
+        //       DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['startTimeTs']));
+        //   User.instance.endTime =
+        //       DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
+        //   SharedPreferences prefs = await SharedPreferences.getInstance();
+        //   prefs.setString('shiftStartTime', User.instance.startTime);
+        //   prefs.setString('shiftEndTime', User.instance.endTime);
+        // }
         return right(response['isFirstLogin'] ? 'YES' : 'NO');
       } catch (e) {
         return left(AuthFailure(e.toString()));
@@ -239,6 +245,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           body = jsonEncode({
             "startDateTs": stDate,
             "endDateTs": enDate,
+            "zoneId": "Australia/Sydney",
             "type": leaveType,
           });
         } else {
@@ -246,6 +253,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
             "startDateTs": stDate,
             "endDateTs": enDate,
             "reason": reason,
+            "zoneId": "Australia/Sydney",
             "type": leaveType,
           });
         }
@@ -293,27 +301,27 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
       return left(AuthFailure('Check your Internet connection'));
   }
 
-  @override
-  Future<Either<AuthFailure, Map<String, dynamic>>> getShiftTiming({String date}) async {
-    print('enter remoteDataSourceImpl getShiftTiming');
-    if (await DataConnectionChecker().hasConnection) {
-      try {
-        //var responseBody = await Future.delayed(Duration(seconds: 5));
-        Map<String, String> headers = {
-          'Authorization': 'Bearer ${User.instance.token}',
-          'Content-Type': 'application/json',
-          'app-key': ApiConstants.APP_KEY,
-        };
+  // @override
+  // Future<Either<AuthFailure, Map<String, dynamic>>> getShiftTiming({String date}) async {
+  //   print('enter remoteDataSourceImpl getShiftTiming');
+  //   if (await DataConnectionChecker().hasConnection) {
+  //     try {
+  //       //var responseBody = await Future.delayed(Duration(seconds: 5));
+  //       Map<String, String> headers = {
+  //         'Authorization': 'Bearer ${User.instance.token}',
+  //         'Content-Type': 'application/json',
+  //         'app-key': ApiConstants.APP_KEY,
+  //       };
 
-        var responseBody = await _client.get(ApiConstants.SHIFT_TIMING_ENDPOINT + '?date=$date', headers);
-        //return right(responseBody['taskId']);
-        return right({'startTime': responseBody['startTimeTs'], 'endTime': responseBody['endTime']});
-      } catch (e) {
-        return left(AuthFailure(e.toString()));
-      }
-    } else
-      return left(AuthFailure('Check your Internet connection'));
-  }
+  //       var responseBody = await _client.get(ApiConstants.SHIFT_TIMING_ENDPOINT + '?date=$date', headers);
+  //       //return right(responseBody['taskId']);
+  //       return right({'startTime': responseBody['startTimeTs'], 'endTime': responseBody['endTime']});
+  //     } catch (e) {
+  //       return left(AuthFailure(e.toString()));
+  //     }
+  //   } else
+  //     return left(AuthFailure('Check your Internet connection'));
+  // }
 
   @override
   Future<Either<AuthFailure, UsersReport>> fetchUserReport({
@@ -393,6 +401,8 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
   @override
   Future<Either<AuthFailure, Unit>> syncInfo() async {
     print('enter remoteDataSourceImpl syncInfo');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (await DataConnectionChecker().hasConnection) {
       try {
         Map<String, String> headers = {
@@ -401,11 +411,34 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'app-key': ApiConstants.APP_KEY,
         };
 
+        var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        final timeResponse = await _client.get('${ApiConstants.SHIFT_TIMING_ENDPOINT}?date=$date', headers);
+
+        if (timeResponse.containsKey('startTimeTs')) {
+          User.instance.startTime =
+              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['startTimeTs']));
+          User.instance.endTime =
+              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
+          prefs.setString('shiftStartTime', User.instance.startTime);
+          prefs.setString('shiftEndTime', User.instance.endTime);
+        }
+
         var responseBody = await _client.get(ApiConstants.SYNC_INFO_ENDPOINT, headers);
         if ((responseBody as Map).containsKey('taskId')) {
           User.instance.taskId = (responseBody as Map)['taskId'];
         }
+        if ((responseBody as Map).containsKey('signInTimeTs')) {
+          // User.instance.startTime =
+          //     DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
+          // prefs.setString('shiftStartTime', User.instance.startTime);
+        }
+        if ((responseBody as Map).containsKey('checkInTimeTs')) {
+          User.instance.checkInTime =
+              DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();
+        }
         User.instance.isSignedIn = responseBody['isSignedIn'];
+        User.instance.isOnLeave = responseBody['isUserOnLeave'];
+
         return right(unit);
       } catch (e) {
         return left(AuthFailure(e.toString()));

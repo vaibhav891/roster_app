@@ -12,15 +12,14 @@ class ManagerReportLocationEvent extends ManagerReportEvent {}
 class ManagerReportLoadEvent extends ManagerReportEvent {
   final String startDate;
   final String endDate;
+  final String timeZone;
 
   ManagerReportLoadEvent({
+    this.timeZone,
     @required this.startDate,
     @required this.endDate,
   });
 
   @override
-  List<Object> get props => [
-        startDate,
-        endDate,
-      ];
+  List<Object> get props => [startDate, endDate, timeZone];
 }

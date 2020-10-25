@@ -37,10 +37,14 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
-        _startDate = DateFormat('EEEE dd,MMMM').format(args.value.startDate).toString();
-        _endDate = DateFormat('EEEE dd,MMMM').format(args.value.endDate ?? args.value.startDate).toString();
-        fromDate = args.value.startDate.toUtc().millisecondsSinceEpoch.toString();
-        toDate = (args.value.endDate ?? args.value.startDate).toUtc().millisecondsSinceEpoch.toString();
+        var stDt = args.value.startDate;
+        var enDt = args.value.endDate ?? args.value.startDate;
+        _startDate = DateFormat('EEEE dd,MMMM').format(stDt).toString();
+        _endDate = DateFormat('EEEE dd,MMMM').format(enDt).toString();
+        // fromDate = args.value.startDate.toUtc().millisecondsSinceEpoch.toString();
+        // toDate = (args.value.endDate ?? args.value.startDate).toUtc().millisecondsSinceEpoch.toString();
+        fromDate = (DateTime.utc(stDt.year, stDt.month, stDt.day).millisecondsSinceEpoch ~/ 1000).toString();
+        toDate = (DateTime.utc(enDt.year, enDt.month, enDt.day).millisecondsSinceEpoch ~/ 1000).toString();
       }
     });
   }
@@ -272,7 +276,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                                                 .bloc<ApplyLeaveBloc>()
                                                 .add(ApplyLeaveEvent(fromDate, toDate, type, _reason));
                                           }
-                                          // Navigator.of(context).pushNamed('/qr-scan-screen');
+                                          // Navigator.of(context).pushNamed('qr-scan-screen');
                                         },
                                       ),
                                       SizedBox(

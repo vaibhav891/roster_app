@@ -23,13 +23,6 @@ class ApiClient {
     responseBody = _returnResponse(response);
 
     return responseBody;
-
-    // if (response.statusCode == 200) {
-    //   responseBody = jsonDecode(response.body);
-    //   return responseBody;
-    // } else {
-    //   throw Exception(response.reasonPhrase);
-    // }
   }
 
   dynamic post(String path, String body, Map<String, String> headers) async {
@@ -43,22 +36,6 @@ class ApiClient {
     responseBody = _returnResponse(response);
 
     return responseBody;
-
-    // if ((response.statusCode == 200 || response.statusCode == 204) && response.body != 'OK') {
-    //   responseBody = jsonDecode(response.body);
-    //   //print(responseBody);
-    //   return responseBody;
-    // } else if (response.statusCode == 201) {
-    //   //responseBody = jsonDecode(response.body);
-    //   return response.body;
-    // } else if (response.statusCode == 400) {
-    //   responseBody = jsonDecode(response.body);
-    //   //print(responseBody);
-    //   throw Exception(responseBody['problems'][0]);
-    // } else if (response.statusCode == 401) {
-    //   print(response.reasonPhrase);
-    //   throw Exception(response.reasonPhrase);
-    // }
   }
 
   dynamic _returnResponse(Response response) {
@@ -75,6 +52,7 @@ class ApiClient {
         throw InvalidInputException(responseJson["problems"][0]);
       case 401:
       case 403:
+      case 404:
         var responseJson = json.decode(response.body.toString());
         throw InvalidInputException(responseJson["problems"][0]);
       case 500:

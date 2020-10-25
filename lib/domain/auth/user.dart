@@ -5,6 +5,7 @@ class User {
 
   static User get instance => _instance;
 
+  String uid;
   String userId;
   String userRole;
   bool isFirstLogin;
@@ -16,6 +17,7 @@ class User {
   String checkInTime;
   int taskId;
   bool isSignedIn;
+  bool isOnLeave = false;
 
   factory User() {
     return _instance;

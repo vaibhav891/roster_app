@@ -41,12 +41,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   ];
 
   Widget currentScreen = HomeScreen();
+  int currentIndex = 0;
   Map<String, dynamic> _deviceData = <String, dynamic>{};
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
   _handleIndexChanged(int index) {
     setState(() {
       currentScreen = tabScreens[index];
+      currentIndex = index;
     });
   }
 
@@ -76,11 +78,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       //     );
       //   }
 
-        // double distanceInMeters = distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
+      // double distanceInMeters = distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
 
-        // if (distanceInMeters > radiusInMeters) {
-        //   bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
-        // }
+      // if (distanceInMeters > radiusInMeters) {
+      //   bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
+      // }
       // }
     });
   }
@@ -130,6 +132,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     };
   }
 
+  Future<bool> _onBackPressed() {
+    print('inside onWillPop');
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Exit?",
+          ),
+          content: Text('Do you really want to exit?'),
+          actions: [
+            FlatButton(onPressed: () => Navigator.of(context).pop(false), child: Text('No')),
+            FlatButton(onPressed: () => Navigator.of(context).pop(true), child: Text('Yes')),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -162,16 +183,19 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //extendBody: true,
-      backgroundColor: AppColor.white,
-      bottomNavigationBar: MyBottomNav(
-        currentIndex: tabScreens.indexOf(currentScreen),
-        handleIndexChanged: _handleIndexChanged,
-      ),
-      body: PageStorage(
-        bucket: bucket,
-        child: currentScreen,
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        //extendBody: true,
+        backgroundColor: AppColor.white,
+        bottomNavigationBar: MyBottomNav(
+          currentIndex: currentIndex, //tabScreens.indexOf(currentScreen),
+          handleIndexChanged: _handleIndexChanged,
+        ),
+        body: PageStorage(
+          bucket: bucket,
+          child: currentScreen,
+        ),
       ),
     );
   }

@@ -54,9 +54,9 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                   },
                   (r) {
                     if (User.instance.userRole == 'Manager') {
-                      Navigator.of(context).pushNamedAndRemoveUntil('/manager-dashboard', (route) => route.isFirst);
+                      Navigator.of(context).pushNamedAndRemoveUntil('manager-dashboard', (route) => false);
                     } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil('/user-dashboard', (route) => route.isFirst);
+                      Navigator.of(context).pushNamedAndRemoveUntil('user-dashboard', (route) => false);
                     }
                   },
                 ),
@@ -152,7 +152,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
 
                                               BlocProvider.of<UpdatePasscodeBloc>(context).add(
                                                   UpdatePasscodePressedEvent(
-                                                      User.instance.userId, _oldPasscode, _passcode));
+                                                      User.instance.uid, _oldPasscode, _passcode));
                                             }
                                           },
                                         ),

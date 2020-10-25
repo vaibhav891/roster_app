@@ -50,18 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
               FlatButton(
                 onPressed: () {
                   BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
-                  Navigator.of(context).pop();
+                  Navigator.of(context).popAndPushNamed('login');
                 },
                 child: Text(
                   'Logout',
                   style: TextStyle(fontSize: Sizes.dimen_20.sp, color: AppColor.white),
                 ),
               ),
-              IconButton(
-                  icon: Icon(
-                    Icons.notifications_none_outlined,
-                  ),
-                  onPressed: () {})
+              // IconButton(
+              //     icon: Icon(
+              //       Icons.notifications_none_outlined,
+              //     ),
+              //     onPressed: () {})
             ],
             title: Text(''),
             backgroundColor: Colors.transparent,
@@ -92,20 +92,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: Sizes.dimen_24.h,
                 ),
                 child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.caption.copyWith(color: AppColor.white),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [Text('Start Time'), Text(User.instance.startTime ?? '-')],
-                      ),
-                      SizedBox(
-                        width: Sizes.dimen_48.w,
-                      ),
-                      Column(
-                        children: [Text('End Time'), Text(User.instance.endTime ?? '-')],
-                      )
-                    ],
-                  ),
+                  style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                  child: User.instance.startTime != null
+                      ? Row(
+                          children: [
+                            Column(
+                              children: [Text('Start Time'), Text(User.instance.startTime ?? '-')],
+                            ),
+                            SizedBox(
+                              width: Sizes.dimen_48.w,
+                            ),
+                            Column(
+                              children: [Text('End Time'), Text(User.instance.endTime ?? '-')],
+                            )
+                          ],
+                        )
+                      : Text('No roster for today'),
                 ),
               ),
               Expanded(
@@ -114,28 +116,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Center(
-                child: MyRaisedButton(
-                  buttonTitle: state.isSignInLoading
-                      ? 'Please wait...'
-                      : state.isSignedIn
-                          ? 'SIGN OUT'
-                          : 'SIGN IN',
-                  onPressed: () async {
-                    print('tapped');
-                    try {
-                      position = await getCurrentPosition();
-                    } catch (ex) {
-                      print("Error details: ${ex.details}");
-                    }
-                    BlocProvider.of<HomeBloc>(context).add(SignInSignOutEvent(position.latitude, position.longitude));
-                  },
-                  buttonColor: AppColor.eastBay,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Sizes.dimen_48.w,
-                    vertical: Sizes.dimen_14.h,
-                  ),
-                  isTrailingPresent: false,
-                ),
+                child: !User.instance.isOnLeave
+                    ? MyRaisedButton(
+                        buttonTitle: state.isSignInLoading
+                            ? 'Please wait...'
+                            : state.isSignedIn
+                                ? 'SIGN OUT'
+                                : 'SIGN IN',
+                        onPressed: () async {
+                          print('tapped');
+                          try {
+                            position = await getCurrentPosition();
+                          } catch (ex) {
+                            print("Error details: ${ex.details}");
+                          }
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(SignInSignOutEvent(position.latitude, position.longitude));
+                        },
+                        buttonColor: AppColor.eastBay,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Sizes.dimen_48.w,
+                          vertical: Sizes.dimen_14.h,
+                        ),
+                        isTrailingPresent: false,
+                      )
+                    : SizedBox(
+                        height: Sizes.dimen_10.h,
+                      ),
               ),
               Expanded(
                 child: SizedBox(
@@ -201,9 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: Sizes.dimen_4.h,
                                 ),
                               ),
-                              state.isCheckedIn
-                                  ? Text('Checkin time : ${User.instance.checkInTime}')
-                                  : Text('Checkin time : -'),
+                              state.isCheckedIn ? Text('Checkin time : ${User.instance.checkInTime}') : Container(),
                               Expanded(
                                 child: SizedBox(
                                   height: Sizes.dimen_4.h,
@@ -226,61 +231,87 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(child: SizedBox(height: Sizes.dimen_4.h)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed('/apply-leave-screen');
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/unwell_bg.png',
-                                        height: 138,
+                              children: !User.instance.isOnLeave
+                                  ? [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/unwell_bg.png',
+                                              height: 138,
+                                            ),
+                                            Positioned(
+                                              left: Sizes.dimen_20,
+                                              top: Sizes.dimen_12,
+                                              child: Image.asset(
+                                                'assets/images/unwell.png',
+                                                height: 61,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      Positioned(
-                                        left: Sizes.dimen_20,
-                                        top: Sizes.dimen_12,
-                                        child: Image.asset(
-                                          'assets/images/unwell.png',
-                                          height: 61,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                    onTap: () async {
-                                      _duration =
-                                          await showDurationPicker(context: context, initialTime: Duration(minutes: 0));
+                                      GestureDetector(
+                                          onTap: () async {
+                                            _duration = await showDurationPicker(
+                                                context: context, initialTime: Duration(minutes: 0));
 
-                                      print(_duration);
-                                      if (_duration != null) {
-                                        var failureOrSuccess =
-                                            await getIt<RemoteDataSrc>().runningLate(duration: _duration.inMinutes);
-                                        failureOrSuccess.fold(
-                                          (l) => FlushbarHelper.createError(message: l.message).show(context),
-                                          (r) =>
-                                              FlushbarHelper.createSuccess(message: 'Submit successful').show(context),
-                                        );
-                                      }
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/late_bg.png',
-                                          height: 138,
+                                            print(_duration);
+                                            if (_duration != null) {
+                                              var failureOrSuccess = await getIt<RemoteDataSrc>()
+                                                  .runningLate(duration: _duration.inMinutes);
+                                              failureOrSuccess.fold(
+                                                (l) => FlushbarHelper.createError(message: l.message).show(context),
+                                                (r) => FlushbarHelper.createSuccess(message: 'Submit successful')
+                                                    .show(context),
+                                              );
+                                            }
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/late_bg.png',
+                                                height: 138,
+                                              ),
+                                              Positioned(
+                                                left: Sizes.dimen_20,
+                                                top: Sizes.dimen_12,
+                                                child: Image.asset(
+                                                  'assets/images/running_late.png',
+                                                  height: 61,
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                    ]
+                                  : [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed('apply-leave-screen');
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/unwell_bg.png',
+                                              height: 138,
+                                            ),
+                                            Positioned(
+                                              left: Sizes.dimen_20,
+                                              top: Sizes.dimen_12,
+                                              child: Image.asset(
+                                                'assets/images/unwell.png',
+                                                height: 61,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        Positioned(
-                                          left: Sizes.dimen_20,
-                                          top: Sizes.dimen_12,
-                                          child: Image.asset(
-                                            'assets/images/running_late.png',
-                                            height: 61,
-                                          ),
-                                        )
-                                      ],
-                                    )),
-                              ],
+                                      ),
+                                    ],
                             ),
                             Expanded(
                               child: SizedBox(

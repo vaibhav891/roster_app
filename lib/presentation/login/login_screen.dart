@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (context) {
         final _key = GlobalKey<FormState>();
-        return BlocListener<SignInFormBloc, SignInFormState>(
+        return BlocConsumer<SignInFormBloc, SignInFormState>(
           listener: (context, state) {
             print('inside dialog listener');
             if (state.isRegister) {
@@ -71,58 +71,62 @@ class _LoginScreenState extends State<LoginScreen> {
               );
             }
           },
-          child: AlertDialog(
-            titlePadding: EdgeInsets.symmetric(
-              horizontal: Sizes.dimen_18.w,
-              vertical: Sizes.dimen_24.h,
-            ),
-            title: Text(
-              'Please enter a valid username',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            content: Form(
-              key: _key,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: TextFormField(
-                initialValue: _username,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: AppColor.sandGrey,
-                  hintText: 'Type in your username',
-                ),
-                onChanged: (value) => _username = value,
-                validator: (value) {
-                  if (_username.isEmpty) return 'Cannot be empty';
-                  return null;
-                },
+          builder: (context, state) {
+            return AlertDialog(
+              titlePadding: EdgeInsets.symmetric(
+                horizontal: Sizes.dimen_18.w,
+                vertical: Sizes.dimen_24.h,
               ),
-            ),
-            actionsPadding: EdgeInsets.only(
-              right: Sizes.dimen_32.w,
-              bottom: Sizes.dimen_24.h,
-            ),
-            actions: [
-              MyRaisedButton(
-                buttonTitle: 'Request Passcode',
-                onPressed: () {
-                  if (_key.currentState.validate()) {
-                    _key.currentState.reset();
-                    print('im here');
-                    //add event for register
-                    BlocProvider.of<SignInFormBloc>(context).add(RegisterUser(_username));
-                    //context.bloc<SignInFormBloc>().add(RegisterUser(_username));
-                  }
-                },
-                buttonColor: AppColor.lightBlue,
-                isTrailingPresent: true,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.dimen_20.w,
-                  vertical: Sizes.dimen_18.h,
+              title: Text(
+                'Please enter a valid username',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              content: Form(
+                key: _key,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  initialValue: _username,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: AppColor.sandGrey,
+                    hintText: 'Type in your username',
+                  ),
+                  //onChanged: (value) => _username = value,
+                  validator: (value) {
+                    if (_username.isEmpty) return 'Cannot be empty';
+                    return null;
+                  },
+                  onSaved: (newValue) => _username = newValue,
                 ),
               ),
-            ],
-          ),
+              actionsPadding: EdgeInsets.only(
+                right: Sizes.dimen_32.w,
+                bottom: Sizes.dimen_24.h,
+              ),
+              actions: [
+                MyRaisedButton(
+                  buttonTitle: state.isSubmitting ? 'Please wait...' : 'Request Passcode',
+                  onPressed: () {
+                    if (_key.currentState.validate()) {
+                      _key.currentState.reset();
+                      _key.currentState.save();
+                      print('im here');
+                      //add event for register
+                      BlocProvider.of<SignInFormBloc>(context).add(RegisterUser(_username));
+                      //context.bloc<SignInFormBloc>().add(RegisterUser(_username));
+                    }
+                  },
+                  buttonColor: AppColor.lightBlue,
+                  isTrailingPresent: true,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.dimen_20.w,
+                    vertical: Sizes.dimen_18.h,
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -155,12 +159,12 @@ class _LoginScreenState extends State<LoginScreen> {
               (r) {
                 print('updatePasscode -> $r');
                 if (r == 'YES')
-                  Navigator.of(context).pushNamed('/setup-passcode-screen', arguments: _passcode);
+                  Navigator.of(context).pushNamed('setup-passcode-screen', arguments: _passcode);
                 else {
                   if (User.instance.userRole == 'Manager') {
-                    Navigator.of(context).pushNamedAndRemoveUntil('/manager-dashboard', (route) => route.isFirst);
+                    Navigator.of(context).pushNamedAndRemoveUntil('manager-dashboard', (route) => false);
                   } else {
-                    Navigator.of(context).pushNamedAndRemoveUntil('/user-dashboard', (route) => route.isFirst);
+                    Navigator.of(context).pushNamedAndRemoveUntil('user-dashboard', (route) => false);
                   }
                 }
               },
@@ -235,7 +239,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   obscureText: _isObscureText,
                                   keyboardType: TextInputType.number,
                                   suffixIcon: IconButton(
-                                    icon: Icon(Icons.remove_red_eye),
+                                    icon: Icon(
+                                      Icons.remove_red_eye,
+                                      color: _isObscureText ? Colors.grey : Colors.blue,
+                                    ),
                                     onPressed: () {
                                       setState(() {
                                         _isObscureText = !_isObscureText;
@@ -265,8 +272,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     height: Sizes.dimen_48.h,
                                   ),
                                 ),
-                                !state.isSubmitting
-                                    ? MyRaisedButton(
+                                state.isSubmitting && !state.isRegister
+                                    ? CircularProgressIndicator()
+                                    : MyRaisedButton(
                                         buttonTitle: 'Login to Account',
                                         buttonColor: AppColor.lightBlue,
                                         isTrailingPresent: true,
@@ -278,13 +286,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                           print('inside onPressed');
                                           if (_formKey.currentState.validate()) {
                                             print('inside validate');
-                                            _formKey.currentState.reset();
+                                            //_formKey.currentState.reset();
+                                            User.instance.uid = _username;
                                             context.bloc<SignInFormBloc>().add(SignInUser(_username, _passcode));
                                           }
-                                          //Navigator.of(context).pushNamed('/setup-passcode-screen');
+                                          //Navigator.of(context).pushNamed('setup-passcode-screen');
                                         },
-                                      )
-                                    : CircularProgressIndicator(),
+                                      ),
                                 SizedBox(
                                   height: Sizes.dimen_10.h,
                                 ),

@@ -27,6 +27,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   dartz: ^0.9.1
   data_connection_checker: ^0.3.4
+  device_info: ^0.4.2+8
   equatable: null
   firebase_messaging: ^7.0.3
   flushbar: ^1.10.4
@@ -41,15 +42,15 @@ dependencies:
   injectable: ^1.0.4
   intl: ^0.16.1
   jwt_decoder: ^1.0.2
+  package_info: ^0.4.3
   pedantic: ^1.9.2
   percent_indicator: ^2.1.7+4
   qr_code_scanner: 0.0.12
   salomon_bottom_bar: ^2.0.0
+  shared_preferences: ^0.5.12+2
   syncfusion_flutter_datepicker: ^18.3.35-beta
   table_calendar: ^2.2.3
   uuid: ^2.2.2
-  package_info: ^0.4.3
-  device_info: ^0.4.2+8
 
 dev_dependencies:
   flutter_test:

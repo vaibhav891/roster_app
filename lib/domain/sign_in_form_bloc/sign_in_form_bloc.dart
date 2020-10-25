@@ -9,6 +9,8 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:roster_app/domain/auth/auth_failure.dart';
 import 'package:roster_app/data/data_sources/remote_data_src.dart';
+import 'package:roster_app/domain/auth/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'sign_in_form_event.dart';
 part 'sign_in_form_state.dart';
@@ -64,6 +66,13 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
         );
       },
       signOutUser: (SignOutUser value) async* {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+        User.instance.userId = '';
+        User.instance.userRole = '';
+        User.instance.token = '';
+        User.instance.startTime = '';
+        User.instance.endTime = '';
         yield state.copyWith(
           isSubmitting: false,
           authFailureOrSuccessOption: none(),
