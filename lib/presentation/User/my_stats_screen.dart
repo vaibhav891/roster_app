@@ -23,7 +23,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
   var _weekEnd;
   var _monthStart;
   var _monthEnd;
-  var _percentWorkDone;
+  var _percentWorkDone = 0.0;
   bool _selected = false;
 
   _getMonthDates() {

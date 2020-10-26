@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscureText = true;
 
   String _username = '';
+  String _username2 = '';
   String _passcode = '';
 
   String _validator(String value) {
@@ -85,19 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 key: _key,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: TextFormField(
-                  initialValue: _username,
+                  initialValue: _username2,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     filled: true,
                     fillColor: AppColor.sandGrey,
                     hintText: 'Type in your username',
                   ),
-                  onChanged: (value) => _username = value,
+                  onChanged: (value) => _username2 = value,
                   validator: (value) {
-                    if (_username.isEmpty) return 'Cannot be empty';
+                    if (value.isEmpty) return 'Cannot be empty';
                     return null;
                   },
-                  onSaved: (newValue) => _username = newValue,
+                  onSaved: (newValue) => _username2 = newValue,
                 ),
               ),
               actionsPadding: EdgeInsets.only(
@@ -113,8 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       _key.currentState.save();
                       print('im here');
                       //add event for register
-                      BlocProvider.of<SignInFormBloc>(context).add(RegisterUser(_username));
-                      //context.bloc<SignInFormBloc>().add(RegisterUser(_username));
+                      BlocProvider.of<SignInFormBloc>(context).add(RegisterUser(_username2));
+                      //context.bloc<SignInFormBloc>().add(RegisterUser(_username2));
                     }
                   },
                   buttonColor: AppColor.lightBlue,
@@ -256,6 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     padding: EdgeInsets.only(right: Sizes.dimen_32.w),
                                     child: GestureDetector(
                                       onTap: () {
+                                        _username2 = _username;
                                         _showDialog();
                                       },
                                       child: Text(

@@ -9,7 +9,7 @@ class ApplyLeaveState extends Equatable {
 
   factory ApplyLeaveState.initial() => ApplyLeaveState(
         isLoading: false,
-        successOrFailure: right(unit),
+        successOrFailure: null, //right(unit),
       );
 
   ApplyLeaveState copyWith({
