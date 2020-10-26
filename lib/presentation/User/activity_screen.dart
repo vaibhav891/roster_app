@@ -19,7 +19,6 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProviderStateMixin {
-
   DateTime now = DateTime.now();
   String _startDate;
   String _endDate;
@@ -31,13 +30,11 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
   String _selectedDate = '';
   Map<String, String> _selectedTile = Map<String, String>();
 
-
   //Table Calander Variables
   Map<DateTime, List> _events;
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
-
 
   _getStartnEndDates(DateTime date) {
     // _startDate = (DateTime(date.year, date.month, 2).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
@@ -59,13 +56,11 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
     // ));
   }
 
-
   void _onDaySelected(DateTime day, List events, List holidays) {
-
     setState(() {
-        print('inside _onSelectionChanged');
-        _selectedDate = DateFormat('dd MMM yyyy').format(day);
-        //_getStartnEndDates(args.value);
+      print('inside _onSelectionChanged');
+      _selectedDate = DateFormat('dd MMM yyyy').format(day);
+      //_getStartnEndDates(args.value);
     });
 
 //    setState(() {
@@ -76,7 +71,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
     _events = {};
     tileData = [];
-    now = DateTime(first.year,first.month,1);
+    now = DateTime(first.year, first.month, 1);
     _getStartnEndDates(first);
     _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
   }
@@ -97,7 +92,6 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
     );
 
     _animationController.forward();
-
   }
 
   @override
@@ -119,16 +113,21 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
               for (var j = 0; j < dailyRep.length; j++) {
                 tileData.add({
-                  "date": DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
-                  "startTime": DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs)),
-                  "endTime": DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs)),
+                  "date":
+                      DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "startTime": dailyRep[j].signInTimeTs != 0
+                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs))
+                      : '-',
+                  "endTime": dailyRep[j].signOutTimeTs != 0
+                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs))
+                      : '-',
                   "extras": (dailyRep[j].durationInHrs - 9) > 0 ? (dailyRep[j].durationInHrs - 9).toString() : "0",
                   "late": getTimeString(dailyRep[j].lateInMins),
                   "display": dailyRep[j].leaveType == 'sick'
                       ? 'Leave: Sick'
                       : dailyRep[j].leaveType == 'planned'
                           ? 'Leave: planned'
-                              : 'Your working hours'
+                          : 'Your working hours'
                 });
 
                 if (dailyRep[j].durationInHrs == 0)
@@ -141,10 +140,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                   dailyRep[j].leaveType == 'sick'
                       ? 'Leave: Sick'
                       : dailyRep[j].leaveType == 'planned'
-                      ? 'Leave: planned'
-                      : 'Your working hours'
+                          ? 'Leave: planned'
+                          : 'Your working hours'
                 ];
-
               }
               _selectedTile = Map();
 
@@ -152,40 +150,40 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                 if (tileData[i]['date'] == _selectedDate) _selectedTile = tileData[i];
               }
 
-              DateTime next ;
-              if(now.month == 12){
-                next = DateTime(now.year+1,1,1);
-              }else
-                next = DateTime(now.year,now.month+1,1);
+              DateTime next;
+              if (now.month == 12) {
+                next = DateTime(now.year + 1, 1, 1);
+              } else
+                next = DateTime(now.year, now.month + 1, 1);
 
-              DateTime n = DateTime(now.year,now.month,1);
+              DateTime n = DateTime(now.year, now.month, 1);
 
               int days = next.difference(n).inDays;
-              print("Difference"+days.toString());
+              print("Difference" + days.toString());
 
-              for(int i=0 ; i < days ; i++){
-                if(!_events.containsKey(DateTime(now.year,now.month,i+1))){
-                  _events[DateTime(now.year,now.month,i+1)] = ["Weekly Off"];
+              for (int i = 0; i < days; i++) {
+                if (!_events.containsKey(DateTime(now.year, now.month, i + 1))) {
+                  _events[DateTime(now.year, now.month, i + 1)] = ["Weekly Off"];
                 }
               }
-
             }
-
           }
           return Scaffold(
               backgroundColor: AppColor.blackHaze,
-              appBar: MyAppBar(
-                myTitle: Text(
-                  'My Calendar',
-                  style: TextStyle(color: Colors.black),
-                ),
-                centerTitle: true,
-              ),
+              // appBar: MyAppBar(
+              //   myTitle: Text(
+              //     'My Calendar',
+              //     style: TextStyle(color: Colors.black),
+              //   ),
+              //   centerTitle: true,
+              // ),
               body: (state is UserReportLoaded)
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      //calendar here
-                      children: [
+                  ? SingleChildScrollView(
+                      child: SafeArea(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          //calendar here
+                          children: [
 //                        Expanded(
 //                          flex: 3,
 //                          child: SfDateRangePicker(
@@ -225,68 +223,90 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 //                            ),
 //                          ),
 //                        ),
-                        Container(
-                          color: AppColor.blackHaze,
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: TableCalendar(
-                              initialSelectedDay: now,
-                              availableGestures: AvailableGestures.none,
-                              calendarController: _calendarController,
-                              initialCalendarFormat: CalendarFormat.month,
-                              daysOfWeekStyle: DaysOfWeekStyle(
-                                weekdayStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
-                                weekendStyle: TextStyle(color: const Color(0xFF616161),fontWeight: FontWeight.bold),
-                              ),
-                              events: _events,
-                              startingDayOfWeek: StartingDayOfWeek.sunday,
-                              endDay: DateTime.now(),
-                              calendarStyle: CalendarStyle(
-                                outsideDaysVisible: false,
-                                markersPositionBottom: 10,
-                                contentPadding: EdgeInsets.only(bottom: 0,left: 8,right: 8),
-                                weekdayStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                weekendStyle: const TextStyle(color: AppColor.textDark,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                outsideStyle: const TextStyle(color: AppColor.textLight,fontSize: 13,fontFamily: 'Product Sans',fontWeight: FontWeight.w400),
-                                selectedStyle: const TextStyle(color: AppColor.textDark,fontSize: 15,fontFamily: 'Product Sans',fontWeight: FontWeight.bold),
-                              ),
-                              selectedBoxDecoration: BoxDecoration(shape: BoxShape.rectangle,border: Border.all(color: Colors.black)),
-                              selectionMargin: EdgeInsets.only(right: 15, left:15 , top: 15 ,bottom: 15),
-                              headerStyle: HeaderStyle(
-                                formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
-                                centerHeaderTitle: true,
-                                formatButtonVisible: false,
-                                titleTextStyle: TextStyle(color: AppColor.textDark,fontSize: 16,fontFamily: 'Product Sans'),
-                                headerMargin: EdgeInsets.only(bottom: 15)
-                              ),
-                              onDaySelected: _onDaySelected,
-                              onVisibleDaysChanged: _onVisibleDaysChanged,
-                              builders: CalendarBuilders(
-                                  singleMarkerBuilder: (context,daytime,event){
+                            Flexible(
+                              child: Container(
+                                color: AppColor.blackHaze,
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: TableCalendar(
+                                  initialSelectedDay: now,
+                                  availableGestures: AvailableGestures.none,
+                                  calendarController: _calendarController,
+                                  initialCalendarFormat: CalendarFormat.month,
+                                  daysOfWeekStyle: DaysOfWeekStyle(
+                                    weekdayStyle:
+                                        TextStyle(color: const Color(0xFF616161), fontWeight: FontWeight.bold),
+                                    weekendStyle:
+                                        TextStyle(color: const Color(0xFF616161), fontWeight: FontWeight.bold),
+                                  ),
+                                  events: _events,
+                                  startingDayOfWeek: StartingDayOfWeek.sunday,
+                                  //endDay: DateTime.now(),
+                                  calendarStyle: CalendarStyle(
+                                    outsideDaysVisible: false,
+                                    markersPositionBottom: 10,
+                                    contentPadding: EdgeInsets.only(bottom: 0, left: 8, right: 8),
+                                    weekdayStyle: const TextStyle(
+                                        color: AppColor.textDark,
+                                        fontSize: 13,
+                                        fontFamily: 'Product Sans',
+                                        fontWeight: FontWeight.w400),
+                                    weekendStyle: const TextStyle(
+                                        color: AppColor.textDark,
+                                        fontSize: 13,
+                                        fontFamily: 'Product Sans',
+                                        fontWeight: FontWeight.w400),
+                                    outsideStyle: const TextStyle(
+                                        color: AppColor.textLight,
+                                        fontSize: 13,
+                                        fontFamily: 'Product Sans',
+                                        fontWeight: FontWeight.w400),
+                                    selectedStyle: const TextStyle(
+                                        color: AppColor.textDark,
+                                        fontSize: 15,
+                                        fontFamily: 'Product Sans',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  selectedBoxDecoration:
+                                      BoxDecoration(shape: BoxShape.rectangle, border: Border.all(color: Colors.black)),
+                                  selectionMargin: EdgeInsets.only(right: 15, left: 15, top: 15, bottom: 15),
+                                  headerStyle: HeaderStyle(
+                                    formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+                                    centerHeaderTitle: true,
+                                    formatButtonVisible: false,
+                                    titleTextStyle: TextStyle(
+                                      color: AppColor.textDark,
+                                      fontSize: 16,
+                                      fontFamily: 'Product Sans',
+                                    ),
+                                    headerMargin: EdgeInsets.only(bottom: 15),
+                                  ),
+                                  onDaySelected: _onDaySelected,
+                                  onVisibleDaysChanged: _onVisibleDaysChanged,
+                                  builders: CalendarBuilders(singleMarkerBuilder: (context, daytime, event) {
                                     return Container(
                                       height: 2,
                                       width: 32,
                                       color: getColorsFromEvent(event),
                                     );
-                                  }
-                              ),
-
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            width: ScreenUtil().screenWidth,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(Sizes.dimen_40),
-                              ),
-                              color: AppColor.white,
-                            ),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: Sizes.dimen_18.h,
+                                  }),
                                 ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Container(
+                                width: ScreenUtil().screenWidth,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(Sizes.dimen_40),
+                                  ),
+                                  color: AppColor.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: Sizes.dimen_18.h,
+                                    ),
 //                                Row(
 //                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
 //                                  children: [
@@ -319,134 +339,171 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 //                                    ),
 //                                  ],
 //                                ),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 25),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text('Weekly off',style: TextStyle(fontSize: 10,fontFamily: "Product Sans",color: AppColor.textDark),),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 9),
-                                          height: 2,
-                                          width: 32,
-                                          color:  AppColor.salmon,
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text('Sick Leave',style: TextStyle(fontSize: 10,fontFamily: "Product Sans",color: AppColor.textDark),),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 9),
-                                          height: 2,
-                                          width: 32,
-                                          color:  AppColor.saffron,
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text('Working Day',style: TextStyle(fontSize: 10,fontFamily: "Product Sans",color: AppColor.textDark),),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 9),
-                                          height: 2,
-                                          width: 32,
-                                          color:  AppColor.shamrockGreen,
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text('Planned Leave',style: TextStyle(fontSize: 10,fontFamily: "Product Sans",color: AppColor.textDark),),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 9),
-                                          height: 2,
-                                          width: 32,
-                                          color:  AppColor.lightBlue,
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                                SizedBox(
-                                  height: Sizes.dimen_18.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      //_selectedTile["date"],
-                                      _selectedDate,
-                                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: AppColor.textTitleDark,fontFamily:'Product Sans'),
-                                    ),
-                                    Text( _selectedTile.containsKey('display') ? _selectedTile['display'] : 'Weekly off', style: TextStyle(fontSize: 20,color: AppColor.textTitleDark,fontFamily:'Product Sans'),),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: Sizes.dimen_14.h,
-                                ),
-                                Container(
-                                  color: getColorsFromEvent(_selectedTile.containsKey('display') ? _selectedTile['display'] : 'Weekly off'),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: Sizes.dimen_18.h,
-                                    ),
-                                    child: DefaultTextStyle(
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 25),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          MyActivityColumn(
-                                            title: 'Sign In',
-                                            subTitle: _selectedTile.containsKey('startTime')
-                                                ? _selectedTile['startTime']
-                                                : '-',
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Weekly off',
+                                                style: TextStyle(
+                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(top: 9),
+                                                height: 2,
+                                                width: 32,
+                                                color: AppColor.salmon,
+                                              )
+                                            ],
                                           ),
-                                          MyActivityColumn(
-                                            title: 'Sign Out',
-                                            subTitle:
-                                                _selectedTile.containsKey('endTime') ? _selectedTile['endTime'] : '-',
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Sick Leave',
+                                                style: TextStyle(
+                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(top: 9),
+                                                height: 2,
+                                                width: 32,
+                                                color: AppColor.saffron,
+                                              )
+                                            ],
                                           ),
-                                          MyActivityColumn(
-                                            title: 'Extras',
-                                            subTitle:
-                                                _selectedTile.containsKey('extras') ? _selectedTile['extras'] : '-',
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Working Day',
+                                                style: TextStyle(
+                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(top: 9),
+                                                height: 2,
+                                                width: 32,
+                                                color: AppColor.shamrockGreen,
+                                              )
+                                            ],
                                           ),
-                                          MyActivityColumn(
-                                            title: 'Late',
-                                            subTitle: _selectedTile.containsKey('late') ? _selectedTile['late'] : '-',
-                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Planned Leave',
+                                                style: TextStyle(
+                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(top: 9),
+                                                height: 2,
+                                                width: 32,
+                                                color: AppColor.lightBlue,
+                                              )
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      height: Sizes.dimen_18.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          //_selectedTile["date"],
+                                          _selectedDate,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.textTitleDark,
+                                              fontFamily: 'Product Sans'),
+                                        ),
+                                        Text(
+                                          _selectedTile.containsKey('display')
+                                              ? _selectedTile['display']
+                                              : 'Weekly off',
+                                          style: TextStyle(
+                                              fontSize: 20, color: AppColor.textTitleDark, fontFamily: 'Product Sans'),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Sizes.dimen_14.h,
+                                    ),
+                                    Container(
+                                      color: getColorsFromEvent(_selectedTile.containsKey('display')
+                                          ? _selectedTile['display']
+                                          : 'Weekly off'),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: Sizes.dimen_18.h,
+                                        ),
+                                        child: DefaultTextStyle(
+                                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              MyActivityColumn(
+                                                title: 'Sign In',
+                                                subTitle: _selectedTile.containsKey('startTime')
+                                                    ? _selectedTile['startTime']
+                                                    : '-',
+                                              ),
+                                              MyActivityColumn(
+                                                title: 'Sign Out',
+                                                subTitle: _selectedTile.containsKey('endTime')
+                                                    ? _selectedTile['endTime']
+                                                    : '-',
+                                              ),
+                                              MyActivityColumn(
+                                                title: 'Extras',
+                                                subTitle:
+                                                    _selectedTile.containsKey('extras') ? _selectedTile['extras'] : '-',
+                                              ),
+                                              MyActivityColumn(
+                                                title: 'Late',
+                                                subTitle:
+                                                    _selectedTile.containsKey('late') ? _selectedTile['late'] : '-',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Sizes.dimen_14.h,
+                                    ),
+                                    MyRaisedButton(
+                                      buttonTitle: 'Apply for Leaves',
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
+                                          _userReportBloc
+                                            ..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
+                                          //setState(() {});
+                                        });
+                                      },
+                                      buttonColor: AppColor.lightBlue,
+                                      isTrailingPresent: false,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: Sizes.dimen_32.w,
+                                        vertical: Sizes.dimen_14.h,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Sizes.dimen_14.h,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: Sizes.dimen_14.h,
-                                ),
-                                MyRaisedButton(
-                                  buttonTitle: 'Apply for Leaves',
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
-                                      setState(() {});
-                                    });
-                                  },
-                                  buttonColor: AppColor.lightBlue,
-                                  isTrailingPresent: false,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Sizes.dimen_32.w,
-                                    vertical: Sizes.dimen_14.h,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     )
                   : Center(
                       child: CircularProgressIndicator(),
@@ -457,16 +514,15 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
   }
 
   getColorsFromEvent(event) {
-
-    if(event == 'Leave: Sick'){
+    if (event == 'Leave: Sick') {
       return AppColor.saffron;
-    }else if(event == 'Your working hours'){
+    } else if (event == 'Your working hours') {
       return AppColor.shamrockGreen;
-    }else if(event == 'Leave: planned'){
+    } else if (event == 'Leave: planned') {
       return AppColor.lightBlue;
-    } else if(event == 'Weekly Off'){
-        return AppColor.salmon;
-    }else
+    } else if (event == 'Weekly Off') {
+      return AppColor.salmon;
+    } else
       return AppColor.salmon;
   }
 

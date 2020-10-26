@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor: AppColor.sandGrey,
                     hintText: 'Type in your username',
                   ),
-                  //onChanged: (value) => _username = value,
+                  onChanged: (value) => _username = value,
                   validator: (value) {
                     if (_username.isEmpty) return 'Cannot be empty';
                     return null;
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   buttonTitle: state.isSubmitting ? 'Please wait...' : 'Request Passcode',
                   onPressed: () {
                     if (_key.currentState.validate()) {
-                      _key.currentState.reset();
+                      //_key.currentState.reset();
                       _key.currentState.save();
                       print('im here');
                       //add event for register
@@ -296,28 +296,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: Sizes.dimen_10.h,
                                 ),
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    text: 'Not having code yet?',
-                                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                                          color: AppColor.paleSky,
-                                        ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: ' Request now\n',
-                                        style: TextStyle(
-                                          color: AppColor.lightBlue,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            print('tapped');
-                                            _showDialog();
-                                          },
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // RichText(
+                                //   textAlign: TextAlign.center,
+                                //   text: TextSpan(
+                                //     text: 'Not having code yet?',
+                                //     style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                //           color: AppColor.paleSky,
+                                //         ),
+                                //     children: <TextSpan>[
+                                //       TextSpan(
+                                //         text: ' Request now\n',
+                                //         style: TextStyle(
+                                //           color: AppColor.lightBlue,
+                                //         ),
+                                //         recognizer: TapGestureRecognizer()
+                                //           ..onTap = () {
+                                //             print('tapped');
+                                //             _showDialog();
+                                //           },
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

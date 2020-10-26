@@ -34,8 +34,10 @@ class CustomInputBox extends StatelessWidget {
         maxLines: keyboardType == TextInputType.multiline ? 5 : 1,
         obscureText: obscureText,
         decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.never,
           suffixIcon: suffixIcon,
-          hintText: hintText,
+          labelText: hintText,
+          //hintText: hintText,
           isDense: true,
           filled: true,
           fillColor: AppColor.sandGrey.withOpacity(0.85),

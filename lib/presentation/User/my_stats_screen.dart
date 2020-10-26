@@ -65,9 +65,24 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                 actions: [
                   FlatButton(
                     onPressed: () {
-                      BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
-
-                      Navigator.of(context).popAndPushNamed('login');
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Log Out'),
+                            content: Text('Do you really want to logout?'),
+                            actions: [
+                              FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text('No')),
+                              FlatButton(
+                                  onPressed: () {
+                                    BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
+                                    Navigator.of(context).pushNamedAndRemoveUntil('login', (route) => false);
+                                  },
+                                  child: Text('Yes')),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Text(
                       'Logout',

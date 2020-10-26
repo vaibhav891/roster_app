@@ -46,13 +46,15 @@ class _RosterAppState extends State<RosterApp> {
     super.initState();
     _initializeSharedPrefs();
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(
-        resumeCallBack: () async => setState(() {
-              // check if token is present
-              if (User.instance.token == null) {
-                Navigator.of(context).pushNamed('login');
-              }
-              print("resume callback");
-            })));
+      resumeCallBack: () async => print('App resumed'),
+      // () async => setState(() {
+      //       // check if token is present
+      //       if (User.instance.token == null) {
+      //         Navigator.of(context).pushNamed('login');
+      //       }
+      //       print("resume callback");
+      //     }),
+    ));
   }
 
   @override
@@ -93,7 +95,7 @@ class _RosterAppState extends State<RosterApp> {
                       ),
                   appBarTheme: const AppBarTheme(elevation: 0),
                 ),
-                initialRoute: User.instance.token != null
+                initialRoute: User.instance.token != null && User.instance.token != ''
                     ? User.instance.userRole == 'User'
                         ? 'user-dashboard'
                         : 'manager-dashboard'

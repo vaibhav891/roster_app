@@ -17,7 +17,6 @@ import 'package:roster_app/di/get_it.dart';
 import 'package:roster_app/domain/manager_report_bloc/manager_report_bloc.dart';
 import 'package:roster_app/domain/model/user_timing.dart';
 import 'package:roster_app/domain/sign_in_form_bloc/sign_in_form_bloc.dart';
-import 'package:roster_app/presentation/common/my_decoration_box.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:roster_app/common/size_extension.dart';
 
@@ -127,7 +126,19 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
     fbm.configure(
       onMessage: (message) {
         print('onMessage: $message');
-        return null;
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(message['notification']['title']),
+            content: Text(message['notification']['body']),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
       },
       onResume: (message) {
         print('onResume: $message');
@@ -197,8 +208,24 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
               child: Scaffold(
                   floatingActionButton: FloatingActionButton.extended(
                     onPressed: () {
-                      BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
-                      Navigator.of(context).popAndPushNamed('login');
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Log Out'),
+                            content: Text('Do you really want to logout?'),
+                            actions: [
+                              FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text('No')),
+                              FlatButton(
+                                  onPressed: () {
+                                    BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
+                                    Navigator.of(context).pushNamedAndRemoveUntil('login', (route) => false);
+                                  },
+                                  child: Text('Yes')),
+                            ],
+                          );
+                        },
+                      );
                     },
                     label: Text('Logout'),
                     shape: RoundedRectangleBorder(
@@ -211,21 +238,22 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                       DefaultTextStyle(
                         style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
                         child: TableCalendar(
-                          endDay: DateTime.now(),
+                          //endDay: DateTime.now(),
                           availableCalendarFormats: const {CalendarFormat.week: 'Week'},
                           calendarController: _calendarController,
                           initialCalendarFormat: CalendarFormat.week,
-                          selectedBoxDecoration: BoxDecoration(shape: BoxShape.circle,color: Colors.white.withOpacity(0.5)),
+                          selectedBoxDecoration:
+                              BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.5)),
                           //initialSelectedDay: dateSelected,
                           onVisibleDaysChanged: (first, last, format) {
-                            if (DateTime.now().millisecondsSinceEpoch > first.millisecondsSinceEpoch) {
-                              _calendarController.setSelectedDay(first);
-                              _convertDate(first);
-                              BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
-                                startDate: _stDate,
-                                endDate: _endDate,
-                              ));
-                            }
+                            // if (DateTime.now().millisecondsSinceEpoch > first.millisecondsSinceEpoch) {
+                            _calendarController.setSelectedDay(first);
+                            _convertDate(first);
+                            BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
+                              startDate: _stDate,
+                              endDate: _endDate,
+                            ));
+                            // }
                           },
                           calendarStyle: CalendarStyle(
                             markersColor: AppColor.white,
@@ -237,7 +265,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                           headerStyle: HeaderStyle(
                             centerHeaderTitle: true,
                           ),
-                          onDaySelected: (day, events1,events2) {
+                          onDaySelected: (day, events1, events2) {
                             print(day.toString());
                             _convertDate(day);
                             BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
@@ -289,12 +317,12 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                             ? //userTimings[index].inTime.toString()
                                             DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
                                                 int.parse(userTimings[index].inTime) * 1000))
-                                            : '0';
+                                            : '-';
                                         var outTime = userTimings[index].outTime != '0'
                                             ? //userTimings[index].outTime.toString()
                                             DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
                                                 int.parse(userTimings[index].outTime) * 1000))
-                                            : '0';
+                                            : '-';
                                         return ListTile(
                                           tileColor: AppColor.white,
                                           title: Text(userTimings[index].userName),

@@ -52,8 +52,34 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     });
   }
 
-  _getPosition() {
+  _getPosition() async {
     print('inside _getPosition');
+
+    try {
+      LocationPermission permission = await GeolocatorPlatform.instance.checkPermission();
+      if (permission == LocationPermission.denied) {
+        LocationPermission perm = await GeolocatorPlatform.instance.requestPermission();
+        if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content:
+                    Text('Location is required for user to signin into site. You can turn it on again from Settings.'),
+                actions: [
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('Ok'),
+                  )
+                ],
+              );
+            },
+          );
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
 
     positionStream = getPositionStream(
       timeInterval: 600000, //this is in millisecs
@@ -160,7 +186,19 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     fbm.configure(
       onMessage: (message) {
         print('onMessage: $message');
-        return null;
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(message['notification']['title']),
+            content: Text(message['notification']['body']),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
       },
       onResume: (message) {
         print('onResume: $message');

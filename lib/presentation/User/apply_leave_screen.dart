@@ -26,10 +26,11 @@ class ApplyLeaveScreen extends StatefulWidget {
 class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   final _applyLeaveBloc = getIt<ApplyLeaveBloc>();
   final _formKey = GlobalKey<FormState>();
-  String _startDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
-  String _endDate = DateFormat('EEEE dd,MMMM').format(DateTime.now());
-  String fromDate = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
-  String toDate = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
+  DateTime now = DateTime.now();
+  String _startDate;
+  String _endDate;
+  String fromDate;
+  String toDate;
   String _leaveType;
   String _reason;
 
@@ -37,14 +38,22 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
-        var stDt = args.value.startDate;
-        var enDt = args.value.endDate ?? args.value.startDate;
+        DateTime stDt = args.value.startDate;
+        DateTime enDt = args.value.endDate != null
+            ? args.value.endDate.add(Duration(seconds: Duration.secondsPerDay - 1))
+            : args.value.startDate.add(Duration(seconds: Duration.secondsPerDay - 1));
         _startDate = DateFormat('EEEE dd,MMMM').format(stDt).toString();
         _endDate = DateFormat('EEEE dd,MMMM').format(enDt).toString();
         // fromDate = args.value.startDate.toUtc().millisecondsSinceEpoch.toString();
         // toDate = (args.value.endDate ?? args.value.startDate).toUtc().millisecondsSinceEpoch.toString();
-        fromDate = (DateTime.utc(stDt.year, stDt.month, stDt.day).millisecondsSinceEpoch ~/ 1000).toString();
-        toDate = (DateTime.utc(enDt.year, enDt.month, enDt.day).millisecondsSinceEpoch ~/ 1000).toString();
+        fromDate = (DateTime.utc(stDt.year, stDt.month, stDt.day, stDt.hour, stDt.minute, stDt.second)
+                    .millisecondsSinceEpoch ~/
+                1000)
+            .toString();
+        toDate = (DateTime.utc(enDt.year, enDt.month, enDt.day, enDt.hour, enDt.minute, enDt.second)
+                    .millisecondsSinceEpoch ~/
+                1000)
+            .toString();
       }
     });
   }
@@ -53,6 +62,12 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   void initState() {
     super.initState();
     _leaveType = leaveTypes[0];
+    _startDate = DateFormat('EEEE dd,MMMM').format(now);
+    _endDate = DateFormat('EEEE dd,MMMM').format(now);
+    fromDate = (DateTime.utc(now.year, now.month, now.day).millisecondsSinceEpoch ~/ 1000).toString();
+    toDate = ((DateTime.utc(now.year, now.month, now.day).millisecondsSinceEpoch ~/ 1000) + Duration.secondsPerDay - 1)
+        .toString();
+    print('dates $fromDate, $toDate');
   }
 
   @override
@@ -161,6 +176,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                                                     height: Sizes.dimen_350.h,
                                                     child: SfDateRangePicker(
                                                       selectionMode: DateRangePickerSelectionMode.range,
+                                                      enablePastDates: false,
                                                       showNavigationArrow: true,
                                                       onSelectionChanged: _onSelectionChanged,
                                                     ),

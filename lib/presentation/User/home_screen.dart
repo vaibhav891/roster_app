@@ -49,8 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               FlatButton(
                 onPressed: () {
-                  BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
-                  Navigator.of(context).popAndPushNamed('login');
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Log Out'),
+                        content: Text('Do you really want to logout?'),
+                        actions: [
+                          FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text('No')),
+                          FlatButton(
+                              onPressed: () {
+                                BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
+                                Navigator.of(context).pushNamedAndRemoveUntil('login', (route) => false);
+                              },
+                              child: Text('Yes')),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Text(
                   'Logout',
@@ -93,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
-                  child: User.instance.startTime != null
+                  child: User.instance.startTime != null && User.instance.startTime != ''
                       ? Row(
                           children: [
                             Column(
@@ -236,7 +252,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
-                                            setState(() {});
+                                            BlocProvider.of<HomeBloc>(context).add(HomeInitialEvent());
+
+                                            //setState(() {});
                                           });
                                         },
                                         child: Stack(
@@ -290,27 +308,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                           )),
                                     ]
                                   : [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pushNamed('apply-leave-screen');
-                                        },
-                                        child: Stack(
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/unwell_bg.png',
-                                              height: 138,
-                                            ),
-                                            Positioned(
-                                              left: Sizes.dimen_20,
-                                              top: Sizes.dimen_12,
-                                              child: Image.asset(
-                                                'assets/images/unwell.png',
-                                                height: 61,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                      Center(
+                                          child: Text('You are on leave today.',
+                                              style: Theme.of(context).textTheme.headline6)),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     Navigator.of(context).pushNamed('apply-leave-screen').then(
+                                      //         (value) => BlocProvider.of<HomeBloc>(context).add(HomeInitialEvent()));
+                                      //   },
+                                      //   child: Stack(
+                                      //     children: [
+                                      //       Image.asset(
+                                      //         'assets/images/unwell_bg.png',
+                                      //         height: 138,
+                                      //       ),
+                                      //       Positioned(
+                                      //         left: Sizes.dimen_20,
+                                      //         top: Sizes.dimen_12,
+                                      //         child: Image.asset(
+                                      //           'assets/images/unwell.png',
+                                      //           height: 61,
+                                      //         ),
+                                      //       )
+                                      //     ],
+                                      //   ),
+                                      // ),
                                     ],
                             ),
                             Expanded(
