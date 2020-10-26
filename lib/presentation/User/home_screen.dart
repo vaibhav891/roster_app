@@ -143,6 +143,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           print('tapped');
                           try {
                             position = await getCurrentPosition();
+                          } on PermissionDeniedException {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Access required'),
+                                  content: Text(
+                                      'Location is required for user to signin into site. You can turn it on again from Settings.'),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: Text('Ok'),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
                           } catch (ex) {
                             print("Error details: ${ex.details}");
                           }

@@ -64,6 +64,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
+                title: Text('Access required'),
                 content:
                     Text('Location is required for user to signin into site. You can turn it on again from Settings.'),
                 actions: [

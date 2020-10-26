@@ -121,7 +121,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                   "endTime": dailyRep[j].signOutTimeTs != 0
                       ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs))
                       : '-',
-                  "extras": (dailyRep[j].durationInHrs - 9) > 0 ? (dailyRep[j].durationInHrs - 9).toString() : "0",
+                  "extras": (dailyRep[j].extra) > 0 ? (dailyRep[j].extra).toString() : "0",
                   "late": getTimeString(dailyRep[j].lateInMins),
                   "display": dailyRep[j].leaveType == 'sick'
                       ? 'Leave: Sick'

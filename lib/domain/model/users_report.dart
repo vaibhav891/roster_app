@@ -83,6 +83,7 @@ class DailyReport {
   int signInTimeTs;
   int signOutTimeTs;
   int durationInHrs;
+  int extra;
   int lateInMins;
   String leaveType;
 
@@ -93,6 +94,7 @@ class DailyReport {
       this.signInTimeTs,
       this.signOutTimeTs,
       this.durationInHrs,
+      this.extra,
       this.lateInMins,
       this.leaveType});
 
@@ -103,6 +105,7 @@ class DailyReport {
     signInTimeTs = json['signInTimeTs'];
     signOutTimeTs = json['signOutTimeTs'];
     durationInHrs = json['durationInHrs'];
+    extra = json['extra'];
     lateInMins = json['lateInMins'];
     leaveType = json['leaveType'];
   }
@@ -115,6 +118,7 @@ class DailyReport {
     data['signInTimeTs'] = this.signInTimeTs;
     data['signOutTimeTs'] = this.signOutTimeTs;
     data['durationInHrs'] = this.durationInHrs;
+    data['extra'] = this.extra;
     data['lateInMins'] = this.lateInMins;
     data['leaveType'] = this.leaveType;
     return data;
