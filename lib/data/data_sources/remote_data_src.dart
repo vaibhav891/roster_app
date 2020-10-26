@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:roster_app/domain/NotificationBloc/Models/notification_model.dart';
 import 'package:roster_app/domain/auth/auth_failure.dart';
 import 'package:roster_app/domain/model/locations.dart';
 import 'package:roster_app/domain/model/users_report.dart';
@@ -51,4 +52,7 @@ abstract class RemoteDataSrc {
   Future<Either<AuthFailure, Unit>> updateDeviceInfo({Map<String, dynamic> deviceInfo});
 
   Future<Either<AuthFailure, Unit>> syncInfo();
+  
+  Future<Either<AuthFailure, NotificationList>> fetchNotifications();
+
 }

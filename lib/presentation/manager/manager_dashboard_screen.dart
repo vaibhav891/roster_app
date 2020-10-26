@@ -25,7 +25,7 @@ class ManagerDashboardScreen extends StatefulWidget {
   _ManagerDashboardScreenState createState() => _ManagerDashboardScreenState();
 }
 
-class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
+ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
   final CalendarController _calendarController = CalendarController();
   ManagerReportBloc _managerReportBloc;
   String _stDate = '';
@@ -186,7 +186,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                 if (state.usersReport.workSummary[i].siteName == _selectedLocation) {
                   var locationDetail = state.usersReport.workSummary[i].dailyReport;
 
-                  userTimings = locationDetail.map((e) {
+                  userTimings = locationDetail.map((e){
                     String type = e.lateInMins != 0
                         ? 'Late'
                         : e.signInTimeTs == 0
@@ -235,6 +235,30 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                   body: SafeArea(
                       child: Column(
                     children: [
+
+                      Container(
+                        margin: EdgeInsets.only(top: 10,right: 10),
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.of(context).pushNamed('manager-notifications');
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("Alerts", style: TextStyle(fontSize: 18, color: AppColor.white, fontFamily: "Product Sans")),
+                              SizedBox(width: 3,),
+                              Icon(Icons.notifications_none , color: AppColor.white,size: 24,)
+                            ],
+                          ),
+                        )
+
+//                        IconButton(icon:,onPressed: (){
+//                          Navigator.of(context).pushNamed('manager-notifications');
+//                        },),
+                      ),
+
                       DefaultTextStyle(
                         style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
                         child: TableCalendar(

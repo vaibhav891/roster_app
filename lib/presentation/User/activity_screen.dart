@@ -113,8 +113,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
               for (var j = 0; j < dailyRep.length; j++) {
                 tileData.add({
-                  "date":
-                      DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "date": DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
                   "startTime": dailyRep[j].signInTimeTs != 0
                       ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs))
                       : '-',
@@ -152,11 +151,11 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
               DateTime next;
               if (now.month == 12) {
-                next = DateTime(now.year + 1, 1, 1);
+                next = DateTime(now.year + 1, 1, 1).toUtc();
               } else
-                next = DateTime(now.year, now.month + 1, 1);
+                next = DateTime(now.year, now.month + 1, 1).toUtc();
 
-              DateTime n = DateTime(now.year, now.month, 1);
+              DateTime n = DateTime(now.year, now.month, 1).toUtc();
 
               int days = next.difference(n).inDays;
               print("Difference" + days.toString());

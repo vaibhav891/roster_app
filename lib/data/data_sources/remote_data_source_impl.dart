@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:roster_app/data/core/api_client.dart';
 import 'package:roster_app/data/core/api_constants.dart';
+import 'package:roster_app/domain/NotificationBloc/Models/notification_model.dart';
 import 'package:roster_app/domain/auth/auth_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:roster_app/data/data_sources/remote_data_src.dart';
@@ -446,4 +447,30 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
     } else
       return left(AuthFailure('Check your Internet connection'));
   }
+
+  @override
+  Future<Either<AuthFailure, NotificationList>> fetchNotifications() async {
+    print('enter remoteDataSourceImpl fetchUserSite');
+    if (await DataConnectionChecker().hasConnection) {
+      try {
+
+        //var responseBody = await Future.delayed(Duration(seconds: 5));
+        Map<String, String> headers = {
+          'Authorization': 'Bearer ${User.instance.token}',
+          'Content-Type': 'application/json',
+          'app-key': ApiConstants.APP_KEY,
+        };
+
+        var responseBody = await _client.get( ApiConstants.GET_NOTIFICATION_ENDPOINT , headers);
+        print(responseBody);
+        return right(NotificationList.fromJson(jsonDecode(responseBody)));
+
+      } catch (e) {
+        return left(AuthFailure(e.toString()));
+      }
+    } else
+      return left(AuthFailure('Check your Internet connection'));
+  }
+
+
 }

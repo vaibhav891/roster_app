@@ -17,9 +17,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final RemoteDataSrc _remoteDataSrc;
 
   @override
-  Stream<HomeState> mapEventToState(
-    HomeEvent event,
-  ) async* {
+  Stream<HomeState> mapEventToState(HomeEvent event,) async* {
     if (event is HomeInitialEvent) {
       yield state.copyWith(
         isSignInLoading: true,

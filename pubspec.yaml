@@ -51,6 +51,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^18.3.35-beta
 #  table_calendar: ^2.2.3
   uuid: ^2.2.2
+  rxdart: 0.24.1
+  timeago: ^2.0.28
   table_calendar:
     path: table_calendar
 

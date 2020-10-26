@@ -13,6 +13,7 @@ import 'package:roster_app/presentation/User/user_dashboard_screen.dart';
 import 'package:roster_app/presentation/common/lifecycle_event_handler.dart';
 import 'package:roster_app/presentation/login/login_screen.dart';
 import 'package:roster_app/presentation/login/setup_passcode_screen.dart';
+import 'package:roster_app/presentation/manager/Notification/notification_list_screen.dart';
 import 'package:roster_app/presentation/manager/manager_dashboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -107,6 +108,7 @@ class _RosterAppState extends State<RosterApp> {
                   'apply-leave-screen': (context) => ApplyLeaveScreen(),
                   'qr-scan-screen': (context) => QrScanScreen(),
                   'manager-dashboard': (context) => ManagerDashboardScreen(),
+                  'manager-notifications': (context) => NotificationListScreen(),
                 },
               );
             } else

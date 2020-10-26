@@ -18,4 +18,6 @@ class ApiConstants {
   static const String USER_SITE_ENDPOINT = '/api/v1/user/site';
   static const String UPDATE_DEVICE_INFO_ENDPOINT = '/api/v1/user/deviceInfo';
   static const String SYNC_INFO_ENDPOINT = '/api/v1/user/sync';
+  static const String GET_NOTIFICATION_ENDPOINT = '/api/v1/notifications';
+
 }
