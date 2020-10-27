@@ -60,19 +60,19 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
               ? RefreshIndicator(
                   onRefresh: _onRefresh,
                   child: ListView.builder(
-                      itemCount:10,
-                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      itemCount:this._bloc.listLength,
+                      padding: EdgeInsets.only(top:this._bloc.notifications.length == 0?0: 20, bottom:this._bloc.notifications.length == 0 ?0: 20),
                       itemBuilder: (ctx, index) {
 
                         if(this._bloc.notifications.length == 0 && index ==0 ) {
                           return Container(
-                            height: MediaQuery.of(context).size.height - 80,
+                            height: MediaQuery.of(context).size.height - 80 ,
                             child: Center(
                               child: Text("No Notifications", style: TextStyle(fontSize: 18, color: AppColor.textDark, fontFamily: "Product Sans"),
                             ),
                           ));
                         }
-                        return NotificationListAdapter();
+                        return NotificationListAdapter(notification: this._bloc.notifications[index],);
                       }),
                 )
               : Container(

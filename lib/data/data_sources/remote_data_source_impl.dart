@@ -463,7 +463,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
 
         var responseBody = await _client.get( ApiConstants.GET_NOTIFICATION_ENDPOINT , headers);
         print(responseBody);
-        return right(NotificationList.fromJson(jsonDecode(responseBody)));
+        return right(NotificationList.fromJson(responseBody));
 
       } catch (e) {
         return left(AuthFailure(e.toString()));

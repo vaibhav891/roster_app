@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class NotificationList {
   int status;
   List<Notifications> notifications;
@@ -40,12 +42,12 @@ class Notifications {
         this.timestamp});
 
   Notifications.fromJson(Map<String, dynamic> json) {
-    from = json['from'];
-    to = json['to'];
-    title = json['title'];
-    message = json['message'];
-    type = json['type'];
-    timestamp = json['timestamp'];
+    from = json['from'] ?? " ";
+    to = json['to'] ?? " ";
+    title = json['title'] ?? " ";
+    message = json['message'] ?? " ";
+    type = json['type'] ?? " ";
+    timestamp = json['timestamp'] ?? " ";
   }
 
   Map<String, dynamic> toJson() {

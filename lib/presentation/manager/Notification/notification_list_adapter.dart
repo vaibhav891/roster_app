@@ -26,7 +26,7 @@ class NotificationListAdapter extends StatelessWidget {
                 color: AppColor.lightBlue,
               shape: BoxShape.circle
             ),
-            child: Center(child: Text(notification.from[0],style: TextStyle(fontSize: 20,color: AppColor.white,fontFamily: "Product Sans"),)),
+            child: Center(child: Text((notification?.from ?? " ")[0],style: TextStyle(fontSize: 20,color: AppColor.white,fontFamily: "Product Sans"),)),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,7 @@ class NotificationListAdapter extends StatelessWidget {
                       text: notification.type + " : ",
                       style: TextStyle(color: AppColor.textDark, fontSize: 16,fontFamily: "Product Sans",fontWeight: FontWeight.bold),
                       children: <TextSpan>[
-                        TextSpan(text: notification.message,
+                        TextSpan(text: notification.from + " " + notification.message,
                             style: TextStyle(
                                 color: AppColor.textLight, fontSize: 15,fontFamily: "Product Sans"),
                         )
@@ -53,7 +53,8 @@ class NotificationListAdapter extends StatelessWidget {
                 children: [
                   Icon(Icons.access_time,color: AppColor.textLight,size: 15,),
                   SizedBox(width: 7,),
-                  Text( timeago.format(DateTime.fromMillisecondsSinceEpoch(notification.timestamp * 1000)),style: TextStyle(fontSize: 12,color: AppColor.textLight,fontFamily: "Product Sans"),),
+                  Text(
+                    timeago.format(DateTime.fromMillisecondsSinceEpoch(notification.timestamp * 1000)), style: TextStyle(fontSize: 12,color: AppColor.textLight,fontFamily: "Product Sans"),),
                 ],
               )
 
