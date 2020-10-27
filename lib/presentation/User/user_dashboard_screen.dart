@@ -89,28 +89,28 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       User.instance.lat = position.latitude;
       User.instance.long = position.longitude;
       var bloc = BlocProvider.of<HomeBloc>(context);
-      // if (bloc.state.isSignedIn) {
-      //   var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
-      //   if (failureOrSuccess.isRight()) {
-      //     failureOrSuccess.fold(
-      //       (l) => null,
-      //       (r) {
-      //         if (r.sites.length > 0) {
-      //           siteLat = r.sites.first.location.latitude;
-      //           siteLong = r.sites.first.location.longitude;
-      //           radiusInMeters = r.sites.first.radiusInMeter;
-      //         }
-      //         return null;
-      //       },
-      //     );
-      //   }
+      if (bloc.state.isSignedIn) {
+        var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
+        if (failureOrSuccess.isRight()) {
+          failureOrSuccess.fold(
+            (l) => null,
+            (r) {
+              if (r.sites.length > 0) {
+                siteLat = r.sites.first.location.latitude;
+                siteLong = r.sites.first.location.longitude;
+                radiusInMeters = r.sites.first.radiusInMeter;
+              }
+              return null;
+            },
+          );
+        }
 
-      // double distanceInMeters = distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
+        double distanceInMeters = distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
 
-      // if (distanceInMeters > radiusInMeters) {
-      //   bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
-      // }
-      // }
+        if (distanceInMeters > radiusInMeters) {
+          bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
+        }
+      }
     });
   }
 

@@ -37,9 +37,9 @@ class _RosterAppState extends State<RosterApp> {
       User.instance.userRole = decodedToken['data']['public']['role'] ?? '';
       print('app launch - token ${User.instance.token}');
     }
-    if (prefs.containsKey('shiftStartTime')) User.instance.startTime = prefs.getString('shiftStartTime');
+    if (prefs.containsKey('shiftStartTime')) User.instance.startTime = prefs.getInt('shiftStartTime');
 
-    if (prefs.containsKey('shiftEndTime')) User.instance.endTime = prefs.getString('shiftEndTime');
+    if (prefs.containsKey('shiftEndTime')) User.instance.endTime = prefs.getInt('shiftEndTime');
   }
 
   @override

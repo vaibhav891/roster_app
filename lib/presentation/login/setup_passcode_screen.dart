@@ -112,7 +112,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                                   CustomInputBox(
                                     title: 'Enter new passcode',
                                     onChanged: (value) => _passcode = value,
-                                    hintText: '******',
+                                    //hintText: '******',
                                     obscureText: true,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
@@ -123,7 +123,7 @@ class _SetupPasscodeScreenState extends State<SetupPasscodeScreen> {
                                   CustomInputBox(
                                     title: 'Re-enter Passcode',
                                     onChanged: (value) => _rePasscode = value,
-                                    hintText: '******',
+                                    //hintText: '******',
                                     obscureText: true,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {

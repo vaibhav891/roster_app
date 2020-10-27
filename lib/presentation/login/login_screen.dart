@@ -66,7 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   (r) {
                     print('inside success');
                     Navigator.of(context).pop();
-                    return FlushbarHelper.createSuccess(message: 'Passcode is reset').show(context);
+                    return FlushbarHelper.createSuccess(message: 'Reset password request submitted successfully. ')
+                        .show(context);
                   },
                 ),
               );
@@ -92,6 +93,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: AppColor.sandGrey,
                     hintText: 'Type in your username',
+                    enabledBorder: //InputBorder.none,
+                        OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: //InputBorder.none,
+                        OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent, width: 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent, width: 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                   onChanged: (value) => _username2 = value,
                   validator: (value) {
@@ -236,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   title: 'Passcode',
                                   onChanged: (value) => _passcode = value,
                                   validator: _validator,
-                                  hintText: '******',
+                                  //hintText: '******',
                                   obscureText: _isObscureText,
                                   keyboardType: TextInputType.number,
                                   suffixIcon: IconButton(
