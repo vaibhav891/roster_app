@@ -56,6 +56,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
         yield state.copyWith(
           isSubmitting: true,
           authFailureOrSuccessOption: none(),
+          isRegister: false,
         );
 
         successOrFailure = await _remoteDataSrc.signInUser(userId: value.username, passcode: value.passcode);
