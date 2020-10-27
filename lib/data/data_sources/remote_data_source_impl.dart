@@ -446,11 +446,11 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         if ((responseBody as Map).containsKey('taskId')) {
           User.instance.taskId = (responseBody as Map)['taskId'];
         }
-        if ((responseBody as Map).containsKey('signInTimeTs')) {
-          User.instance.startTime = responseBody['signInTimeTs'];
-          // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
-          prefs.setInt('shiftStartTime', User.instance.startTime);
-        }
+        // if ((responseBody as Map).containsKey('signInTimeTs')) {
+        //   User.instance.startTime = responseBody['signInTimeTs'];
+        //   // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
+        //   prefs.setInt('shiftStartTime', User.instance.startTime);
+        // }
         if ((responseBody as Map).containsKey('checkInTimeTs')) {
           User.instance.checkInTime =
               DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();
@@ -480,8 +480,9 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         };
 
         var responseBody = await _client.get(ApiConstants.GET_NOTIFICATION_ENDPOINT, headers);
-        print(responseBody);
-        return right(NotificationList.fromJson(jsonDecode(responseBody)));
+        //print(responseBody.toString());
+        //var decodedJson = jsonDecode(responseBody);
+        return right(NotificationList.fromJson(responseBody));
       } catch (e) {
         return left(AuthFailure(e.toString()));
       }

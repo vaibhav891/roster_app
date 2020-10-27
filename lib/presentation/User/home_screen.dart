@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   color: AppColor.lightBlue,
                                                 ),
                                                 Text(
-                                                  '${time.hours ?? '00'}:${time.min}:${time.sec}',
+                                                  '${time.hours != null ? time.hours.toString().padLeft(2, '0') : '00'}:${time.min != null ? time.min.toString().padLeft(2, '0') : '00'}:${time.sec.toString().padLeft(2, '0')}',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline2
