@@ -72,8 +72,8 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
         User.instance.userId = '';
         User.instance.userRole = '';
         User.instance.token = '';
-        User.instance.startTime = '';
-        User.instance.endTime = '';
+        User.instance.startTime = 0;
+        User.instance.endTime = 0;
         yield state.copyWith(
           isSubmitting: false,
           authFailureOrSuccessOption: none(),

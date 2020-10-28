@@ -35,6 +35,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   String _reason;
 
   List<String> leaveTypes = ['Sick Leave', 'Planned Leave'];
+
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
@@ -76,23 +77,18 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       create: (context) => _applyLeaveBloc,
       child: BlocConsumer<ApplyLeaveBloc, ApplyLeaveState>(
         listener: (context, state) {
-          if (state.successOrFailure != null) {
-            state.successOrFailure.fold(
-              (failure) => FlushbarHelper.createError(message: failure.message
-                      // map(
-                      //   cancelledByUser: (_) => 'cancelled ',
-                      //   serverError: (_) => 'Server error! Contact support',
-                      //   invalidUsernamePasscodeCombination: (_) => 'Invalid Username & passcode combination',
-                      //   noInternetConnectivity: (_) => 'No Internet connectivity',
-                      // ),
-                      )
-                  .show(context),
+          //if (state.successOrFailure != none()) {
+          state.successOrFailure.fold(
+            () => null,
+            (either) => either.fold(
+              (l) => FlushbarHelper.createError(message: l.message).show(context),
               (r) {
                 Navigator.of(context).pop();
                 return FlushbarHelper.createSuccess(message: 'Leave request submitted successfully.').show(context);
               },
-            );
-          }
+            ),
+          );
+          //}
         },
         builder: (context, state) => Container(
           decoration: MyDecorationBox(),

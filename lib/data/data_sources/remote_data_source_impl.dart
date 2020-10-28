@@ -139,6 +139,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         //await Future.delayed(Duration(seconds: 5));
@@ -168,6 +169,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         await _client.post(ApiConstants.SHIFT_SIGNOUT_ENDPOINT, body, headers);
@@ -193,6 +195,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         //var responseBody = await Future.delayed(Duration(seconds: 5));
@@ -219,6 +222,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         //var responseBody = await Future.delayed(Duration(seconds: 5));
@@ -289,6 +293,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         //var responseBody = await Future.delayed(Duration(seconds: 5));
@@ -341,6 +346,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         var responseBody = await _client.post(ApiConstants.USERS_REPORT_ENDPOINT, body, headers);
@@ -364,6 +370,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         var responseBody = await _client.get(ApiConstants.USER_SITE_ENDPOINT, headers);
@@ -386,6 +393,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         //var responseBody = await Future.delayed(Duration(seconds: 5));
@@ -410,29 +418,39 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
         var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
         final timeResponse = await _client.get('${ApiConstants.SHIFT_TIMING_ENDPOINT}?date=$date', headers);
 
         if (timeResponse.containsKey('startTimeTs')) {
-          User.instance.startTime =
-              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['startTimeTs']));
-          User.instance.endTime =
-              DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
-          prefs.setString('shiftStartTime', User.instance.startTime);
-          prefs.setString('shiftEndTime', User.instance.endTime);
+          // User.instance.startTime =
+          //     DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['startTimeTs']));
+          // User.instance.endTime =
+          //     DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
+          User.instance.startTime = timeResponse['startTimeTs'];
+          User.instance.endTime = timeResponse['endTimeTs'];
+          prefs.setInt('shiftStartTime', User.instance.startTime);
+          prefs.setInt('shiftEndTime', User.instance.endTime);
         }
+
+        headers = {
+          'Authorization': 'Bearer ${User.instance.token}',
+          'Content-Type': 'application/json',
+          'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
+        };
 
         var responseBody = await _client.get(ApiConstants.SYNC_INFO_ENDPOINT, headers);
         if ((responseBody as Map).containsKey('taskId')) {
           User.instance.taskId = (responseBody as Map)['taskId'];
         }
-        if ((responseBody as Map).containsKey('signInTimeTs')) {
-          // User.instance.startTime =
-          //     DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
-          // prefs.setString('shiftStartTime', User.instance.startTime);
-        }
+        // if ((responseBody as Map).containsKey('signInTimeTs')) {
+        //   User.instance.startTime = responseBody['signInTimeTs'];
+        //   // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
+        //   prefs.setInt('shiftStartTime', User.instance.startTime);
+        // }
         if ((responseBody as Map).containsKey('checkInTimeTs')) {
           User.instance.checkInTime =
               DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();
@@ -453,24 +471,22 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
     print('enter remoteDataSourceImpl fetchUserSite');
     if (await DataConnectionChecker().hasConnection) {
       try {
-
         //var responseBody = await Future.delayed(Duration(seconds: 5));
         Map<String, String> headers = {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
+          'x-app-timezone': 'Australia/Sydney'
         };
 
-        var responseBody = await _client.get( ApiConstants.GET_NOTIFICATION_ENDPOINT , headers);
-        print(responseBody);
+        var responseBody = await _client.get(ApiConstants.GET_NOTIFICATION_ENDPOINT, headers);
+        //print(responseBody.toString());
+        //var decodedJson = jsonDecode(responseBody);
         return right(NotificationList.fromJson(responseBody));
-
       } catch (e) {
         return left(AuthFailure(e.toString()));
       }
     } else
       return left(AuthFailure('Check your Internet connection'));
   }
-
-
 }

@@ -12,8 +12,8 @@ class User {
   String token;
   double lat;
   double long;
-  String startTime;
-  String endTime;
+  int startTime;
+  int endTime;
   String checkInTime;
   int taskId;
   bool isSignedIn;

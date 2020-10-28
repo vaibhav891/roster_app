@@ -18,13 +18,14 @@ class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
   Stream<ApplyLeaveState> mapEventToState(
     ApplyLeaveEvent event,
   ) async* {
+    Either<AuthFailure, Unit> _successOrFailure;
+
     yield state.copyWith(
       isLoading: true,
-      successOrFailure: null, //right(unit),
+      successOrFailure: none(), //right(unit),
     );
 
-    Either<AuthFailure, Unit> successOrFailure;
-    successOrFailure = await _remoteDataSrc.applyLeave(
+    _successOrFailure = await _remoteDataSrc.applyLeave(
       startDate: event.startDate,
       endDate: event.endDate,
       leaveType: event.leaveType,
@@ -32,7 +33,7 @@ class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
     );
     yield state.copyWith(
       isLoading: false,
-      successOrFailure: successOrFailure,
+      successOrFailure: _successOrFailure == null ? none() : some(_successOrFailure),
     );
   }
 }

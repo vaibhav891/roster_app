@@ -51,6 +51,18 @@ class CustomInputBox extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(16),
           ),
+          border: OutlineInputBorder(
+            //borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent, width: 0.5),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent, width: 0.5),
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
         validator: validator,
         onChanged: onChanged,

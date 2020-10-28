@@ -114,7 +114,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
               for (var j = 0; j < dailyRep.length; j++) {
                 tileData.add({
-                  "date": DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "date":
+                      DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
                   "startTime": dailyRep[j].signInTimeTs != 0
                       ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs))
                       : '-',
@@ -163,7 +164,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
               for (int i = 0; i < days; i++) {
                 if (!_events.containsKey(DateTime(now.year, now.month, i + 1))) {
-                  _events[DateTime(now.year, now.month, i + 1)] = ["Weekly Off"];
+                  _events[DateTime(now.year, now.month, i + 1)] = ["No Roster"];
                 }
               }
             }
@@ -348,7 +349,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                           Column(
                                             children: [
                                               Text(
-                                                'Weekly off',
+                                                'No Roster',
                                                 style: TextStyle(
                                                     fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
                                               ),
@@ -409,7 +410,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                       ),
                                     ),
                                     SizedBox(
-                                      height: Sizes.dimen_18.h,
+                                      height: Sizes.dimen_32.h,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -424,9 +425,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               fontFamily: 'Product Sans'),
                                         ),
                                         Text(
-                                          _selectedTile.containsKey('display')
-                                              ? _selectedTile['display']
-                                              : 'Weekly off',
+                                          _selectedTile.containsKey('display') ? _selectedTile['display'] : 'No Roster',
                                           style: TextStyle(
                                               fontSize: 20, color: AppColor.textTitleDark, fontFamily: 'Product Sans'),
                                         ),
@@ -438,7 +437,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                     Container(
                                       color: getColorsFromEvent(_selectedTile.containsKey('display')
                                           ? _selectedTile['display']
-                                          : 'Weekly off'),
+                                          : 'No Roster'),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                           vertical: Sizes.dimen_18.h,
@@ -476,7 +475,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                       ),
                                     ),
                                     SizedBox(
-                                      height: Sizes.dimen_14.h,
+                                      height: Sizes.dimen_24.h,
                                     ),
                                     MyRaisedButton(
                                       buttonTitle: 'Apply for Leaves',
@@ -520,7 +519,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
       return AppColor.shamrockGreen;
     } else if (event == 'Leave: planned') {
       return AppColor.lightBlue;
-    } else if (event == 'Weekly Off') {
+    } else if (event == 'No Roster') {
       return AppColor.salmon;
     } else
       return AppColor.salmon;
