@@ -72,6 +72,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
     _events = {};
     tileData = [];
     now = DateTime(first.year, first.month, 1);
+    _selectedDate = DateFormat('dd MMM yyyy').format(now);
     _getStartnEndDates(first);
     _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
   }
@@ -145,7 +146,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               }
               _selectedTile = Map();
 
-              for (var i = 0; i < tileData.length; i++) {
+              for (var i = 0; i < tileData.length; i++){
                 if (tileData[i]['date'] == _selectedDate) _selectedTile = tileData[i];
               }
 
