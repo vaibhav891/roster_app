@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: DefaultTextStyle(
                     style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
-                    child: rosterPresent
+                    child: rosterPresent && !User.instance.isOnLeave
                         ? Row(
                             children: [
                               Column(
@@ -183,29 +183,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('tapped');
                             try {
                               position = await getCurrentPosition();
-                              if (!state.isSignedIn) {
-                                var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
-                                if (failureOrSuccess.isRight()) {
-                                  failureOrSuccess.fold(
-                                    (l) => print('error getting user site'),
-                                    (r) {
-                                      if (r.sites.length > 0) {
-                                        siteLat = r.sites.first.location.latitude;
-                                        siteLong = r.sites.first.location.longitude;
-                                        radiusInMeters = r.sites.first.radiusInMeter;
-                                      }
-                                      return null;
-                                    },
-                                  );
-                                }
-                                double distanceInMeters =
-                                    distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
-                                print('Distance b/w sites -> $distanceInMeters');
+                              // if (!state.isSignedIn) {
+                              //   var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
+                              //   if (failureOrSuccess.isRight()) {
+                              //     failureOrSuccess.fold(
+                              //       (l) => print('error getting user site'),
+                              //       (r) {
+                              //         if (r.sites.length > 0) {
+                              //           siteLat = r.sites.first.location.latitude;
+                              //           siteLong = r.sites.first.location.longitude;
+                              //           radiusInMeters = r.sites.first.radiusInMeter;
+                              //         }
+                              //         return null;
+                              //       },
+                              //     );
+                              //   }
+                              //   double distanceInMeters =
+                              //       distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
+                              //   print('Distance b/w sites -> $distanceInMeters');
 
-                                if (distanceInMeters > radiusInMeters) {
-                                  return _showMoveCloser(context);
-                                }
-                              }
+                              //   if (distanceInMeters > radiusInMeters) {
+                              //     return _showMoveCloser(context);
+                              //   }
+                              // }
                             } on PermissionDeniedException {
                               showDialog(
                                 context: context,
@@ -284,8 +284,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //   height: Sizes.dimen_200,
                                         // ),
                                         CountdownTimer(
-                                          endTime: User.instance.endTime ?? 0,
+                                          endTime: User.instance.shiftSignInTime != null
+                                              ? User.instance.shiftSignInTime + User.instance.duration
+                                              : DateTime.now().millisecondsSinceEpoch + User.instance.duration,
                                           daysSymbol: Text('days'),
+                                          emptyWidget: Text(
+                                            '00:00:00',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2
+                                                .copyWith(color: AppColor.lightBlue),
+                                          ),
                                           widgetBuilder: (context, time) {
                                             //print('inside timer');
                                             return Column(
@@ -297,7 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   color: AppColor.lightBlue,
                                                 ),
                                                 Text(
-                                                  '${time.hours != null ? time.hours.toString().padLeft(2, '0') : '00'}:${time.min != null ? time.min.toString().padLeft(2, '0') : '00'}:${time.sec.toString().padLeft(2, '0')}',
+                                                  time != null
+                                                      ? '${time.hours != null ? time.hours.toString().padLeft(2, '0') : '00'}:${time.min != null ? time.min.toString().padLeft(2, '0') : '00'}:${time.sec.toString().padLeft(2, '0')}'
+                                                      : '00:00:00',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline2

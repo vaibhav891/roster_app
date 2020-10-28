@@ -14,6 +14,8 @@ class User {
   double long;
   int startTime;
   int endTime;
+  int duration;
+  int shiftSignInTime;
   String checkInTime;
   int taskId;
   bool isSignedIn;

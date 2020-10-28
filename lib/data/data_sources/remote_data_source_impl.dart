@@ -431,8 +431,10 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           //     DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['endTimeTs']));
           User.instance.startTime = timeResponse['startTimeTs'];
           User.instance.endTime = timeResponse['endTimeTs'];
+          User.instance.duration = User.instance.endTime - User.instance.startTime;
           prefs.setInt('shiftStartTime', User.instance.startTime);
           prefs.setInt('shiftEndTime', User.instance.endTime);
+          prefs.setInt('shiftDuration', User.instance.duration);
         }
 
         headers = {
@@ -446,11 +448,12 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         if ((responseBody as Map).containsKey('taskId')) {
           User.instance.taskId = (responseBody as Map)['taskId'];
         }
-        // if ((responseBody as Map).containsKey('signInTimeTs')) {
-        //   User.instance.startTime = responseBody['signInTimeTs'];
-        //   // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
-        //   prefs.setInt('shiftStartTime', User.instance.startTime);
-        // }
+        if ((responseBody as Map).containsKey('signInTimeTs')) {
+          User.instance.shiftSignInTime = responseBody['signInTimeTs'];
+          // User.instance.startTime = responseBody['signInTimeTs'];
+          // // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
+          // prefs.setInt('shiftStartTime', User.instance.startTime);
+        }
         if ((responseBody as Map).containsKey('checkInTimeTs')) {
           User.instance.checkInTime =
               DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();

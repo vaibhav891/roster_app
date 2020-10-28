@@ -113,14 +113,15 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               var dailyRep = workSum[i].dailyReport;
 
               for (var j = 0; j < dailyRep.length; j++) {
+                print(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000));
                 tileData.add({
                   "date":
                       DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
                   "startTime": dailyRep[j].signInTimeTs != 0
-                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs))
+                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000))
                       : '-',
                   "endTime": dailyRep[j].signOutTimeTs != 0
-                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs))
+                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs * 1000))
                       : '-',
                   "extras": (dailyRep[j].extra) > 0 ? (dailyRep[j].extra).toString() : "0",
                   "late": getTimeString(dailyRep[j].lateInMins),
@@ -475,7 +476,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                       ),
                                     ),
                                     SizedBox(
-                                      height: Sizes.dimen_24.h,
+                                      height: Sizes.dimen_12.h,
                                     ),
                                     MyRaisedButton(
                                       buttonTitle: 'Apply for Leaves',

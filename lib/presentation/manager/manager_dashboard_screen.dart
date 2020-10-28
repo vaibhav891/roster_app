@@ -393,6 +393,88 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                         height: 2,
                                       ),
                                     ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Container(
+                                      //padding: EdgeInsets.all(Sizes.dimen_12),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 60,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  color: Colors.amber,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: Icon(
+                                                      Icons.timer,
+                                                      size: 20,
+                                                      color: AppColor.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Late',
+                                                  //style: Theme.of(context).textTheme.subtitle1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Container(
+                                            width: 60,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  color: Colors.red,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: Icon(
+                                                      Icons.cancel_outlined,
+                                                      size: 20,
+                                                      color: AppColor.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Leave',
+                                                  //style: Theme.of(context).textTheme.subtitle1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Container(
+                                            width: 60,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  color: AppColor.mmGreen,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: Icon(
+                                                      Icons.done,
+                                                      size: 20,
+                                                      color: AppColor.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Working',
+                                                  //style: Theme.of(context).textTheme.subtitle1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   )
                                 ],
                               )
