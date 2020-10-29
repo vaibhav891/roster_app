@@ -75,6 +75,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
     _selectedDate = DateFormat('dd MMM yyyy').format(now);
     _getStartnEndDates(first);
     _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
+
   }
 
   @override
@@ -115,8 +116,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               for (var j = 0; j < dailyRep.length; j++) {
                 print(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000));
                 tileData.add({
-                  "date":
-                      DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "date": DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
                   "startTime": dailyRep[j].signInTimeTs != 0
                       ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000))
                       : '-',
@@ -170,6 +170,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               }
             }
           }
+
           return Scaffold(
               backgroundColor: AppColor.blackHaze,
               // appBar: MyAppBar(
@@ -268,9 +269,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                         fontFamily: 'Product Sans',
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  selectedBoxDecoration:
-                                      BoxDecoration(shape: BoxShape.rectangle, border: Border.all(color: Colors.black)),
-                                  selectionMargin: EdgeInsets.only(right: 15, left: 15, top: 15, bottom: 15),
+                                  selectedBoxDecoration: BoxDecoration(shape: BoxShape.rectangle, border: Border.all(color: Colors.black)),
+                                  selectionMargin: EdgeInsets.only(right: 14, left: 14, top: 14, bottom: 14),
                                   headerStyle: HeaderStyle(
                                     formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
                                     centerHeaderTitle: true,

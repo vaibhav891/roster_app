@@ -256,8 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       color: AppColor.blackHaze,
                     ),
-                    child: rosterPresent
-                        ? User.instance.isOnLeave
+                    child: rosterPresent ? User.instance.isOnLeave
                             ? Center(
                                 child: Text('You are on leave today.', style: Theme.of(context).textTheme.headline5))
                             : state.isSignedIn

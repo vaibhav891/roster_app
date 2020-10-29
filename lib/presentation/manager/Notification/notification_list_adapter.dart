@@ -44,7 +44,7 @@ class NotificationListAdapter extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                       children: <TextSpan>[
                         TextSpan(
-                          text: notification.from + " " + notification.message,
+                          text: notification.message,
                           style: TextStyle(color: AppColor.textLight, fontSize: 15, fontFamily: "Product Sans"),
                         )
                       ]),
