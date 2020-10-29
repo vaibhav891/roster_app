@@ -132,10 +132,10 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                           : 'Your working hours'
                 });
 
-                if (dailyRep[j].durationInHrs == 0)
-                  leaveDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
-                else
-                  workingDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
+                // if (dailyRep[j].durationInMins == 0)
+                //   leaveDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
+                // else
+                //   workingDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
 
                 //Adding Events
                 _events[DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)] = [
@@ -148,7 +148,7 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               }
               _selectedTile = Map();
 
-              for (var i = 0; i < tileData.length; i++){
+              for (var i = 0; i < tileData.length; i++) {
                 if (tileData[i]['date'] == _selectedDate) _selectedTile = tileData[i];
               }
 

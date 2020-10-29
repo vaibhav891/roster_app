@@ -17,7 +17,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final RemoteDataSrc _remoteDataSrc;
 
   @override
-  Stream<HomeState> mapEventToState(HomeEvent event,) async* {
+  Stream<HomeState> mapEventToState(
+    HomeEvent event,
+  ) async* {
     if (event is HomeInitialEvent) {
       yield state.copyWith(
         isSignInLoading: true,
@@ -35,7 +37,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           return state.copyWith(
             isSignInLoading: false,
             isSignedIn: User.instance.isSignedIn,
-            isCheckedIn: User.instance.taskId != null ? true : false,
+            isCheckedIn: User.instance.taskId != null || User.instance.taskId != 0 ? true : false,
             failure: AuthFailure(""),
           );
         },

@@ -189,7 +189,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                   userTimings = locationDetail.map((e) {
                     String type = e.lateInMins != 0
                         ? 'Late'
-                        : e.signInTimeTs == 0
+                        : e.leaveType != null
                             ? 'Leave'
                             : 'Working';
                     return UserTiming(

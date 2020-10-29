@@ -283,9 +283,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //   height: Sizes.dimen_200,
                                         // ),
                                         CountdownTimer(
-                                          endTime: User.instance.shiftSignInTime != null
-                                              ? User.instance.shiftSignInTime + User.instance.duration
-                                              : DateTime.now().millisecondsSinceEpoch + User.instance.duration,
+                                          endTime: User.instance.shiftSignInTime != 0 &&
+                                                  User.instance.shiftSignInTime != null
+                                              ? User.instance.shiftSignInTime +
+                                                  User.instance.duration -
+                                                  ((User.instance.workDurationInMins ?? 0) * 60 * 1000)
+                                              : DateTime.now().millisecondsSinceEpoch +
+                                                  User.instance.duration -
+                                                  ((User.instance.workDurationInMins ?? 0) * 60 * 1000),
                                           daysSymbol: Text('days'),
                                           emptyWidget: Text(
                                             '00:00:00',
@@ -319,35 +324,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
 
                                         Expanded(child: SizedBox(height: Sizes.dimen_10.h)),
-                                        MyRaisedButton(
-                                          buttonTitle: state.isCheckInLoading
-                                              ? 'Please wait...'
-                                              : state.isCheckedIn
-                                                  ? 'Check-out'
-                                                  : 'Check-in',
-                                          buttonColor: AppColor.lightBlue,
-                                          isTrailingPresent: false,
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: Sizes.dimen_20.w,
-                                            vertical: Sizes.dimen_18.h,
-                                          ),
-                                          onPressed: () async {
-                                            User.instance.checkInTime =
-                                                DateFormat.jm().format(DateTime.now()).toString();
-                                            var taskId = state.isCheckedIn
-                                                ? User.instance.taskId.toString()
-                                                : '83b921b5-8be6-4322-b6b0-60ca5f4e9033';
-                                            BlocProvider.of<HomeBloc>(context).add(CheckInCheckOutEvent(id: taskId));
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: Sizes.dimen_4.h,
-                                          ),
-                                        ),
-                                        state.isCheckedIn
-                                            ? Text('Checkin time : ${User.instance.checkInTime}')
-                                            : Container(),
+                                        // MyRaisedButton(
+                                        //   buttonTitle: state.isCheckInLoading
+                                        //       ? 'Please wait...'
+                                        //       : state.isCheckedIn
+                                        //           ? 'Check-out'
+                                        //           : 'Check-in',
+                                        //   buttonColor: AppColor.lightBlue,
+                                        //   isTrailingPresent: false,
+                                        //   padding: EdgeInsets.symmetric(
+                                        //     horizontal: Sizes.dimen_20.w,
+                                        //     vertical: Sizes.dimen_18.h,
+                                        //   ),
+                                        //   onPressed: () async {
+                                        //     User.instance.checkInTime =
+                                        //         DateFormat.jm().format(DateTime.now()).toString();
+                                        //     var taskId = state.isCheckedIn
+                                        //         ? User.instance.taskId.toString()
+                                        //         : '83b921b5-8be6-4322-b6b0-60ca5f4e9033';
+                                        //     BlocProvider.of<HomeBloc>(context).add(CheckInCheckOutEvent(id: taskId));
+                                        //   },
+                                        // ),
+                                        // Expanded(
+                                        //   child: SizedBox(
+                                        //     height: Sizes.dimen_4.h,
+                                        //   ),
+                                        // ),
+                                        // state.isCheckedIn
+                                        //     ? Text('Checkin time : ${User.instance.checkInTime}')
+                                        //     : Container(),
                                         Expanded(
                                           child: SizedBox(
                                             height: Sizes.dimen_4.h,

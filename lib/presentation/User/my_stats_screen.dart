@@ -143,9 +143,9 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                             : Builder(
                                 builder: (context) {
                                   if (state is UserReportLoaded) {
-                                    _percentWorkDone = state.usersReport.totalWorkTimeInHrs /
-                                        (state.usersReport.totalWorkTimeInHrs +
-                                            state.usersReport.remainingWorkTimeInHrs);
+                                    _percentWorkDone = state.usersReport.totalWorkTimeInMins /
+                                        (state.usersReport.totalWorkTimeInMins +
+                                            state.usersReport.remainingWorkTimeInMins);
                                   }
 
                                   return Column(
@@ -223,7 +223,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                                                 children: [
                                                   (state is UserReportLoaded)
                                                       ? Text(
-                                                          '${state.usersReport.totalWorkTimeInHrs}',
+                                                          getTimeString(state.usersReport.totalWorkTimeInMins),
                                                           style: Theme.of(context).textTheme.headline5,
                                                         )
                                                       : Text(''),
@@ -250,7 +250,7 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
                                                 children: [
                                                   (state is UserReportLoaded)
                                                       ? Text(
-                                                          '${state.usersReport.remainingWorkTimeInHrs}',
+                                                          getTimeString(state.usersReport.remainingWorkTimeInMins),
                                                           style: Theme.of(context).textTheme.headline5,
                                                         )
                                                       : Text(''),
@@ -277,5 +277,11 @@ class _MyStatsScreenState extends State<MyStatsScreen> {
         },
       ),
     );
+  }
+
+  String getTimeString(int value) {
+    final int hour = value ~/ 60;
+    final int minutes = value % 60;
+    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")} hr';
   }
 }

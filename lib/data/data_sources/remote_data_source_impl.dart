@@ -454,6 +454,10 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           // // DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['signInTimeTs']));
           // prefs.setInt('shiftStartTime', User.instance.startTime);
         }
+        if ((responseBody as Map).containsKey('workDurationInMins')) {
+          User.instance.workDurationInMins = responseBody['workDurationInMins'];
+        }
+
         if ((responseBody as Map).containsKey('checkInTimeTs')) {
           User.instance.checkInTime =
               DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();

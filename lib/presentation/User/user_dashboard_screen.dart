@@ -59,7 +59,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       LocationPermission permission = await GeolocatorPlatform.instance.checkPermission();
       if (permission == LocationPermission.denied) {
         LocationPermission perm = await GeolocatorPlatform.instance.requestPermission();
-        if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) {
+        if (perm == LocationPermission.denied //|| perm == LocationPermission.deniedForever
+            ) {
           showDialog(
             context: context,
             builder: (context) {

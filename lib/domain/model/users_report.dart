@@ -1,23 +1,23 @@
 class UsersReport {
   int startDateTs;
   int endDateTs;
-  int totalWorkTimeInHrs;
-  int remainingWorkTimeInHrs;
+  int totalWorkTimeInMins;
+  int remainingWorkTimeInMins;
   List<WorkSummary> workSummary;
 
   UsersReport({
     this.startDateTs,
     this.endDateTs,
-    this.totalWorkTimeInHrs,
-    this.remainingWorkTimeInHrs,
+    this.totalWorkTimeInMins,
+    this.remainingWorkTimeInMins,
     this.workSummary,
   });
 
   UsersReport.fromJson(Map<String, dynamic> json) {
     startDateTs = json['startDateTs'];
     endDateTs = json['endDateTs'];
-    totalWorkTimeInHrs = json['totalWorkTimeInHrs'];
-    remainingWorkTimeInHrs = json['remainingWorkTimeInHrs'];
+    totalWorkTimeInMins = json['totalWorkTimeInMins'];
+    remainingWorkTimeInMins = json['remainingWorkTimeInMins'];
     if (json['workSummary'] != null) {
       workSummary = new List<WorkSummary>();
       json['workSummary'].forEach((v) {
@@ -30,8 +30,8 @@ class UsersReport {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['startDateTs'] = this.startDateTs;
     data['endDateTs'] = this.endDateTs;
-    data['totalWorkTimeInHrs'] = this.totalWorkTimeInHrs;
-    data['remainingWorkTimeInHrs'] = this.remainingWorkTimeInHrs;
+    data['totalWorkTimeInMins'] = this.totalWorkTimeInMins;
+    data['remainingWorkTimeInMins'] = this.remainingWorkTimeInMins;
     if (this.workSummary != null) {
       data['workSummary'] = this.workSummary.map((v) => v.toJson()).toList();
     }
@@ -82,7 +82,7 @@ class DailyReport {
   int dateTs;
   int signInTimeTs;
   int signOutTimeTs;
-  int durationInHrs;
+  int durationInMins;
   int extra;
   int lateInMins;
   String leaveType;
@@ -93,7 +93,7 @@ class DailyReport {
       this.dateTs,
       this.signInTimeTs,
       this.signOutTimeTs,
-      this.durationInHrs,
+      this.durationInMins,
       this.extra,
       this.lateInMins,
       this.leaveType});
@@ -104,7 +104,7 @@ class DailyReport {
     dateTs = json['dateTs'];
     signInTimeTs = json['signInTimeTs'];
     signOutTimeTs = json['signOutTimeTs'];
-    durationInHrs = json['durationInHrs'];
+    durationInMins = json['durationInMins'];
     extra = json['extra'];
     lateInMins = json['lateInMins'];
     leaveType = json['leaveType'];
@@ -117,7 +117,7 @@ class DailyReport {
     data['dateTs'] = this.dateTs;
     data['signInTimeTs'] = this.signInTimeTs;
     data['signOutTimeTs'] = this.signOutTimeTs;
-    data['durationInHrs'] = this.durationInHrs;
+    data['durationInMins'] = this.durationInMins;
     data['extra'] = this.extra;
     data['lateInMins'] = this.lateInMins;
     data['leaveType'] = this.leaveType;

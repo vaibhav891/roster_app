@@ -69,11 +69,12 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
       signOutUser: (SignOutUser value) async* {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.clear();
-        User.instance.userId = '';
-        User.instance.userRole = '';
-        User.instance.token = '';
-        User.instance.startTime = 0;
-        User.instance.endTime = 0;
+        // User.instance.userId = '';
+        // User.instance.userRole = '';
+        // User.instance.token = '';
+        // User.instance.startTime = 0;
+        // User.instance.endTime = 0;
+        User.instance.clear();
         yield state.copyWith(
           isSubmitting: false,
           authFailureOrSuccessOption: none(),
