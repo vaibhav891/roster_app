@@ -82,6 +82,8 @@ class DailyReport {
   int dateTs;
   int signInTimeTs;
   int signOutTimeTs;
+  int shiftStartTs;
+  int shiftEndTs;
   int durationInMins;
   int extra;
   int lateInMins;
@@ -93,6 +95,8 @@ class DailyReport {
       this.dateTs,
       this.signInTimeTs,
       this.signOutTimeTs,
+      this.shiftStartTs,
+      this.shiftEndTs,
       this.durationInMins,
       this.extra,
       this.lateInMins,
@@ -104,6 +108,8 @@ class DailyReport {
     dateTs = json['dateTs'];
     signInTimeTs = json['signInTimeTs'];
     signOutTimeTs = json['signOutTimeTs'];
+    shiftStartTs = json['shiftStartTs'];
+    shiftEndTs = json['shiftEndTs'];
     durationInMins = json['durationInMins'];
     extra = json['extra'];
     lateInMins = json['lateInMins'];
@@ -117,6 +123,8 @@ class DailyReport {
     data['dateTs'] = this.dateTs;
     data['signInTimeTs'] = this.signInTimeTs;
     data['signOutTimeTs'] = this.signOutTimeTs;
+    data['shiftStartTs'] = this.shiftStartTs;
+    data['shiftEndTs'] = this.shiftEndTs;
     data['durationInMins'] = this.durationInMins;
     data['extra'] = this.extra;
     data['lateInMins'] = this.lateInMins;

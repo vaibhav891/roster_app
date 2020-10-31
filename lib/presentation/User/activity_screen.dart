@@ -8,7 +8,6 @@ import 'package:roster_app/common/themes/theme_color.dart';
 import 'package:roster_app/di/get_it.dart';
 import 'package:roster_app/domain/user_report_bloc/user_report_bloc.dart';
 import 'package:roster_app/presentation/common/my_raised_button.dart';
-import 'package:roster_app/presentation/common/myappbar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:roster_app/common/size_extension.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -18,7 +17,8 @@ class ActivityScreen extends StatefulWidget {
   _ActivityScreenState createState() => _ActivityScreenState();
 }
 
-class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProviderStateMixin {
+class _ActivityScreenState extends State<ActivityScreen>
+    with SingleTickerProviderStateMixin {
   DateTime now = DateTime.now();
   String _startDate;
   String _endDate;
@@ -38,8 +38,13 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 
   _getStartnEndDates(DateTime date) {
     // _startDate = (DateTime(date.year, date.month, 2).toUtc().millisecondsSinceEpoch ~/ 1000).toString();
-    _startDate = (DateTime.utc(date.year, date.month, 1).millisecondsSinceEpoch ~/ 1000).toString();
-    _endDate = (DateTime.utc(date.year, date.month + 1, 0).millisecondsSinceEpoch ~/ 1000).toString();
+    _startDate =
+        (DateTime.utc(date.year, date.month, 1).millisecondsSinceEpoch ~/ 1000)
+            .toString();
+    _endDate =
+        (DateTime.utc(date.year, date.month + 1, 0).millisecondsSinceEpoch ~/
+                1000)
+            .toString();
   }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -68,14 +73,15 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 //    });
   }
 
-  void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
+  void _onVisibleDaysChanged(
+      DateTime first, DateTime last, CalendarFormat format) {
     _events = {};
     tileData = [];
     now = DateTime(first.year, first.month, 1);
     _selectedDate = DateFormat('dd MMM yyyy').format(now);
     _getStartnEndDates(first);
-    _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
-
+    _userReportBloc
+      ..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
   }
 
   @override
@@ -99,11 +105,13 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UserReportBloc>(
-      create: (context) => _userReportBloc..add(UserReportEvent(endDate: _endDate, startDate: _startDate)),
+      create: (context) => _userReportBloc
+        ..add(UserReportEvent(endDate: _endDate, startDate: _startDate)),
       child: BlocConsumer<UserReportBloc, UserReportState>(
         listener: (context, state) {
           if (state is UserReportError) {
-            FlushbarHelper.createError(message: state.failure.message).show(context);
+            FlushbarHelper.createError(message: state.failure.message)
+                .show(context);
           }
         },
         builder: (context, state) {
@@ -114,17 +122,51 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               var dailyRep = workSum[i].dailyReport;
 
               for (var j = 0; j < dailyRep.length; j++) {
-                print(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000));
+                var finalLateDuration = dailyRep[j].lateInMins;
+
+                if (dailyRep[j].signInTimeTs > 0) {
+                  finalLateDuration =
+                      (dailyRep[j].signInTimeTs > dailyRep[j].shiftStartTs)
+                          ? ((dailyRep[j].signInTimeTs -
+                                  dailyRep[j].shiftStartTs) ~/
+                              60)
+                          : 0;
+                } else {
+                  int currentTime =
+                      DateTime.now().millisecondsSinceEpoch ~/ 1000;
+                  var lateDurationTillNow =
+                      (currentTime > dailyRep[j].shiftStartTs)
+                          ? ((currentTime - dailyRep[j].shiftStartTs) ~/ 60)
+                          : 0;
+
+                  finalLateDuration =
+                      (dailyRep[j].lateInMins > lateDurationTillNow)
+                          ? dailyRep[j].lateInMins
+                          : lateDurationTillNow;
+                }
+
+                print(finalLateDuration);
+
+                print(DateTime.fromMillisecondsSinceEpoch(
+                    dailyRep[j].signInTimeTs * 1000));
                 tileData.add({
-                  "date": DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)),
+                  "date": DateFormat('dd MMM yyyy').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          dailyRep[j].dateTs * 1000)),
                   "startTime": dailyRep[j].signInTimeTs != 0
-                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signInTimeTs * 1000))
+                      ? DateFormat.jm().format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              dailyRep[j].signInTimeTs * 1000))
                       : '-',
                   "endTime": dailyRep[j].signOutTimeTs != 0
-                      ? DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].signOutTimeTs * 1000))
+                      ? DateFormat.jm().format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              dailyRep[j].signOutTimeTs * 1000))
                       : '-',
-                  "extras": (dailyRep[j].extra) > 0 ? (dailyRep[j].extra).toString() : "0",
-                  "late": getTimeString(dailyRep[j].lateInMins),
+                  "extras": (dailyRep[j].extra) > 0
+                      ? (dailyRep[j].extra).toString()
+                      : "0",
+                  "late": getTimeString(finalLateDuration),
                   "display": dailyRep[j].leaveType == 'sick'
                       ? 'Leave: Sick'
                       : dailyRep[j].leaveType == 'planned'
@@ -138,7 +180,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                 //   workingDays.add(DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000));
 
                 //Adding Events
-                _events[DateTime.fromMillisecondsSinceEpoch(dailyRep[j].dateTs * 1000)] = [
+                _events[DateTime.fromMillisecondsSinceEpoch(
+                    dailyRep[j].dateTs * 1000)] = [
                   dailyRep[j].leaveType == 'sick'
                       ? 'Leave: Sick'
                       : dailyRep[j].leaveType == 'planned'
@@ -149,7 +192,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               _selectedTile = Map();
 
               for (var i = 0; i < tileData.length; i++) {
-                if (tileData[i]['date'] == _selectedDate) _selectedTile = tileData[i];
+                if (tileData[i]['date'] == _selectedDate)
+                  _selectedTile = tileData[i];
               }
 
               DateTime next;
@@ -164,7 +208,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
               print("Difference" + days.toString());
 
               for (int i = 0; i < days; i++) {
-                if (!_events.containsKey(DateTime(now.year, now.month, i + 1))) {
+                if (!_events
+                    .containsKey(DateTime(now.year, now.month, i + 1))) {
                   _events[DateTime(now.year, now.month, i + 1)] = ["No Roster"];
                 }
               }
@@ -236,10 +281,12 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                   calendarController: _calendarController,
                                   initialCalendarFormat: CalendarFormat.month,
                                   daysOfWeekStyle: DaysOfWeekStyle(
-                                    weekdayStyle:
-                                        TextStyle(color: const Color(0xFF616161), fontWeight: FontWeight.bold),
-                                    weekendStyle:
-                                        TextStyle(color: const Color(0xFF616161), fontWeight: FontWeight.bold),
+                                    weekdayStyle: TextStyle(
+                                        color: const Color(0xFF616161),
+                                        fontWeight: FontWeight.bold),
+                                    weekendStyle: TextStyle(
+                                        color: const Color(0xFF616161),
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   events: _events,
                                   startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -247,7 +294,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                   calendarStyle: CalendarStyle(
                                     outsideDaysVisible: false,
                                     markersPositionBottom: 10,
-                                    contentPadding: EdgeInsets.only(bottom: 0, left: 8, right: 8),
+                                    contentPadding: EdgeInsets.only(
+                                        bottom: 0, left: 8, right: 8),
                                     weekdayStyle: const TextStyle(
                                         color: AppColor.textDark,
                                         fontSize: 13,
@@ -269,10 +317,14 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                         fontFamily: 'Product Sans',
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  selectedBoxDecoration: BoxDecoration(shape: BoxShape.rectangle, border: Border.all(color: Colors.black)),
-                                  selectionMargin: EdgeInsets.only(right: 14, left: 14, top: 14, bottom: 14),
+                                  selectedBoxDecoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(color: Colors.black)),
+                                  selectionMargin: EdgeInsets.only(
+                                      right: 14, left: 14, top: 14, bottom: 14),
                                   headerStyle: HeaderStyle(
-                                    formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+                                    formatButtonTextStyle: TextStyle().copyWith(
+                                        color: Colors.white, fontSize: 15.0),
                                     centerHeaderTitle: true,
                                     formatButtonVisible: false,
                                     titleTextStyle: TextStyle(
@@ -284,7 +336,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                   ),
                                   onDaySelected: _onDaySelected,
                                   onVisibleDaysChanged: _onVisibleDaysChanged,
-                                  builders: CalendarBuilders(singleMarkerBuilder: (context, daytime, event) {
+                                  builders: CalendarBuilders(
+                                      singleMarkerBuilder:
+                                          (context, daytime, event) {
                                     return Container(
                                       height: 2,
                                       width: 32,
@@ -342,9 +396,11 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
 //                                  ],
 //                                ),
                                     Container(
-                                      margin: EdgeInsets.symmetric(horizontal: 25),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 25),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Column(
@@ -352,7 +408,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               Text(
                                                 'No Roster',
                                                 style: TextStyle(
-                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                                    fontSize: 10,
+                                                    fontFamily: "Product Sans",
+                                                    color: AppColor.textDark),
                                               ),
                                               Container(
                                                 margin: EdgeInsets.only(top: 9),
@@ -367,7 +425,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               Text(
                                                 'Sick Leave',
                                                 style: TextStyle(
-                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                                    fontSize: 10,
+                                                    fontFamily: "Product Sans",
+                                                    color: AppColor.textDark),
                                               ),
                                               Container(
                                                 margin: EdgeInsets.only(top: 9),
@@ -382,7 +442,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               Text(
                                                 'Working Day',
                                                 style: TextStyle(
-                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                                    fontSize: 10,
+                                                    fontFamily: "Product Sans",
+                                                    color: AppColor.textDark),
                                               ),
                                               Container(
                                                 margin: EdgeInsets.only(top: 9),
@@ -397,7 +459,9 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               Text(
                                                 'Planned Leave',
                                                 style: TextStyle(
-                                                    fontSize: 10, fontFamily: "Product Sans", color: AppColor.textDark),
+                                                    fontSize: 10,
+                                                    fontFamily: "Product Sans",
+                                                    color: AppColor.textDark),
                                               ),
                                               Container(
                                                 margin: EdgeInsets.only(top: 9),
@@ -414,7 +478,8 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                       height: Sizes.dimen_32.h,
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Text(
                                           //_selectedTile["date"],
@@ -426,9 +491,13 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                               fontFamily: 'Product Sans'),
                                         ),
                                         Text(
-                                          _selectedTile.containsKey('display') ? _selectedTile['display'] : 'No Roster',
+                                          _selectedTile.containsKey('display')
+                                              ? _selectedTile['display']
+                                              : 'No Roster',
                                           style: TextStyle(
-                                              fontSize: 20, color: AppColor.textTitleDark, fontFamily: 'Product Sans'),
+                                              fontSize: 20,
+                                              color: AppColor.textTitleDark,
+                                              fontFamily: 'Product Sans'),
                                         ),
                                       ],
                                     ),
@@ -436,39 +505,51 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                       height: Sizes.dimen_14.h,
                                     ),
                                     Container(
-                                      color: getColorsFromEvent(_selectedTile.containsKey('display')
-                                          ? _selectedTile['display']
-                                          : 'No Roster'),
+                                      color: getColorsFromEvent(
+                                          _selectedTile.containsKey('display')
+                                              ? _selectedTile['display']
+                                              : 'No Roster'),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                           vertical: Sizes.dimen_18.h,
                                         ),
                                         child: DefaultTextStyle(
-                                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(color: AppColor.white),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               MyActivityColumn(
                                                 title: 'Sign In',
-                                                subTitle: _selectedTile.containsKey('startTime')
+                                                subTitle: _selectedTile
+                                                        .containsKey(
+                                                            'startTime')
                                                     ? _selectedTile['startTime']
                                                     : '-',
                                               ),
                                               MyActivityColumn(
                                                 title: 'Sign Out',
-                                                subTitle: _selectedTile.containsKey('endTime')
+                                                subTitle: _selectedTile
+                                                        .containsKey('endTime')
                                                     ? _selectedTile['endTime']
                                                     : '-',
                                               ),
                                               MyActivityColumn(
                                                 title: 'Extras',
-                                                subTitle:
-                                                    _selectedTile.containsKey('extras') ? _selectedTile['extras'] : '-',
+                                                subTitle: _selectedTile
+                                                        .containsKey('extras')
+                                                    ? _selectedTile['extras']
+                                                    : '-',
                                               ),
                                               MyActivityColumn(
                                                 title: 'Late',
-                                                subTitle:
-                                                    _selectedTile.containsKey('late') ? _selectedTile['late'] : '-',
+                                                subTitle: _selectedTile
+                                                        .containsKey('late')
+                                                    ? _selectedTile['late']
+                                                    : '-',
                                               ),
                                             ],
                                           ),
@@ -481,9 +562,13 @@ class _ActivityScreenState extends State<ActivityScreen> with SingleTickerProvid
                                     MyRaisedButton(
                                       buttonTitle: 'Apply for Leaves',
                                       onPressed: () {
-                                        Navigator.of(context).pushNamed('apply-leave-screen').then((value) {
+                                        Navigator.of(context)
+                                            .pushNamed('apply-leave-screen')
+                                            .then((value) {
                                           _userReportBloc
-                                            ..add(UserReportEvent(endDate: _endDate, startDate: _startDate));
+                                            ..add(UserReportEvent(
+                                                endDate: _endDate,
+                                                startDate: _startDate));
                                           //setState(() {});
                                         });
                                       },

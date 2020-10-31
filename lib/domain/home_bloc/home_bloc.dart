@@ -26,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         failure: AuthFailure(""),
       );
       Either<AuthFailure, Unit> successOrFailure;
-      successOrFailure = await _remoteDataSrc.syncInfo();
+      successOrFailure = await _remoteDataSrc.shiftInfo();
 
       yield successOrFailure.fold(
         (l) => state.copyWith(

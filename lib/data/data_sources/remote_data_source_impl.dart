@@ -144,6 +144,7 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
 
         //await Future.delayed(Duration(seconds: 5));
         await _client.post(ApiConstants.SHIFT_SIGNIN_ENDPOINT, body, headers);
+        await syncInfo();
         return right(unit);
       } catch (e) {
         print(e.toString());
@@ -408,8 +409,8 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> syncInfo() async {
-    print('enter remoteDataSourceImpl syncInfo');
+  Future<Either<AuthFailure, Unit>> shiftInfo() async {
+    print('enter remoteDataSourceImpl shiftInfo');
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (await DataConnectionChecker().hasConnection) {
@@ -436,8 +437,22 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
           prefs.setInt('shiftEndTime', User.instance.endTime);
           prefs.setInt('shiftDuration', User.instance.duration);
         }
+        await syncInfo();
+        return right(unit);
+      } catch (e) {
+        return left(AuthFailure(e.toString()));
+      }
+    } else
+      return left(AuthFailure('Check your Internet connection'));
+  }
 
-        headers = {
+  @override
+  Future<Either<AuthFailure, Unit>> syncInfo() async {
+    print('enter remoteDataSourceImpl syncInfo');
+
+    if (await DataConnectionChecker().hasConnection) {
+      try {
+        Map<String, String> headers = {
           'Authorization': 'Bearer ${User.instance.token}',
           'Content-Type': 'application/json',
           'app-key': ApiConstants.APP_KEY,
@@ -457,13 +472,20 @@ class RemoteDataSrcImpl implements RemoteDataSrc {
         if ((responseBody as Map).containsKey('workDurationInMins')) {
           User.instance.workDurationInMins = responseBody['workDurationInMins'];
         }
+        if ((responseBody as Map).containsKey('lastSignInTs')) {
+          User.instance.lastSignInTs = responseBody['lastSignInTs'];
+        }
 
         if ((responseBody as Map).containsKey('checkInTimeTs')) {
           User.instance.checkInTime =
-              DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(timeResponse['checkInTimeTs'])).toString();
+              DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(responseBody['checkInTimeTs'])).toString();
         }
         User.instance.isSignedIn = responseBody['isSignedIn'];
         User.instance.isOnLeave = responseBody['isUserOnLeave'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        User.instance.shiftEndTime =
+            User.instance.lastSignInTs + User.instance.duration - (User.instance.workDurationInMins * 60 * 1000);
+        prefs.setInt('shiftEndTm', User.instance.shiftEndTime);
 
         return right(unit);
       } catch (e) {

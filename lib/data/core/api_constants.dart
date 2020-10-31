@@ -2,7 +2,7 @@ class ApiConstants {
   ApiConstants._();
 
   static const String APP_NAME = 'Roster-App';
-  static const String BASE_URL = 'https://yis-roswed-dev-rzl6t4rbta-ts.a.run.app';
+  static const String BASE_URL = 'http://srplus.yourappsolutions.com';
   static const String APP_KEY = 'kh3Ty7vmeLcWHhchlpEVZPILnRTNqrsB';
   static const String BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
   static const String LOGIN_ENDPOINT = '/api/v1/security/login';
@@ -19,5 +19,4 @@ class ApiConstants {
   static const String UPDATE_DEVICE_INFO_ENDPOINT = '/api/v1/user/deviceInfo';
   static const String SYNC_INFO_ENDPOINT = '/api/v1/user/sync';
   static const String GET_NOTIFICATION_ENDPOINT = '/api/v1/notifications';
-
 }

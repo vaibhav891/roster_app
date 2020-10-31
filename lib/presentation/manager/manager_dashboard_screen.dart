@@ -41,10 +41,16 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
   RemoteDataSrc _remoteDataSrc = getIt<RemoteDataSrc>();
 
   _convertDate(DateTime date) {
-    _stDate = (DateTime.utc(date.year, date.month, date.day).millisecondsSinceEpoch ~/ 1000).toString();
-    _endDate =
-        ((DateTime.utc(date.year, date.month, date.day).add(Duration(days: 1)).millisecondsSinceEpoch - 1) ~/ 1000)
+    _stDate =
+        (DateTime.utc(date.year, date.month, date.day).millisecondsSinceEpoch ~/
+                1000)
             .toString();
+    _endDate = ((DateTime.utc(date.year, date.month, date.day)
+                    .add(Duration(days: 1))
+                    .millisecondsSinceEpoch -
+                1) ~/
+            1000)
+        .toString();
 
     print('manager report $_stDate, $_endDate');
   }
@@ -60,8 +66,12 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
           ),
           content: Text('Do you really want to exit?'),
           actions: [
-            FlatButton(onPressed: () => Navigator.of(context).pop(false), child: Text('No')),
-            FlatButton(onPressed: () => Navigator.of(context).pop(true), child: Text('Yes')),
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No')),
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Yes')),
           ],
         );
       },
@@ -78,7 +88,9 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
         deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
 
     if (!mounted) return;
@@ -89,8 +101,11 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
     var pushToken = await fbm.getToken();
     _deviceData['pushToken'] = pushToken;
 
-    var successOrFailure = await _remoteDataSrc.updateDeviceInfo(deviceInfo: _deviceData);
-    successOrFailure.fold((l) => FlushbarHelper.createError(message: l.message).show(context), (r) => null);
+    var successOrFailure =
+        await _remoteDataSrc.updateDeviceInfo(deviceInfo: _deviceData);
+    successOrFailure.fold(
+        (l) => FlushbarHelper.createError(message: l.message).show(context),
+        (r) => null);
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -126,7 +141,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
     fbm.configure(
       onMessage: (message) {
         print('onMessage: $message');
-        return showDialog(
+        showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(message['notification']['title']),
@@ -139,6 +154,7 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
             ],
           ),
         );
+        return null;
       },
       onResume: (message) {
         print('onResume: $message');
@@ -173,7 +189,8 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
         child: BlocConsumer<ManagerReportBloc, ManagerReportState>(
           listener: (context, state) {
             if (state is ManagerReportErrorState) {
-              FlushbarHelper.createError(message: state.failure.message).show(context);
+              FlushbarHelper.createError(message: state.failure.message)
+                  .show(context);
             }
           },
           builder: (context, state) {
@@ -181,19 +198,47 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
               locations = state.usersReport.workSummary.map((e) {
                 return e.siteName;
               }).toList();
-              if (_selectedLocation == null && locations.isNotEmpty) _selectedLocation = locations[0];
+              if (_selectedLocation == null && locations.isNotEmpty)
+                _selectedLocation = locations[0];
               for (var i = 0; i < state.usersReport.workSummary.length; i++) {
-                if (state.usersReport.workSummary[i].siteName == _selectedLocation) {
-                  var locationDetail = state.usersReport.workSummary[i].dailyReport;
+                if (state.usersReport.workSummary[i].siteName ==
+                    _selectedLocation) {
+                  var locationDetail =
+                      state.usersReport.workSummary[i].dailyReport;
 
                   userTimings = locationDetail.map((e) {
-                    String type = e.lateInMins != 0
+                    var finalLateDuration = e.lateInMins;
+
+                    if (e.signInTimeTs > 0) {
+                      finalLateDuration = (e.signInTimeTs > e.shiftStartTs)
+                          ? ((e.signInTimeTs - e.shiftStartTs) ~/ 60)
+                          : 0;
+                    } else {
+                      int currentTime =
+                          DateTime.now().millisecondsSinceEpoch ~/ 1000;
+                      var lateDurationTillNow = (currentTime > e.shiftStartTs)
+                          ? ((currentTime - e.shiftStartTs) ~/ 60)
+                          : 0;
+
+                      finalLateDuration = (e.lateInMins > lateDurationTillNow)
+                          ? e.lateInMins
+                          : lateDurationTillNow;
+                    }
+
+                    print(finalLateDuration);
+                    String type = finalLateDuration != 0
                         ? 'Late'
                         : e.leaveType != null
                             ? 'Leave'
                             : 'Working';
+
                     return UserTiming(
-                        e.name, e.signInTimeTs.toString(), e.signOutTimeTs.toString(), type, e.extra, e.lateInMins);
+                        e.name,
+                        e.signInTimeTs.toString(),
+                        e.signOutTimeTs.toString(),
+                        type,
+                        e.extra,
+                        finalLateDuration);
                   }).toList();
                 }
               }
@@ -216,11 +261,16 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                             title: Text('Log Out'),
                             content: Text('Do you really want to logout?'),
                             actions: [
-                              FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text('No')),
+                              FlatButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('No')),
                               FlatButton(
                                   onPressed: () {
-                                    BlocProvider.of<SignInFormBloc>(context).add(SignInFormEvent.signOutUser());
-                                    Navigator.of(context).pushNamedAndRemoveUntil('login', (route) => false);
+                                    BlocProvider.of<SignInFormBloc>(context)
+                                        .add(SignInFormEvent.signOutUser());
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            'login', (route) => false);
                                   },
                                   child: Text('Yes')),
                             ],
@@ -241,14 +291,18 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                           alignment: Alignment.centerRight,
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).pushNamed('manager-notifications');
+                              Navigator.of(context)
+                                  .pushNamed('manager-notifications');
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text("Alerts",
-                                    style: TextStyle(fontSize: 18, color: AppColor.white, fontFamily: "Product Sans")),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: AppColor.white,
+                                        fontFamily: "Product Sans")),
                                 SizedBox(
                                   width: 3,
                                 ),
@@ -266,20 +320,27 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
 //                        },),
                           ),
                       DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(color: AppColor.white),
                         child: TableCalendar(
                           //endDay: DateTime.now(),
-                          availableCalendarFormats: const {CalendarFormat.week: 'Week'},
+                          availableCalendarFormats: const {
+                            CalendarFormat.week: 'Week'
+                          },
                           calendarController: _calendarController,
                           initialCalendarFormat: CalendarFormat.week,
-                          selectedBoxDecoration:
-                              BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.5)),
+                          selectedBoxDecoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.5)),
                           //initialSelectedDay: dateSelected,
                           onVisibleDaysChanged: (first, last, format) {
                             // if (DateTime.now().millisecondsSinceEpoch > first.millisecondsSinceEpoch) {
                             _calendarController.setSelectedDay(first);
                             _convertDate(first);
-                            BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
+                            BlocProvider.of<ManagerReportBloc>(context)
+                                .add(ManagerReportLoadEvent(
                               startDate: _stDate,
                               endDate: _endDate,
                             ));
@@ -298,7 +359,8 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                           onDaySelected: (day, events1, events2) {
                             print(day.toString());
                             _convertDate(day);
-                            BlocProvider.of<ManagerReportBloc>(context).add(ManagerReportLoadEvent(
+                            BlocProvider.of<ManagerReportBloc>(context)
+                                .add(ManagerReportLoadEvent(
                               startDate: _stDate,
                               endDate: _endDate,
                             ));
@@ -314,9 +376,12 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16),
                                     decoration: BoxDecoration(
-                                        color: AppColor.sandGrey, borderRadius: BorderRadius.circular(14)),
+                                        color: AppColor.sandGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
                                     child: DropdownButtonFormField(
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
@@ -343,44 +408,66 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                     child: ListView.separated(
                                       itemCount: userTimings.length,
                                       itemBuilder: (context, index) {
-                                        var inTime = userTimings[index].inTime != '0'
+                                        var inTime = userTimings[index]
+                                                    .inTime !=
+                                                '0'
                                             ? //userTimings[index].inTime.toString()
-                                            DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
-                                                int.parse(userTimings[index].inTime) * 1000))
+                                            DateFormat.jm().format(DateTime
+                                                .fromMillisecondsSinceEpoch(
+                                                    int.parse(userTimings[index]
+                                                            .inTime) *
+                                                        1000))
                                             : '-';
-                                        var outTime = userTimings[index].outTime != '0'
+                                        var outTime = userTimings[index]
+                                                    .outTime !=
+                                                '0'
                                             ? //userTimings[index].outTime.toString()
-                                            DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(
-                                                int.parse(userTimings[index].outTime) * 1000))
+                                            DateFormat.jm().format(DateTime
+                                                .fromMillisecondsSinceEpoch(
+                                                    int.parse(userTimings[index]
+                                                            .outTime) *
+                                                        1000))
                                             : '-';
                                         return ListTile(
                                           tileColor: AppColor.white,
-                                          title: Text(userTimings[index].userName),
+                                          title:
+                                              Text(userTimings[index].userName),
                                           subtitle: Row(
                                             children: [
-                                              Text('In : $inTime  Out : $outTime '),
+                                              Text(
+                                                  'In : $inTime  Out : $outTime '),
                                               if (userTimings[index].extra != 0)
-                                                Text(' Extra - ${userTimings[index].extra} mins'),
-                                              if (userTimings[index].lateInMins != 0)
-                                                Text(' Late by ${userTimings[index].lateInMins} mins',
+                                                Text(
+                                                    ' Extra - ${userTimings[index].extra} mins'),
+                                              if (userTimings[index]
+                                                      .lateInMins !=
+                                                  0)
+                                                Text(
+                                                    ' Late by ${userTimings[index].lateInMins} mins',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText2
-                                                        .copyWith(color: Colors.red)),
+                                                        .copyWith(
+                                                            color: Colors.red)),
                                             ],
                                           ),
                                           trailing: Container(
-                                            color: userTimings[index].type == 'Late'
+                                            color: userTimings[index].type ==
+                                                    'Late'
                                                 ? Colors.amber
-                                                : userTimings[index].type == 'Leave'
+                                                : userTimings[index].type ==
+                                                        'Leave'
                                                     ? Colors.red
                                                     : AppColor.mmGreen,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(16.0),
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
                                               child: Icon(
-                                                userTimings[index].type == 'Late'
+                                                userTimings[index].type ==
+                                                        'Late'
                                                     ? Icons.timer
-                                                    : userTimings[index].type == 'Leave'
+                                                    : userTimings[index].type ==
+                                                            'Leave'
                                                         ? Icons.cancel_outlined
                                                         : Icons.done,
                                                 color: AppColor.white,
@@ -389,7 +476,8 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                           ),
                                         );
                                       },
-                                      separatorBuilder: (context, index) => SizedBox(
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(
                                         height: 2,
                                       ),
                                     ),
@@ -407,7 +495,9 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                                 Container(
                                                   color: Colors.amber,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(4.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Icon(
                                                       Icons.timer,
                                                       size: 20,
@@ -432,7 +522,9 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                                 Container(
                                                   color: Colors.red,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(4.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Icon(
                                                       Icons.cancel_outlined,
                                                       size: 20,
@@ -457,7 +549,9 @@ class _ManagerDashboardScreenState extends State<ManagerDashboardScreen> {
                                                 Container(
                                                   color: AppColor.mmGreen,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(4.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Icon(
                                                       Icons.done,
                                                       size: 20,

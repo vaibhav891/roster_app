@@ -183,29 +183,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('tapped');
                             try {
                               position = await getCurrentPosition();
-                              // if (!state.isSignedIn) {
-                              //   var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
-                              //   if (failureOrSuccess.isRight()) {
-                              //     failureOrSuccess.fold(
-                              //       (l) => print('error getting user site'),
-                              //       (r) {
-                              //         if (r.sites.length > 0) {
-                              //           siteLat = r.sites.first.location.latitude;
-                              //           siteLong = r.sites.first.location.longitude;
-                              //           radiusInMeters = r.sites.first.radiusInMeter;
-                              //         }
-                              //         return null;
-                              //       },
-                              //     );
-                              //   }
-                              //   double distanceInMeters =
-                              //       distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
-                              //   print('Distance b/w sites -> $distanceInMeters');
+                              if (!state.isSignedIn) {
+                                var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
+                                if (failureOrSuccess.isRight()) {
+                                  failureOrSuccess.fold(
+                                    (l) => print('error getting user site'),
+                                    (r) {
+                                      if (r.sites.length > 0) {
+                                        siteLat = r.sites.first.location.latitude;
+                                        siteLong = r.sites.first.location.longitude;
+                                        radiusInMeters = r.sites.first.radiusInMeter;
+                                      }
+                                      return null;
+                                    },
+                                  );
+                                }
+                                double distanceInMeters =
+                                    distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
+                                print('Distance b/w sites -> $distanceInMeters');
 
-                              //   if (distanceInMeters > radiusInMeters) {
-                              //     return _showMoveCloser(context);
-                              //   }
-                              // }
+                                if (distanceInMeters > radiusInMeters) {
+                                  return _showMoveCloser(context);
+                                }
+                              }
                             } on PermissionDeniedException {
                               showDialog(
                                 context: context,
@@ -256,7 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       color: AppColor.blackHaze,
                     ),
-                    child: rosterPresent ? User.instance.isOnLeave
+                    child: rosterPresent
+                        ? User.instance.isOnLeave
                             ? Center(
                                 child: Text('You are on leave today.', style: Theme.of(context).textTheme.headline5))
                             : state.isSignedIn
@@ -283,14 +284,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //   height: Sizes.dimen_200,
                                         // ),
                                         CountdownTimer(
-                                          endTime: User.instance.shiftSignInTime != 0 &&
-                                                  User.instance.shiftSignInTime != null
-                                              ? User.instance.shiftSignInTime +
-                                                  User.instance.duration -
-                                                  ((User.instance.workDurationInMins ?? 0) * 60 * 1000)
-                                              : DateTime.now().millisecondsSinceEpoch +
-                                                  User.instance.duration -
-                                                  ((User.instance.workDurationInMins ?? 0) * 60 * 1000),
+                                          endTime:
+                                              // User.instance.shiftSignInTime != 0 &&
+                                              //         User.instance.shiftSignInTime != null
+                                              //     ? User.instance.shiftSignInTime +
+                                              //         User.instance.duration -
+                                              //         ((User.instance.workDurationInMins ?? 0) * 60 * 1000)
+                                              //     :
+                                              // DateTime.now().millisecondsSinceEpoch +
+                                              //     User.instance.duration -
+                                              //     (User.instance.workDurationInMins * 60 * 1000),
+                                              User.instance.shiftEndTime,
                                           daysSymbol: Text('days'),
                                           emptyWidget: Text(
                                             '00:00:00',

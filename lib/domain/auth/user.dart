@@ -16,6 +16,8 @@ class User {
   int endTime = 0;
   int duration = 0;
   int shiftSignInTime = 0;
+  int lastSignInTs = 0;
+  int shiftEndTime = 0;
   int workDurationInMins = 0;
   String checkInTime = '';
   int taskId = 0;
@@ -40,6 +42,8 @@ class User {
     _instance.endTime = 0;
     _instance.duration = 0;
     _instance.shiftSignInTime = 0;
+    _instance.lastSignInTs = 0;
+    _instance.shiftEndTime = 0;
     _instance.workDurationInMins = 0;
     _instance.checkInTime = '';
     _instance.taskId = 0;

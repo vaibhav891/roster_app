@@ -40,7 +40,14 @@ class _RosterAppState extends State<RosterApp> {
     if (prefs.containsKey('shiftStartTime')) User.instance.startTime = prefs.getInt('shiftStartTime');
 
     if (prefs.containsKey('shiftEndTime')) User.instance.endTime = prefs.getInt('shiftEndTime');
-    if (prefs.containsKey('shiftDuration')) User.instance.duration = prefs.getInt('shiftDuration');
+    if (prefs.containsKey('shiftDuration')) {
+      User.instance.duration = prefs.getInt('shiftDuration');
+      print('prefs ->shiftDuration ${User.instance.duration}');
+    }
+    if (prefs.containsKey('shiftEndTm')) {
+      User.instance.shiftEndTime = prefs.getInt('shiftEndTm');
+      print('prefs ->shiftEndTime ${User.instance.shiftEndTime}');
+    }
   }
 
   @override

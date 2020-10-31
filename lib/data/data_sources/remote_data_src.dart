@@ -52,7 +52,8 @@ abstract class RemoteDataSrc {
   Future<Either<AuthFailure, Unit>> updateDeviceInfo({Map<String, dynamic> deviceInfo});
 
   Future<Either<AuthFailure, Unit>> syncInfo();
-  
-  Future<Either<AuthFailure, NotificationList>> fetchNotifications();
 
+  Future<Either<AuthFailure, Unit>> shiftInfo();
+
+  Future<Either<AuthFailure, NotificationList>> fetchNotifications();
 }

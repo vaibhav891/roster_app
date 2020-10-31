@@ -56,18 +56,22 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     print('inside _getPosition');
 
     try {
-      LocationPermission permission = await GeolocatorPlatform.instance.checkPermission();
+      LocationPermission permission =
+          await GeolocatorPlatform.instance.checkPermission();
       if (permission == LocationPermission.denied) {
-        LocationPermission perm = await GeolocatorPlatform.instance.requestPermission();
-        if (perm == LocationPermission.denied //|| perm == LocationPermission.deniedForever
+        LocationPermission perm =
+            await GeolocatorPlatform.instance.requestPermission();
+        if (perm ==
+                LocationPermission
+                    .denied //|| perm == LocationPermission.deniedForever
             ) {
           showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
                 title: Text('Access required'),
-                content:
-                    Text('Location is required for user to signin into site. You can turn it on again from Settings.'),
+                content: Text(
+                    'Location is required for user to signin into site. You can turn it on again from Settings.'),
                 actions: [
                   FlatButton(
                     onPressed: () => Navigator.of(context).pop(),
@@ -86,32 +90,37 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     positionStream = getPositionStream(
       timeInterval: 600000, //this is in millisecs
     ).listen((Position position) async {
-      print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+      print(position == null
+          ? 'Unknown'
+          : position.latitude.toString() +
+              ', ' +
+              position.longitude.toString());
       User.instance.lat = position.latitude;
       User.instance.long = position.longitude;
       var bloc = BlocProvider.of<HomeBloc>(context);
-      // if (bloc.state.isSignedIn) {
-      //   var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
-      //   if (failureOrSuccess.isRight()) {
-      //     failureOrSuccess.fold(
-      //       (l) => null,
-      //       (r) {
-      //         if (r.sites.length > 0) {
-      //           siteLat = r.sites.first.location.latitude;
-      //           siteLong = r.sites.first.location.longitude;
-      //           radiusInMeters = r.sites.first.radiusInMeter;
-      //         }
-      //         return null;
-      //       },
-      //     );
-      //   }
+      if (bloc.state.isSignedIn) {
+        var failureOrSuccess = await _remoteDataSrc.fetchUserSite();
+        if (failureOrSuccess.isRight()) {
+          failureOrSuccess.fold(
+            (l) => null,
+            (r) {
+              if (r.sites.length > 0) {
+                siteLat = r.sites.first.location.latitude;
+                siteLong = r.sites.first.location.longitude;
+                radiusInMeters = r.sites.first.radiusInMeter;
+              }
+              return null;
+            },
+          );
+        }
 
-      //   double distanceInMeters = distanceBetween(siteLat, siteLong, position.latitude, position.longitude);
+        double distanceInMeters = distanceBetween(
+            siteLat, siteLong, position.latitude, position.longitude);
 
-      //   if (distanceInMeters > radiusInMeters) {
-      //     bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
-      //   }
-      // }
+        if (distanceInMeters > radiusInMeters) {
+          bloc.add(SignInSignOutEvent(position.latitude, position.longitude));
+        }
+      }
     });
   }
 
@@ -125,7 +134,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
 
     if (!mounted) return;
@@ -136,8 +147,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     var pushToken = await fbm.getToken();
     _deviceData['pushToken'] = pushToken;
 
-    var successOrFailure = await _remoteDataSrc.updateDeviceInfo(deviceInfo: _deviceData);
-    successOrFailure.fold((l) => FlushbarHelper.createError(message: l.message).show(context), (r) => null);
+    var successOrFailure =
+        await _remoteDataSrc.updateDeviceInfo(deviceInfo: _deviceData);
+    successOrFailure.fold(
+        (l) => FlushbarHelper.createError(message: l.message).show(context),
+        (r) => null);
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -171,8 +185,12 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           ),
           content: Text('Do you really want to exit?'),
           actions: [
-            FlatButton(onPressed: () => Navigator.of(context).pop(false), child: Text('No')),
-            FlatButton(onPressed: () => Navigator.of(context).pop(true), child: Text('Yes')),
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No')),
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Yes')),
           ],
         );
       },
@@ -188,7 +206,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     fbm.configure(
       onMessage: (message) {
         print('onMessage: $message');
-        return showDialog(
+        showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(message['notification']['title']),
@@ -201,6 +219,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             ],
           ),
         );
+        return null;
       },
       onResume: (message) {
         print('onResume: $message');
